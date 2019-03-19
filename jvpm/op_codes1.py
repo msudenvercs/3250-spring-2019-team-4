@@ -17,7 +17,7 @@ class op_codes:
                     print ("true")
                 elif(poppedValue == 0):
                     print ("false")
-                else
+                else:
                     print("this is not implemented.")
             elif(tag == "//java/io/PrintStream/java.lang.String"):
                 print(stack_z.pop())

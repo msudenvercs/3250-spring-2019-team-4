@@ -438,7 +438,7 @@ class JavaClassFile:
 
     #parses constant table to check for #3, #13, #18, #24, #25, and #26
     def decode_constant_table(constant_table):
-        for(i in constant_table):
+        for i in constant_table:
             #strings will be replaced with hexadecimal
             if (i == "#3"):
                 if (i == "#17"):
