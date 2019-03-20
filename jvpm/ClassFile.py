@@ -436,6 +436,22 @@ class JavaClassFile:
     def get_attribute_table_size(self):
         return self.classfile_attribute_table_size
 
+    #parses constant table to check for #3, #13, #18, #24, #25, and #26
+    def decode_constant_table(constant_table):
+        for i in constant_table:
+            #strings will be replaced with hexadecimal
+            if (i == "#3"):
+                if (i == "#17"):
+                    if (i == "#24"):
+                        return "PrintStream"
+                if (i == "#18"):
+                    if (i == "#25"):
+                        return "println"
+                    elif (i == "#26"):
+                        return "(I)V"
+                return
+
+
     # For Testing
 
     def print_data(self):   # pragma: no cover
@@ -517,7 +533,7 @@ a.print_data()
             "0x64":op_codes1.op_codes.op_code64
             "0x82":op_codes1.op_codes.op_code82
         }
-        
+
         send(op_code_dict[input](stack_z))
 
 '''

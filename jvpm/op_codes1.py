@@ -4,6 +4,25 @@ All Methods for OP Codes go in this file
 
 class op_codes:
 
+        #emulates println for the different data types
+        def invokeVirtual(stack_z, tag):
+            if(tag == "//java/io/PrintStream.print:(I)V"):
+                print(stack_z.pop())
+            elif(tag == "//java/io/PrintStream.print:(D)V"):
+                print(stack_z.pop())
+
+            elif(tag  == "//java/io/PrintStream.print:(Z)V"):
+                poppedValue = stack_z.pop()
+                if(poppedValue == 1):
+                    print ("true")
+                elif(poppedValue == 0):
+                    print ("false")
+                else:
+                    print("this is not implemented.")
+            elif(tag == "//java/io/PrintStream/java.lang.String"):
+                print(stack_z.pop())
+
+
         def op_code70(stack_z):     #remainder
                 var1 = stack_z.pop() % stack_z.pop()
                 stack_z.append(var1)
@@ -20,7 +39,7 @@ class op_codes:
                 return stack_z
 
         def op_code7c(stack_z):		#shift right
-                var1 = stack_z.pop() >> stack_z.pop()  
+                var1 = stack_z.pop() >> stack_z.pop()
                 stack_z.append(var1)
                 return stack_z
 
@@ -217,25 +236,26 @@ class op_codes:
                         stack_z.append(varsarray[index])
                         return stack_z
 
-        def op_code36(stack_z, varsarray, index):
-                if (index > len(varsarray)):
-                        raise IndexError
-                else:
-                        stack_z.append(varsarray[index])
-                        return stack_z
+        # def op_code36(stack_z, varsarray, index):
+        #        if (index > len(varsarray)):
+        #               raise IndexError
+        #      else:
+        #                stack_z.append(varsarray[index])
+        #                return stack_z
 
-        def op_code3b(stack_z, varsarray):
-                        stack_z.append(varsarray[0])
-                        return stack_z
+        # def op_code3b(stack_z, varsarray):
+        #                stack_z.append(varsarray[0])
+        #                return stack_z
 
-        def op_code3c(stack_z, varsarray):
-                        stack_z.append(varsarray[1])
-                        return stack_z
+        # def op_code3c(stack_z, varsarray):
+        #               stack_z.append(varsarray[1])
+        #              return stack_z
 
-        def op_code3d(stack_z, varsarray):
-                        stack_z.append(varsarray[2])
-                        return stack_z
+        # def op_code3d(stack_z, varsarray):
+        #               stack_z.append(varsarray[2])
+        #                return stack_z
 
-        def op_code3e(stack_z, varsarray):
-                        stack_z.append(varsarray[3])
-                        return stack_z
+        # def op_code3e(stack_z, varsarray):
+        #               stack_z.append(varsarray[3])
+        #              return stack_z
+
