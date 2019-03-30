@@ -64,7 +64,6 @@ class JavaClassFile:
         constant = ""
         constant_table = []
         size = 0
-
         # Loop will stop once all constant values have been collected
         for i in range(self.get_pool_count_int()):
             data_value = format(self.data[byte_location], "02X")
@@ -80,7 +79,6 @@ class JavaClassFile:
                 constant += data_value
                 size += 3
                 # Get the offset for a string from the ConstantPoolTag Class
-                tag = ConstantPoolTag("01")
                 num_bytes = int(data_value, 16)
                 for k in range(byte_location, byte_location + int(num_bytes)):
                     constant += format(self.data[k], "02X")
@@ -91,8 +89,7 @@ class JavaClassFile:
                 byte_location += int(num_bytes)
             # Tag represents something else, which means only that value needs to be read
             else:
-                tag = ConstantPoolTag(data_value)
-                num_bytes = tag.get_byte_length(data_value)
+                num_bytes = ConstantPoolTag(data_value).get_byte_length(data_value)
                 constant += data_value
                 byte_location += 1
                 size += 1
@@ -481,6 +478,28 @@ class JavaClassFile:
         print("Attribute Table: " + str(self.classfile_attribute_table))
         print("Attribute Table Size: " + str(self.classfile_attribute_table_size))
 
+    # Print data from tables in a human readable format
+    def display_data(self): # pragma: no cover TODO
+        values = {}
+        index = 1
+        print("CONSTANT TABLE")
+        class_file_data = self.classfile_constant_table
+
+        for i in range(len(self.classfile_constant_table)):
+            tag = str(class_file_data[i][0:2])
+            data = class_file_data[i][2:]
+            if(tag == "01"):
+                tag_type = ConstantPoolTag(tag).get_tag_Type(tag)
+                data = bytes.fromhex(data).decode('utf-8')
+                values[index] = [tag_type, data]
+            else:
+                tag_type = ConstantPoolTag(tag).get_tag_Type(tag)
+                values[index] = [tag_type, data]
+            index += 1
+
+        for i in range(1, len(values)):
+            print(str(i) + ": " + str(values[i]))
+
     # Python "Constructor"
     def __init__(self, file_name):
         # TODO: Make it so that the .class file can be specified by name, this could help in testing opcode reading
@@ -509,6 +528,7 @@ class JavaClassFile:
 # -----END OF METHOD DEFINITIONS-----
 a = JavaClassFile("test.class")
 a.print_data()
+a.display_data()
 
 '''
     def op_code_caller(self, input):
