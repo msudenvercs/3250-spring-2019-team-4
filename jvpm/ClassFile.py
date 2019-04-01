@@ -482,23 +482,52 @@ class JavaClassFile:
     def display_data(self): # pragma: no cover TODO
         values = {}
         index = 1
-        print("CONSTANT TABLE")
-        class_file_data = self.classfile_constant_table
-
+        class_file_constant_table = self.classfile_constant_table
+        class_file_interface_table = self.classfile_interface_table
+        class_file_field_table = self.classfile_field_table
+        print("-----CONSTANT TABLE-----\n")
         for i in range(len(self.classfile_constant_table)):
-            tag = str(class_file_data[i][0:2])
-            data = class_file_data[i][2:]
-            if(tag == "01"):
+            tag = str(class_file_constant_table[i][0:2])
+            data = class_file_constant_table[i][2:]
+
+            if tag == "01":     # String
                 tag_type = ConstantPoolTag(tag).get_tag_Type(tag)
                 data = bytes.fromhex(data).decode('utf-8')
                 values[index] = [tag_type, data]
+
+            elif tag == "07":   # Class Ref
+                tag_type = ConstantPoolTag(tag).get_tag_Type(tag)
+                data = '#' + str(int(data, 16))
+                values[index] = [tag_type, data]
+
+            elif tag == "08":   # String Ref
+                tag_type = ConstantPoolTag(tag).get_tag_Type(tag)
+                data = '#' + str(int(data, 16))
+                values[index] = [tag_type, data]
+
+            elif tag == "09":   # Field Ref
+                tag_type = ConstantPoolTag(tag).get_tag_Type(tag)
+                data_index_01 = data[2:4]
+                data_index_02 = data[4:]
+                data = ('#' + str(int(data_index_01, 16)) + ', ' + '#' + str(int(data_index_02, 16)))
+                values[index] = [tag_type, data]
+
+            elif tag == "0A":   # Method Ref
+                tag_type = ConstantPoolTag(tag).get_tag_Type(tag)
+                data_index_01 = data[2:4]
+                data_index_02 = data[4:]
+                data = ('#' + str(int(data_index_01, 16)) + ', ' + '#' + str(int(data_index_02, 16)))
+                values[index] = [tag_type, data]
+
             else:
                 tag_type = ConstantPoolTag(tag).get_tag_Type(tag)
                 values[index] = [tag_type, data]
-            index += 1
 
-        for i in range(1, len(values)):
+            index += 1
+        for i in range(1, len(class_file_constant_table)):
             print(str(i) + ": " + str(values[i]))
+
+        print("\n-----INTERFACE TABLE-----")
 
     # Python "Constructor"
     def __init__(self, file_name):
