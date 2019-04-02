@@ -491,36 +491,36 @@ class JavaClassFile:
             data = class_file_constant_table[i][2:]
 
             if tag == "01":     # String
-                tag_type = ConstantPoolTag(tag).get_tag_Type(tag)
+                tag_type = ConstantPoolTag(tag).get_tag_type(tag)
                 data = bytes.fromhex(data).decode('utf-8')
                 values[index] = [tag_type, data]
 
             elif tag == "07":   # Class Ref
-                tag_type = ConstantPoolTag(tag).get_tag_Type(tag)
+                tag_type = ConstantPoolTag(tag).get_tag_type(tag)
                 data = '#' + str(int(data, 16))
                 values[index] = [tag_type, data]
 
             elif tag == "08":   # String Ref
-                tag_type = ConstantPoolTag(tag).get_tag_Type(tag)
+                tag_type = ConstantPoolTag(tag).get_tag_type(tag)
                 data = '#' + str(int(data, 16))
                 values[index] = [tag_type, data]
 
             elif tag == "09":   # Field Ref
-                tag_type = ConstantPoolTag(tag).get_tag_Type(tag)
+                tag_type = ConstantPoolTag(tag).get_tag_type(tag)
                 data_index_01 = data[2:4]
                 data_index_02 = data[4:]
                 data = ('#' + str(int(data_index_01, 16)) + ', ' + '#' + str(int(data_index_02, 16)))
                 values[index] = [tag_type, data]
 
             elif tag == "0A":   # Method Ref
-                tag_type = ConstantPoolTag(tag).get_tag_Type(tag)
+                tag_type = ConstantPoolTag(tag).get_tag_type(tag)
                 data_index_01 = data[2:4]
                 data_index_02 = data[4:]
                 data = ('#' + str(int(data_index_01, 16)) + ', ' + '#' + str(int(data_index_02, 16)))
                 values[index] = [tag_type, data]
 
             else:
-                tag_type = ConstantPoolTag(tag).get_tag_Type(tag)
+                tag_type = ConstantPoolTag(tag).get_tag_type(tag)
                 values[index] = [tag_type, data]
 
             index += 1

@@ -36,7 +36,7 @@ class ConstantPoolTag(Enum):
             "12": 4     # InvokeDynamic
         }.get(tag, None)
 
-    def get_tag_Type(self, tag):
+    def get_tag_type(self, tag):
         return {
             "01": "UTF-8",    # This represents how many bytes the UTF-8 string size variable is [e.g 00 05]
             "03": "Integer",    # Integer
