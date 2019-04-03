@@ -259,3 +259,22 @@ class op_codes:
         #               stack_z.append(varsarray[3])
         #              return stack_z
 
+        def op_code93(stack_z): # int to short
+                var1 = stack_z.pop()
+                while var1 >= 32768 or var1 <= -32769:
+
+                        if var1 == 32768:
+                                var1 = -32768
+
+                        if var1 == -32769:
+                                var1 = 32767
+
+                        if var1 > 32768:
+                                var1 += -32768
+
+                        if var1 < -32768:
+                                var1 += 32768
+
+                stack_z.append(var1)
+                return stack_z
+
