@@ -260,8 +260,15 @@ class op_codes:
         #              return stack_z
 
         def op_code93(stack_z): # int to short
+                MAX_JAVA_INT = 2147483647
+                MIN_JAVA_INT = -2147483647
                 var1 = stack_z.pop()
                 while var1 >= 32768 or var1 <= -32769:
+                        if var1 == MAX_JAVA_INT:
+                                var1 = -1
+
+                        if var1 == MIN_JAVA_INT:
+                                var1 = 0
 
                         if var1 == 32768:
                                 var1 = -32768
@@ -274,7 +281,7 @@ class op_codes:
 
                         if var1 < -32768:
                                 var1 = 32768 + (var1 + 32768)
-
+                print(var1)
                 stack_z.append(var1)
                 return stack_z
 
