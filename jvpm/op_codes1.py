@@ -281,7 +281,7 @@ class op_codes:
 
                         if var1 < -32768:
                                 var1 = 32768 + (var1 + 32768)
-                print(var1)
+
                 stack_z.append(var1)
                 return stack_z
 
