@@ -285,3 +285,10 @@ class op_codes:
                 stack_z.append(var1)
                 return stack_z
 
+        def op_code2e(array, index):
+                if index < len(array):
+                        stack_z = []
+                        stack_z.append(array[index])
+                        return stack_z
+                else:
+                        raise IndexError
