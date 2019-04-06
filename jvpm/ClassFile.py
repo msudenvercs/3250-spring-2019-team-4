@@ -482,11 +482,15 @@ class JavaClassFile:
     constant_parts =[]
     constant_slpit = []
     def format_constant_table(self):
+        counter = 1;
         for constant in self.classfile_constant_table:
             self.constant_split = [constant[i:i+2] for i in range(0, len(constant), 2)]
             tag = self.constant_split[0]
             self.constant_helper(tag)
-        #print(self.formatted_constant_table)
+
+        for i in self.formatted_constant_table:
+            print(counter ,i)
+            counter = counter +1
 
     def constant_helper(self, tag):
         map = {
@@ -600,9 +604,9 @@ class JavaClassFile:
 
 
 # -----END OF METHOD DEFINITIONS-----
-a = JavaClassFile("HelloWorld.class")
+a = JavaClassFile("test.class")
 a.print_data()
-a.format_constant_table()
+#a.format_constant_table()
 a.display_data()
 
 
