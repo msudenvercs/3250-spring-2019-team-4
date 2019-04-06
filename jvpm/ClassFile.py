@@ -478,6 +478,44 @@ class JavaClassFile:
         print("Attribute Table: " + str(self.classfile_attribute_table))
         print("Attribute Table Size: " + str(self.classfile_attribute_table_size))
 
+    formatted_constant_table = []
+    constant_parts =[]
+    def format_constant_table(self):
+        counter = 1
+        tag =''
+        constant_slpit = []
+        for constant in self.classfile_constant_table:
+            constant_split = [constant[i:i+2] for i in range(0, len(constant), 2)]
+            tag = constant_split[0]
+            #self.constant_helper(tag,constant_slpit)
+        #print(self.constant_parts[1])
+    #print(constant_slpit[0])
+    #int(data_value, 16)
+    #constant_parts[counter]
+    #string = ConstantPoolTag(constant_slpit[0]).get_tag_type(constant_slpit[0])
+    #print(string)
+    #formatted_constant_table[constant]= constant_parts
+
+    def tag_10_helper(self,tag,constant_split):
+        self.constant_parts.append(ConstantPoolTag(tag).get_tag_type(tag))
+        for i in range(1,len(constant_split),2):
+            ref = constant_split[i]+constant_split[i+1]
+            self.constant_parts.append(int(string,16))
+            print()
+
+    def default(self):
+        print("here")
+
+    def constant_helper(self, tag, constant_slpit):
+        map = {
+            "0A": self.tag_10_helper(tag,constant_slpit),
+        }
+        try:
+            map[tag]
+        except KeyError:
+            self.default()
+
+
     # Print data from tables in a human readable format
     def display_data(self): # pragma: no cover TODO
         values = {}
@@ -555,9 +593,11 @@ class JavaClassFile:
 
 
 # -----END OF METHOD DEFINITIONS-----
-a = JavaClassFile("test.class")
+a = JavaClassFile("HelloWorld.class")
 a.print_data()
+a.format_constant_table()
 a.display_data()
+
 
 '''
     def op_code_caller(self, input):
