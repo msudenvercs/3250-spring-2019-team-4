@@ -1,4 +1,5 @@
 from jvpm.ConstantPoolTag import *
+from jvpm.op_codes1 import *
 import os
 
 
@@ -478,7 +479,7 @@ class JavaClassFile:
         print("Attribute Table: " + str(self.classfile_attribute_table))
         print("Attribute Table Size: " + str(self.classfile_attribute_table_size))
 
-    # decoding constant pool and calling upcodes
+    # decoding constant pool and calling upcodes, TODO clean code
     formatted_constant_table = []
     constant_parts =[]
     constant_slpit = []
@@ -502,33 +503,46 @@ class JavaClassFile:
             upcodes_len = method_split[index:index+4]
             hex = int("".join(map(str, upcodes_len)),16)
             self.upcodes.append(method_split[index+4:index+4+hex])
-        print(self.upcodes)
         return(self.upcodes)
 
     def get_virtual(self):
         index = 0
-        for upcode in self.get_upcodes()[1]:
-            if upcode[0] == "B":
-                print(upcode)
-                index = int("".join(map(str, upcode[1:3])),16)
-                print(index)
-                self.execute_upcodes(upcode,index)
-        print(self.virtual)
+        for upcodes in self.get_upcodes():
+            for upcode in upcodes:
+                self.execute_upcodes(upcodes,upcode,index)
+        if self.virtual != "":
+            op_codes.invokeVirtual(self.stack_z,self.virtual)
         return self.virtual
 
-    def execute_upcodes(self, upcode,index):
+    def execute_upcodes(self,upcodes, upcode,index):
         get_return = ""
         map = {
-            "B2": self.upcode_b2
+            "B2": self.upcode_b2,
+            "B1": self.upcode_b1,
+            "10": self.upcode_10
         }
         try:
-            map[upcode](upcode,index)
+            map[upcode](upcodes,upcode,index)
         except KeyError:
-            self.default()
+            self.default(upcode)
 
-    def upcode_b2(self,upcode,index):
-        self.recursive(2)
+    def upcode_b2(self,upcodes,upcode,index):
+        pool_index = upcodes.index(upcode)
+        code_index = int("".join(map(str, upcodes[pool_index+1:pool_index+3])),16)
+        self.recursive(code_index)
 
+    def upcode_b1(self,upcodes,upcode,index):
+        return None
+
+    def upcode_10(self,upcodes,upcode,index):
+        pool_index = upcodes.index(upcode)
+        constant = int("".join(map(str, upcodes[pool_index+1:pool_index+2])),16)
+        self.stack_z.append(constant)
+
+    def default(self,upcode):
+        return None
+
+    #recursive method to interpret contant pool
     virtual = ""
     def recursive(self,index):
         check = ""
@@ -552,7 +566,7 @@ class JavaClassFile:
         try:
             map[tag](tag)
         except KeyError:
-            self.default()
+            self.default(tag)
 
     def tag_ref_helper(self,tag):
         self.constant_parts.append(ConstantPoolTag(tag).get_tag_type(tag))
@@ -572,8 +586,8 @@ class JavaClassFile:
         self.formatted_constant_table.append(self.constant_parts)
         self.constant_parts = []
 
-    def default(self):
-        print("missing method")
+
+
 
 
     # Print data from tables in a human readable format
@@ -655,10 +669,9 @@ class JavaClassFile:
 # -----END OF METHOD DEFINITIONS-----
 a = JavaClassFile("test.class")
 a.print_data()
-#a.format_constant_table()
-#a.get_virtual()
-
-a.display_data()
+a.format_constant_table()
+a.get_virtual()
+#a.display_data()
 
 
 '''

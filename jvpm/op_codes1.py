@@ -6,7 +6,7 @@ class op_codes:
 
         #emulates println for the different data types
         def invokeVirtual(stack_z, tag):
-            if(tag == "//java/io/PrintStream.print:(I)V"):
+            if(tag == "java/io/PrintStreamprintln(I)V"):
                 print(stack_z.pop())
             elif(tag == "//java/io/PrintStream.print:(D)V"):
                 print(stack_z.pop())
