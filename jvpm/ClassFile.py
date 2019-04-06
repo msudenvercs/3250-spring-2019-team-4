@@ -478,9 +478,12 @@ class JavaClassFile:
         print("Attribute Table: " + str(self.classfile_attribute_table))
         print("Attribute Table Size: " + str(self.classfile_attribute_table_size))
 
+    # decoding constant pool and calling upcodes
     formatted_constant_table = []
     constant_parts =[]
     constant_slpit = []
+    upcodes = []
+
     def format_constant_table(self):
         counter = 1;
         for constant in self.classfile_constant_table:
@@ -492,20 +495,66 @@ class JavaClassFile:
             print(counter ,i)
             counter = counter +1
 
+    def get_upcodes(self):
+        index = 18
+        for method in self.classfile_method_table:
+            method_split = [method[i:i+2] for i in range(0, len(method), 2)]
+            upcodes_len = method_split[index:index+4]
+            hex = int("".join(map(str, upcodes_len)),16)
+            self.upcodes.append(method_split[index+4:index+4+hex])
+        print(self.upcodes)
+        return(self.upcodes)
+
+    def get_virtual(self):
+        index = 0
+        for upcode in self.get_upcodes()[1]:
+            if upcode[0] == "B":
+                print(upcode)
+                index = int("".join(map(str, upcode[1:3])),16)
+                print(index)
+                self.execute_upcodes(upcode,index)
+        print(self.virtual)
+        return self.virtual
+
+    def execute_upcodes(self, upcode,index):
+        get_return = ""
+        map = {
+            "B2": self.upcode_b2
+        }
+        try:
+            map[upcode](upcode,index)
+        except KeyError:
+            self.default()
+
+    def upcode_b2(self,upcode,index):
+        self.recursive(2)
+
+    virtual = ""
+    def recursive(self,index):
+        check = ""
+        for call in self.formatted_constant_table[index]:
+            if check == "UTF-8":
+                self.virtual = self.virtual + call
+            elif call == "UTF-8":
+                check = call
+            if isinstance(call,int):
+                self.recursive(call-1)
+
     def constant_helper(self, tag):
         map = {
-            "0C": self.tag_10_helper,
-            "0A": self.tag_10_helper,
-            "09": self.tag_10_helper,
-            "07": self.tag_10_helper,
-            "01": self.tag_01_helper
+            "0C": self.tag_ref_helper,
+            "0A": self.tag_ref_helper,
+            "09": self.tag_ref_helper,
+            "08": self.tag_ref_helper,
+            "07": self.tag_ref_helper,
+            "01": self.tag_utf8_helper
         }
         try:
             map[tag](tag)
         except KeyError:
             self.default()
 
-    def tag_10_helper(self,tag):
+    def tag_ref_helper(self,tag):
         self.constant_parts.append(ConstantPoolTag(tag).get_tag_type(tag))
         for i in range(1,len(self.constant_split),2):
             ref = self.constant_split[i]+self.constant_split[i+1]
@@ -513,7 +562,7 @@ class JavaClassFile:
         self.formatted_constant_table.append(self.constant_parts)
         self.constant_parts = []
 
-    def tag_01_helper(self,tag):
+    def tag_utf8_helper(self,tag):
         self.constant_parts.append(ConstantPoolTag(tag).get_tag_type(tag))
         hex_list = []
         for i in self.constant_split[3:]:
@@ -607,6 +656,7 @@ class JavaClassFile:
 a = JavaClassFile("test.class")
 a.print_data()
 #a.format_constant_table()
+#a.get_virtual()
 a.display_data()
 
 
