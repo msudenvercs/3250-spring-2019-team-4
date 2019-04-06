@@ -480,40 +480,47 @@ class JavaClassFile:
 
     formatted_constant_table = []
     constant_parts =[]
+    constant_slpit = []
     def format_constant_table(self):
-        counter = 1
-        tag =''
-        constant_slpit = []
         for constant in self.classfile_constant_table:
-            constant_split = [constant[i:i+2] for i in range(0, len(constant), 2)]
-            tag = constant_split[0]
-            #self.constant_helper(tag,constant_slpit)
-        #print(self.constant_parts[1])
-    #print(constant_slpit[0])
-    #int(data_value, 16)
-    #constant_parts[counter]
-    #string = ConstantPoolTag(constant_slpit[0]).get_tag_type(constant_slpit[0])
-    #print(string)
-    #formatted_constant_table[constant]= constant_parts
+            self.constant_split = [constant[i:i+2] for i in range(0, len(constant), 2)]
+            tag = self.constant_split[0]
+            self.constant_helper(tag)
+        #print(self.formatted_constant_table)
 
-    def tag_10_helper(self,tag,constant_split):
-        self.constant_parts.append(ConstantPoolTag(tag).get_tag_type(tag))
-        for i in range(1,len(constant_split),2):
-            ref = constant_split[i]+constant_split[i+1]
-            self.constant_parts.append(int(string,16))
-            print()
-
-    def default(self):
-        print("here")
-
-    def constant_helper(self, tag, constant_slpit):
+    def constant_helper(self, tag):
         map = {
-            "0A": self.tag_10_helper(tag,constant_slpit),
+            "0C": self.tag_10_helper,
+            "0A": self.tag_10_helper,
+            "09": self.tag_10_helper,
+            "07": self.tag_10_helper,
+            "01": self.tag_01_helper
         }
         try:
-            map[tag]
+            map[tag](tag)
         except KeyError:
             self.default()
+
+    def tag_10_helper(self,tag):
+        self.constant_parts.append(ConstantPoolTag(tag).get_tag_type(tag))
+        for i in range(1,len(self.constant_split),2):
+            ref = self.constant_split[i]+self.constant_split[i+1]
+            self.constant_parts.append(int(ref,16))
+        self.formatted_constant_table.append(self.constant_parts)
+        self.constant_parts = []
+
+    def tag_01_helper(self,tag):
+        self.constant_parts.append(ConstantPoolTag(tag).get_tag_type(tag))
+        hex_list = []
+        for i in self.constant_split[3:]:
+            hex_list.append(chr(int(i, 16)))
+        ref = "".join(map(str, hex_list))
+        self.constant_parts.append(ref)
+        self.formatted_constant_table.append(self.constant_parts)
+        self.constant_parts = []
+
+    def default(self):
+        print("missing method")
 
 
     # Print data from tables in a human readable format
