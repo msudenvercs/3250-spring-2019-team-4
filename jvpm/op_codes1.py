@@ -8,10 +8,10 @@ class op_codes:
         def invokeVirtual(stack_z, tag):
             if(tag == "java/io/PrintStreamprintln(I)V"):
                 print(stack_z.pop())
-            elif(tag == "//java/io/PrintStream.print:(D)V"):
+            elif(tag == "java/io/PrintStreamprint(D)V"):
                 print(stack_z.pop())
 
-            elif(tag  == "//java/io/PrintStream.print:(Z)V"):
+            elif(tag  == "java/io/PrintStreamprint(Z)V"):
                 poppedValue = stack_z.pop()
                 if(poppedValue == 1):
                     print ("true")
@@ -19,7 +19,7 @@ class op_codes:
                     print ("false")
                 else:
                     print("this is not implemented.")
-            elif(tag == "//java/io/PrintStream/java.lang.String"):
+            elif(tag == "java/io/PrintStream/javalangString"):
                 print(stack_z.pop())
 
 
