@@ -503,44 +503,63 @@ class JavaClassFile:
             upcodes_len = method_split[index:index+4]
             hex = int("".join(map(str, upcodes_len)),16)
             self.upcodes.append(method_split[index+4:index+4+hex])
+        print(self.upcodes)
         return(self.upcodes)
 
-    def get_virtual(self):
+    def get_virtual(self):#fix bug where only upcodes are passed
         index = 0
         for upcodes in self.get_upcodes():
+            check = 0
             for upcode in upcodes:
-                self.execute_upcodes(upcodes,upcode,index)
+                if check == 1 or check == 2:
+                    check = check + 1
+                    continue
+                if upcode == "10" or upcode == "12":
+                    check = 2
+                if upcode[0] == "B":
+                    check = 1
+                self.execute_upcodes(upcodes,upcode)
         if self.virtual != "":
             op_codes.invokeVirtual(self.stack_z,self.virtual)
+        print(self.virtual)
         return self.virtual
 
-    def execute_upcodes(self,upcodes, upcode,index):
+    def execute_upcodes(self,upcodes, upcode):
         get_return = ""
         map = {
             "B2": self.upcode_b2,
             "B1": self.upcode_b1,
+            "12": self.upcode_12,
             "10": self.upcode_10
         }
         try:
-            map[upcode](upcodes,upcode,index)
+            map[upcode](upcodes,upcode)
         except KeyError:
             self.default(upcode)
 
-    def upcode_b2(self,upcodes,upcode,index):
+    #these methods will go in opcodes1 file or othe
+    def upcode_b2(self,upcodes,upcode):
         pool_index = upcodes.index(upcode)
         code_index = int("".join(map(str, upcodes[pool_index+1:pool_index+3])),16)
         self.recursive(code_index)
 
-    def upcode_b1(self,upcodes,upcode,index):
+    def upcode_b1(self,upcodes,upcode):
         return None
 
-    def upcode_10(self,upcodes,upcode,index):
+    def upcode_10(self,upcodes,upcode):
         pool_index = upcodes.index(upcode)
         constant = int("".join(map(str, upcodes[pool_index+1:pool_index+2])),16)
         self.stack_z.append(constant)
 
+    def upcode_12(self,upcodes, upcode):
+        pool_index = upcodes.index(upcode)
+        table_index = int("".join(map(str, upcodes[pool_index+1:pool_index+2])),16)
+        string = self.formatted_constant_table[table_index][1]
+        print(string)
+        self.stack_z.append(string)
+
     def default(self,upcode):
-        return None
+        print("Missing Method: " + upcode)
 
     #recursive method to interpret contant pool
     virtual = ""
@@ -669,9 +688,9 @@ class JavaClassFile:
 # -----END OF METHOD DEFINITIONS-----
 a = JavaClassFile("test.class")
 a.print_data()
-#a.format_constant_table()
+a.format_constant_table()
 #a.get_virtual()
-a.display_data()
+#a.display_data()
 
 
 '''

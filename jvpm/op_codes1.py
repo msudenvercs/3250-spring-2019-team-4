@@ -19,7 +19,7 @@ class op_codes:
                     print ("false")
                 else:
                     print("this is not implemented.")
-            elif(tag == "java/io/PrintStream/javalangString"):
+            elif(tag == "java/io/PrintStreamprintln(Ljava/lang/String;)V"):
                 print(stack_z.pop())
 
 
