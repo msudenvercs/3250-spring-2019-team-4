@@ -691,8 +691,8 @@ a.print_data()
 a.format_constant_table()
 #a.get_virtual()
 #a.display_data()
-#b = JavaClassFile("HelloWorld.class")
-#b.display_data()
+b = JavaClassFile("HelloWorld.class")
+b.display_data()
 
 
 '''
