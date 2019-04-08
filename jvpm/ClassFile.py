@@ -506,7 +506,7 @@ class JavaClassFile:
         print(self.upcodes)
         return(self.upcodes)
 
-    def get_virtual(self):#fix bug where only upcodes are passed
+    def get_virtual(self):
         index = 0
         for upcodes in self.get_upcodes():
             check = 0
@@ -686,7 +686,11 @@ class JavaClassFile:
 
 
 # -----END OF METHOD DEFINITIONS-----
-
+a = JavaClassFile("IntHelloWorld.class")
+a.print_data()
+a.format_constant_table()
+a.get_virtual()
+#a.display_data()
 
 
 '''
