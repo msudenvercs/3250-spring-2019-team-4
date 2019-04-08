@@ -170,28 +170,28 @@ class op_codes:
                 stack_z.append(1)
                 return stack_z
 
-        def op_code91(stack_z):
-                var1 = stack_z.pop()
-                if var1 >= 0:
-                        if (var1 % 256) == 0:
-                                stack_z.append(bytes([0]))
-                        else:
-                                if (var1 // 256) % 2 == 0:
-                                        var1 -= (256 * (var1//256))
-                                        stack_z.append(bytes[var1])
-                                elif ((var1 // 256) % 2) > 1:
-                                        var1 -= (256 * (var1//256 + 1))
-                                        stack_z.append(bytearray([256-var1]))
-                                else:
-                                        var1 -= (256 * (var1//256 + 1))
-                                        stack_z.append(bytes[var1])
-                else:
-                        if (var1 % 256) == 0:
-                                stack_z.append(bytes([0]))
-                        else:
-                                var1 += (256 * (var1//256) * -1)
-                                stack_z.append(bytes([var1]))
-                return stack_z
+        #def op_code91(stack_z):
+        #        var1 = stack_z.pop()
+        #        if var1 >= 0:
+        #                if (var1 % 256) == 0:
+        #                        stack_z.append(bytes([0]))
+        #                else:
+        #                        if (var1 // 256) % 2 == 0:
+        #                                var1 -= (256 * (var1//256))
+        #                                stack_z.append(bytes[var1])
+        #                        elif ((var1 // 256) % 2) > 1:
+        #                                var1 -= (256 * (var1//256 + 1))
+        #                                stack_z.append(bytearray([256-var1]))
+        #                        else:
+        #                                var1 -= (256 * (var1//256 + 1))
+        #                                stack_z.append(bytes[var1])
+        #        else:
+        #                if (var1 % 256) == 0:
+        #                        stack_z.append(bytes([0]))
+        #                else:
+        #                        var1 += (256 * (var1//256) * -1)
+        #                        stack_z.append(bytes([var1]))
+        #        return stack_z
 
         def op_code92(stack_z):
                 var1 = stack_z.pop()
