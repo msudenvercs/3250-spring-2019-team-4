@@ -1,4 +1,5 @@
 from jvpm.ConstantPoolTag import *
+from jvpm.op_codes1 import *
 import os
 
 
@@ -478,6 +479,136 @@ class JavaClassFile:
         print("Attribute Table: " + str(self.classfile_attribute_table))
         print("Attribute Table Size: " + str(self.classfile_attribute_table_size))
 
+    # decoding constant pool and calling upcodes, TODO clean code
+    formatted_constant_table = []
+    constant_parts =[]
+    constant_slpit = []
+    upcodes = []
+
+    def format_constant_table(self):
+        counter = 1;
+        for constant in self.classfile_constant_table:
+            self.constant_split = [constant[i:i+2] for i in range(0, len(constant), 2)]
+            tag = self.constant_split[0]
+            self.constant_helper(tag)
+
+        for i in self.formatted_constant_table:
+            print(counter ,i)
+            counter = counter +1
+
+    def get_upcodes(self):
+        index = 18
+        for method in self.classfile_method_table:
+            method_split = [method[i:i+2] for i in range(0, len(method), 2)]
+            upcodes_len = method_split[index:index+4]
+            hex = int("".join(map(str, upcodes_len)),16)
+            self.upcodes.append(method_split[index+4:index+4+hex])
+        print(self.upcodes)
+        return(self.upcodes)
+
+    def get_virtual(self):#fix bug where only upcodes are passed
+        index = 0
+        for upcodes in self.get_upcodes():
+            check = 0
+            for upcode in upcodes:
+                if check == 1 or check == 2:
+                    check = check + 1
+                    continue
+                if upcode == "10" or upcode == "12":
+                    check = 2
+                if upcode[0] == "B":
+                    check = 1
+                self.execute_upcodes(upcodes,upcode)
+        if self.virtual != "":
+            op_codes.invokeVirtual(self.stack_z,self.virtual)
+        print(self.virtual)
+        return self.virtual
+
+    def execute_upcodes(self,upcodes, upcode):
+        get_return = ""
+        map = {
+            "B2": self.upcode_b2,
+            "B1": self.upcode_b1,
+            "12": self.upcode_12,
+            "10": self.upcode_10
+        }
+        try:
+            map[upcode](upcodes,upcode)
+        except KeyError:
+            self.default(upcode)
+
+    #these methods will go in opcodes1 file or othe
+    def upcode_b2(self,upcodes,upcode):
+        pool_index = upcodes.index(upcode)
+        code_index = int("".join(map(str, upcodes[pool_index+1:pool_index+3])),16)
+        self.recursive(code_index)
+
+    def upcode_b1(self,upcodes,upcode):
+        return None
+
+    def upcode_10(self,upcodes,upcode):
+        pool_index = upcodes.index(upcode)
+        constant = int("".join(map(str, upcodes[pool_index+1:pool_index+2])),16)
+        self.stack_z.append(constant)
+
+    def upcode_12(self,upcodes, upcode):
+        pool_index = upcodes.index(upcode)
+        table_index = int("".join(map(str, upcodes[pool_index+1:pool_index+2])),16)
+        string = self.formatted_constant_table[table_index][1]
+        print(string)
+        self.stack_z.append(string)
+
+    def default(self,upcode):
+        print("Missing Method: " + upcode)
+
+    #recursive method to interpret contant pool
+    virtual = ""
+    def recursive(self,index):
+        check = ""
+        for call in self.formatted_constant_table[index]:
+            if check == "UTF-8":
+                self.virtual = self.virtual + call
+            elif call == "UTF-8":
+                check = call
+            if isinstance(call,int):
+                self.recursive(call-1)
+
+    def constant_helper(self, tag):
+        map = {
+            "0C": self.tag_ref_helper,
+            "0A": self.tag_ref_helper,
+            "09": self.tag_ref_helper,
+            "08": self.tag_ref_helper,
+            "07": self.tag_ref_helper,
+            "01": self.tag_utf8_helper
+        }
+        try:
+            map[tag](tag)
+        except KeyError:
+            self.default(tag)
+
+    def tag_ref_helper(self,tag):
+        self.constant_parts.append(ConstantPoolTag(tag).get_tag_type(tag))
+        for i in range(1,len(self.constant_split),2):
+            ref = self.constant_split[i]+self.constant_split[i+1]
+            self.constant_parts.append(int(ref,16))
+        self.formatted_constant_table.append(self.constant_parts)
+        self.constant_parts = []
+
+    def tag_utf8_helper(self,tag):
+        self.constant_parts.append(ConstantPoolTag(tag).get_tag_type(tag))
+        hex_list = []
+        for i in self.constant_split[3:]:
+            hex_list.append(chr(int(i, 16)))
+        ref = "".join(map(str, hex_list))
+        self.constant_parts.append(ref)
+        self.formatted_constant_table.append(self.constant_parts)
+        self.constant_parts = []
+
+
+
+
+
     # Print data from tables in a human readable format
     def display_data(self): # pragma: no cover TODO
         values = {}
@@ -557,7 +688,12 @@ class JavaClassFile:
 # -----END OF METHOD DEFINITIONS-----
 a = JavaClassFile("test.class")
 a.print_data()
-a.display_data()
+a.format_constant_table()
+#a.get_virtual()
+#a.display_data()
+b = JavaClassFile("HelloWorld.class")
+b.display_data()
+
 
 '''
     def op_code_caller(self, input):
