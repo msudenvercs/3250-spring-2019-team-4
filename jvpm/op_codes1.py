@@ -4,23 +4,23 @@ All Methods for OP Codes go in this file
 
 class op_codes:
 
-        #emulates println for the different data types
-        def invokeVirtual(stack_z, tag):
-            if(tag == "java/io/PrintStreamprintln(I)V"):
-                print(stack_z.pop())
-            elif(tag == "java/io/PrintStreamprint(D)V"):
-                print(stack_z.pop())
+        #emulates println for the different data types ******going to be redone*****
+        #def invokeVirtual(stack_z, tag):
+        #    if(tag == "java/io/PrintStreamprintln(I)V"):
+        #        print(stack_z.pop())
+        #    elif(tag == "java/io/PrintStreamprint(D)V"):
+        #        print(stack_z.pop())
 
-            elif(tag  == "java/io/PrintStreamprint(Z)V"):
-                poppedValue = stack_z.pop()
-                if(poppedValue == 1):
-                    print ("true")
-                elif(poppedValue == 0):
-                    print ("false")
-                else:
-                    print("this is not implemented.")
-            elif(tag == "java/io/PrintStreamprintln(Ljava/lang/String;)V"):
-                print(stack_z.pop())
+        #    elif(tag  == "java/io/PrintStreamprint(Z)V"):
+        #        poppedValue = stack_z.pop()
+        #        if(poppedValue == 1):
+        #            print ("true")
+        #        elif(poppedValue == 0):
+        #            print ("false")
+        #        else:
+        #            print("this is not implemented.")
+        #    elif(tag == "java/io/PrintStreamprintln(Ljava/lang/String;)V"):
+        #        print(stack_z.pop())
 
 
         def op_code70(stack_z):     #remainder
@@ -170,28 +170,28 @@ class op_codes:
                 stack_z.append(1)
                 return stack_z
 
-        def op_code91(stack_z):
-                var1 = stack_z.pop()
-                if var1 >= 0:
-                        if (var1 % 256) == 0:
-                                stack_z.append(bytes([0]))
-                        else:
-                                if (var1 // 256) % 2 == 0:
-                                        var1 -= (256 * (var1//256))
-                                        stack_z.append(bytes[var1])
-                                elif ((var1 // 256) % 2) > 1:
-                                        var1 -= (256 * (var1//256 + 1))
-                                        stack_z.append(bytearray([256-var1]))
-                                else:
-                                        var1 -= (256 * (var1//256 + 1))
-                                        stack_z.append(bytes[var1])
-                else:
-                        if (var1 % 256) == 0:
-                                stack_z.append(bytes([0]))
-                        else:
-                                var1 += (256 * (var1//256) * -1)
-                                stack_z.append(bytes([var1]))
-                return stack_z
+        #def op_code91(stack_z):
+        #        var1 = stack_z.pop()
+        #        if var1 >= 0:
+        #                if (var1 % 256) == 0:
+        #                        stack_z.append(bytes([0]))
+        #                else:
+        #                        if (var1 // 256) % 2 == 0:
+        #                                var1 -= (256 * (var1//256))
+        #                                stack_z.append(bytes[var1])
+        #                        elif ((var1 // 256) % 2) > 1:
+        #                                var1 -= (256 * (var1//256 + 1))
+        #                                stack_z.append(bytearray([256-var1]))
+        #                        else:
+        #                                var1 -= (256 * (var1//256 + 1))
+        #                                stack_z.append(bytes[var1])
+        #        else:
+        #                if (var1 % 256) == 0:
+        #                        stack_z.append(bytes([0]))
+        #                else:
+        #                        var1 += (256 * (var1//256) * -1)
+        #                        stack_z.append(bytes([var1]))
+        #        return stack_z
 
         def op_code92(stack_z):
                 var1 = stack_z.pop()

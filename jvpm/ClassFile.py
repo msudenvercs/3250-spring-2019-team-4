@@ -693,7 +693,6 @@ a.get_virtual()
 #a.display_data()
 
 
-
 '''
     def op_code_caller(self, input):
         op_code_dict = {
