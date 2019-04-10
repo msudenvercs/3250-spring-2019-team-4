@@ -492,13 +492,16 @@ class JavaClassFile:
             self.constant_helper(tag)
         return self.formatted_constant_table
 
-    def print_table(self):
+    def print_table_info(self):
         print("\n-----CONSTANT TABLE-----")
         counter = 1;
         for i in self.formatted_constant_table:
             print(counter ,i)
             counter = counter +1
         print("opcodes:", self.opcodes)
+        print("virtual:",self.virtual)
+        if self.virtual != "":
+            op_codes.invokeVirtual(self.stack_z,self.virtual)
 
     def get_opcodes(self):
         index = 18
@@ -522,9 +525,6 @@ class JavaClassFile:
                 if opcode[0] == "B":
                     check = 1
                 self.execute_opcodes(opcodes,opcode)
-        if self.virtual != "":
-            op_codes.invokeVirtual(self.stack_z,self.virtual)
-        print(self.virtual)
         return self.virtual
 
     def execute_opcodes(self,opcodes, opcode):
@@ -544,14 +544,14 @@ class JavaClassFile:
     def opcode_b2(self,opcodes,opcode):
         pool_index = opcodes.index(opcode)
         code_index = int("".join(map(str, opcodes[pool_index+1:pool_index+3])),16)
-        self.recursive(code_index)
+        self.recursive(code_index-1)
 
     def opcode_b1(self,opcodes,opcode):
         return None
 
     def opcode_10(self,opcodes,opcode):
         pool_index = opcodes.index(opcode)
-        constant = int("".join(map(str, opcodes[pool_index+1:pool_index+2])),16)
+        constant = int("".join(map(str, opcodes[pool_index+2:pool_index+3])),16)
         self.stack_z.append(constant)
 
     def opcode_12(self,opcodes, opcode):
@@ -560,9 +560,10 @@ class JavaClassFile:
         string = self.formatted_constant_table[table_index][1]
         print(string)
         self.stack_z.append(string)
+    #/////////
 
     def default(self,opcode):
-        print("Missing Method: " + opcode)
+        return "Missing Method: " , opcode
 
     #recursive method to interpret contant pool
     virtual = ""
@@ -608,8 +609,6 @@ class JavaClassFile:
         self.constant_parts.append(ref)
         self.formatted_constant_table.append(self.constant_parts)
         self.constant_parts = []
-
-
 
 
 
@@ -694,7 +693,7 @@ a = JavaClassFile("IntHelloWorld.class")
 a.print_data()
 a.format_constant_table()
 a.get_virtual()
-a.print_table()
+a.print_table_info()
 #a.display_data()
 
 
