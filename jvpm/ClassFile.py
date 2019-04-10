@@ -655,7 +655,7 @@ class JavaClassFile:
                 values[index] = [tag_type, data]
 
             index += 1
-        for i in range(1, len(class_file_constant_table)):
+        for i in range(1, len(class_file_constant_table) + 1):
             print(str(i) + ": " + str(values[i]))
 
         print("\n-----INTERFACE TABLE-----")
