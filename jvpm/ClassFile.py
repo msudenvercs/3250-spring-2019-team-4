@@ -479,87 +479,90 @@ class JavaClassFile:
         print("Attribute Table: " + str(self.classfile_attribute_table))
         print("Attribute Table Size: " + str(self.classfile_attribute_table_size))
 
-    # decoding constant pool and calling upcodes, TODO clean code
+    # decoding constant pool and calling opcodes, TODO clean code
     formatted_constant_table = []
     constant_parts =[]
     constant_slpit = []
-    upcodes = []
+    opcodes = []
 
     def format_constant_table(self):
-        counter = 1;
         for constant in self.classfile_constant_table:
             self.constant_split = [constant[i:i+2] for i in range(0, len(constant), 2)]
             tag = self.constant_split[0]
             self.constant_helper(tag)
+        return self.formatted_constant_table
 
+    def print_table(self):
+        print("\n-----CONSTANT TABLE-----")
+        counter = 1;
         for i in self.formatted_constant_table:
             print(counter ,i)
             counter = counter +1
 
-    def get_upcodes(self):
+    def get_opcodes(self):
         index = 18
         for method in self.classfile_method_table:
             method_split = [method[i:i+2] for i in range(0, len(method), 2)]
-            upcodes_len = method_split[index:index+4]
-            hex = int("".join(map(str, upcodes_len)),16)
-            self.upcodes.append(method_split[index+4:index+4+hex])
-        print(self.upcodes)
-        return(self.upcodes)
+            opcodes_len = method_split[index:index+4]
+            hex = int("".join(map(str, opcodes_len)),16)
+            self.opcodes.append(method_split[index+4:index+4+hex])
+        print(self.opcodes)
+        return self.opcodes
 
     def get_virtual(self):
         index = 0
-        for upcodes in self.get_upcodes():
+        for opcodes in self.get_opcodes():
             check = 0
-            for upcode in upcodes:
+            for opcode in opcodes:
                 if check == 1 or check == 2:
                     check = check + 1
                     continue
-                if upcode == "10" or upcode == "12":
+                if opcode == "10" or opcode == "12":
                     check = 2
-                if upcode[0] == "B":
+                if opcode[0] == "B":
                     check = 1
-                self.execute_upcodes(upcodes,upcode)
+                self.execute_opcodes(opcodes,opcode)
         if self.virtual != "":
             op_codes.invokeVirtual(self.stack_z,self.virtual)
         print(self.virtual)
         return self.virtual
 
-    def execute_upcodes(self,upcodes, upcode):
+    def execute_opcodes(self,opcodes, opcode):
         get_return = ""
         map = {
-            "B2": self.upcode_b2,
-            "B1": self.upcode_b1,
-            "12": self.upcode_12,
-            "10": self.upcode_10
+            "B2": self.opcode_b2,
+            "B1": self.opcode_b1,
+            "12": self.opcode_12,
+            "10": self.opcode_10
         }
         try:
-            map[upcode](upcodes,upcode)
+            map[opcode](opcodes,opcode)
         except KeyError:
-            self.default(upcode)
+            self.default(opcode)
 
     #these methods will go in opcodes1 file or othe
-    def upcode_b2(self,upcodes,upcode):
-        pool_index = upcodes.index(upcode)
-        code_index = int("".join(map(str, upcodes[pool_index+1:pool_index+3])),16)
+    def opcode_b2(self,opcodes,opcode):
+        pool_index = opcodes.index(opcode)
+        code_index = int("".join(map(str, opcodes[pool_index+1:pool_index+3])),16)
         self.recursive(code_index)
 
-    def upcode_b1(self,upcodes,upcode):
+    def opcode_b1(self,opcodes,opcode):
         return None
 
-    def upcode_10(self,upcodes,upcode):
-        pool_index = upcodes.index(upcode)
-        constant = int("".join(map(str, upcodes[pool_index+1:pool_index+2])),16)
+    def opcode_10(self,opcodes,opcode):
+        pool_index = opcodes.index(opcode)
+        constant = int("".join(map(str, opcodes[pool_index+1:pool_index+2])),16)
         self.stack_z.append(constant)
 
-    def upcode_12(self,upcodes, upcode):
-        pool_index = upcodes.index(upcode)
-        table_index = int("".join(map(str, upcodes[pool_index+1:pool_index+2])),16)
+    def opcode_12(self,opcodes, opcode):
+        pool_index = opcodes.index(opcode)
+        table_index = int("".join(map(str, opcodes[pool_index+1:pool_index+2])),16)
         string = self.formatted_constant_table[table_index][1]
         print(string)
         self.stack_z.append(string)
 
-    def default(self,upcode):
-        print("Missing Method: " + upcode)
+    def default(self,opcode):
+        print("Missing Method: " + opcode)
 
     #recursive method to interpret contant pool
     virtual = ""
@@ -572,6 +575,7 @@ class JavaClassFile:
                 check = call
             if isinstance(call,int):
                 self.recursive(call-1)
+        return self.virtual
 
     def constant_helper(self, tag):
         map = {
@@ -686,9 +690,10 @@ class JavaClassFile:
 
 
 # -----END OF METHOD DEFINITIONS-----
-a = JavaClassFile("test.class")
+a = JavaClassFile("IntHelloWorld.class")
 a.print_data()
 a.format_constant_table()
+a.print_table()
 a.get_virtual()
 #a.display_data()
 
