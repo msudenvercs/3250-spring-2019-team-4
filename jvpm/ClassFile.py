@@ -498,6 +498,7 @@ class JavaClassFile:
         for i in self.formatted_constant_table:
             print(counter ,i)
             counter = counter +1
+        print("opcodes:", self.opcodes)
 
     def get_opcodes(self):
         index = 18
@@ -506,7 +507,6 @@ class JavaClassFile:
             opcodes_len = method_split[index:index+4]
             hex = int("".join(map(str, opcodes_len)),16)
             self.opcodes.append(method_split[index+4:index+4+hex])
-        print(self.opcodes)
         return self.opcodes
 
     def get_virtual(self):
@@ -693,8 +693,8 @@ class JavaClassFile:
 a = JavaClassFile("IntHelloWorld.class")
 a.print_data()
 a.format_constant_table()
-a.print_table()
 a.get_virtual()
+a.print_table()
 #a.display_data()
 
 
