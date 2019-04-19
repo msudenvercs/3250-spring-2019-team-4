@@ -450,6 +450,7 @@ class JavaClassFile:
                 return
 
 
+
     # For Testing
 
     def print_data(self):   # pragma: no cover
@@ -478,6 +479,99 @@ class JavaClassFile:
         print("Attribute Count: " + self.get_attribute_count())
         print("Attribute Table: " + str(self.classfile_attribute_table))
         print("Attribute Table Size: " + str(self.classfile_attribute_table_size))
+
+        # Print data from tables in a human readable format
+
+    def display_data(self):  # pragma: no cover TODO
+        values = {}
+        index = 1
+        class_file_constant_table = self.classfile_constant_table
+        class_file_interface_table = self.classfile_interface_table
+        class_file_field_table = self.classfile_field_table
+        print("-----CONSTANT TABLE-----\n")
+        for i in range(len(self.classfile_constant_table)):
+            tag = str(class_file_constant_table[i][0:2])
+            data = class_file_constant_table[i][2:]
+            print(data)
+
+            if tag == "01":  # String
+                tag_type = ConstantPoolTag(tag).get_tag_type(tag)
+                data = bytes.fromhex(data).decode('utf-8')
+                values[index] = [tag_type, data]
+
+            elif tag == "07":  # Class Ref
+                tag_type = ConstantPoolTag(tag).get_tag_type(tag)
+                data = '#' + str(int(data, 16))
+                values[index] = [tag_type, data]
+
+            elif tag == "08":  # String Ref
+                tag_type = ConstantPoolTag(tag).get_tag_type(tag)
+                data = '#' + str(int(data, 16))
+                values[index] = [tag_type, data]
+
+            elif tag == "09":  # Field Ref
+                tag_type = ConstantPoolTag(tag).get_tag_type(tag)
+                data_index_01 = data[0:2]
+                data_index_02 = data[4:]
+                data = ('#' + str(int(data_index_01, 16)) + ', ' + '#' + str(int(data_index_02, 16)))
+                values[index] = [tag_type, data]
+
+            elif tag == "0A":  # Method Ref
+                tag_type = ConstantPoolTag(tag).get_tag_type(tag)
+                data_index_01 = data[0:4]
+                data_index_02 = data[4:]
+                data = ('#' + str(int(data_index_01, 16)) + ', ' + '#' + str(int(data_index_02, 16)))
+                values[index] = [tag_type, data]
+
+            elif tag == "0C":  # Name and Type Description
+                tag_type = ConstantPoolTag(tag).get_tag_type(tag)
+                data_index_01 = data[0:4]
+                data_index_02 = data[4:]
+                data = ('#' + str(int(data_index_01, 16)) + ', ' + '#' + str(int(data_index_02, 16)))
+                values[index] = [tag_type, data]
+
+            else:
+                tag_type = ConstantPoolTag(tag).get_tag_type(tag)
+                values[index] = [tag_type, data]
+
+            index += 1
+        for i in range(1, len(class_file_constant_table) + 1):
+            print(str(i) + ": " + str(values[i]))
+
+        print("\n-----INTERFACE TABLE-----")
+
+    def invoke_virtual(self, index):
+        # Index should be 2 hexadecimal bytes
+        int_index = int(index, 16)
+
+
+
+    def invoke_virtual_read_cp(self, cp_data):     #TODO: Better name
+        #TODO I hate ifs find a better way when I have time aka the end of the semester 'cause i'm busy RIP
+        tag = cp_data[0:2]
+        data = cp_data[2:]
+
+        if tag == "01":         # String
+            string_data = bytes.fromhex(data).decode('utf-8')
+            return string_data
+        elif tag == "0C":       # Name and Type Description
+            name_index = data[0:2]
+            type_index = data[4:]
+            self.invoke_virtual_read_cp(self.classfile_constant_table[name_index])
+            self.invoke_virtual_read_cp(self.classfile_constant_table[type_index])
+        elif tag == "07":       # Class Reference
+            print("TODO")
+        elif tag == "08":       # String Reference
+            print("TODO")
+        elif tag == "09":       # Field Reference
+            print("TODO")
+        elif tag == "0A":       # Method Reference
+            print("TODO")
+        elif tag == "0B":       # Interface Method Reference
+            print("TODO")
+
+
+
 
     # decoding constant pool and calling opcodes, TODO clean code
     formatted_constant_table = []
@@ -621,60 +715,6 @@ class JavaClassFile:
         print("virtual:",self.virtual)
         op_codes.invokeVirtual(self.stack_z, self.virtual)
 
-
-
-
-    # Print data from tables in a human readable format
-    def display_data(self): # pragma: no cover TODO
-        values = {}
-        index = 1
-        class_file_constant_table = self.classfile_constant_table
-        class_file_interface_table = self.classfile_interface_table
-        class_file_field_table = self.classfile_field_table
-        print("-----CONSTANT TABLE-----\n")
-        for i in range(len(self.classfile_constant_table)):
-            tag = str(class_file_constant_table[i][0:2])
-            data = class_file_constant_table[i][2:]
-
-            if tag == "01":     # String
-                tag_type = ConstantPoolTag(tag).get_tag_type(tag)
-                data = bytes.fromhex(data).decode('utf-8')
-                values[index] = [tag_type, data]
-
-            elif tag == "07":   # Class Ref
-                tag_type = ConstantPoolTag(tag).get_tag_type(tag)
-                data = '#' + str(int(data, 16))
-                values[index] = [tag_type, data]
-
-            elif tag == "08":   # String Ref
-                tag_type = ConstantPoolTag(tag).get_tag_type(tag)
-                data = '#' + str(int(data, 16))
-                values[index] = [tag_type, data]
-
-            elif tag == "09":   # Field Ref
-                tag_type = ConstantPoolTag(tag).get_tag_type(tag)
-                data_index_01 = data[2:4]
-                data_index_02 = data[4:]
-                data = ('#' + str(int(data_index_01, 16)) + ', ' + '#' + str(int(data_index_02, 16)))
-                values[index] = [tag_type, data]
-
-            elif tag == "0A":   # Method Ref
-                tag_type = ConstantPoolTag(tag).get_tag_type(tag)
-                data_index_01 = data[2:4]
-                data_index_02 = data[4:]
-                data = ('#' + str(int(data_index_01, 16)) + ', ' + '#' + str(int(data_index_02, 16)))
-                values[index] = [tag_type, data]
-
-            else:
-                tag_type = ConstantPoolTag(tag).get_tag_type(tag)
-                values[index] = [tag_type, data]
-
-            index += 1
-        for i in range(1, len(class_file_constant_table) + 1):
-            print(str(i) + ": " + str(values[i]))
-
-        print("\n-----INTERFACE TABLE-----")
-
     # Python "Constructor"
     def __init__(self, file_name):
         # TODO: Make it so that the .class file can be specified by name, this could help in testing opcode reading
@@ -701,15 +741,16 @@ class JavaClassFile:
 
 
 # -----END OF METHOD DEFINITIONS-----
-#a = JavaClassFile("test.class")
+a = JavaClassFile("test.class")
+a.display_data()
 #a.print_data()
 #a.format_constant_table()
 #a.get_virtual()
 #a.print_table_info()
-b = JavaClassFile("wud.class")
-b.format_constant_table()
-b.get_virtual()
-b.print_string()
+#b = JavaClassFile("wud.class")
+#b.format_constant_table()
+#b.get_virtual()
+#b.print_string()
 
 #a.display_data()
 
