@@ -2,10 +2,31 @@
 All Methods for OP Codes go in this file
 '''
 
+import importlib
+import os
+
 class op_codes:
 
-        def op_codeb6(self, stack, call_path):        # invoke virtual
-            print("TODO")
+        def op_codeb6(self, stack, call_path):        # invoke virtualq
+            """
+            I thought it would be better to separate the file path from the method name
+            so instead of call path being a single string containing the path+method e.g java/util/Scanner/nextInt
+            it should be an array that contains 2 elements, the path, [java/util/Scanner], and the method [nextInt]
+            This might not be the best way to do it but I couldn't think of a better one
+            Stack implementation will be for another time
+            """
+
+            split_path = call_path[0].split('/')    # Separate path into components
+            file_name = split_path[len(split_path) - 1]     # File name will be the "anchor"
+            file_path = ".".join(split_path[:len(split_path) - 1])  # Path to the anchor
+            method_name = call_path[1]      # Not sure if this is correct for all invokevirtual, revision inevitable
+
+            importlib.import_module(("." + file_name), file_path)
+            test = file_name()
+            print(type(test))
+
+
+
 
 
         def op_code70(stack_z):     #remainder
@@ -277,3 +298,6 @@ class op_codes:
                         return stack_z
                 else:
                         raise IndexError
+
+a = op_codes()
+a.op_codeb6([], ["java/util/Scanner", "nextInt"])
