@@ -678,8 +678,7 @@ class JavaClassFile:
     def long_helper(stack_z):
         lower = stack_z.pop()
         upper = stack_z.pop() << 32
-        longval = upper | lower
-        stack_z.push(longval)
+        stack_z.push(upper | lower)
         return stack_z
 
     # Python "Constructor"
