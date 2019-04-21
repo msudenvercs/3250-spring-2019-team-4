@@ -4,6 +4,9 @@ from jvpm import op_codes1
 
 class test_op_codes(unittest.TestCase):
 
+    def test_opcodeb6(self):    # TODO
+        print("TODO")
+
     def test_opcode05(self): #load 2 onto stack
         test_stack = [1, 2]
         test_stack = op_codes1.op_codes.op_code05(test_stack)

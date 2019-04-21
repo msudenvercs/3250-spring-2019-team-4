@@ -165,4 +165,8 @@ class testClass(unittest.TestCase):
     def test_get_attribute_table_size(self):
         self.assertEqual(ClassFile.JavaClassFile.get_attribute_table_size(self.unittest_file), 8)
 
-    
+    def test_invoke_virtual(self):  # TODO
+        print("TODO")
+
+    def test_invoke_virtual_read_cp(self):  # TODO
+        print("TODO")

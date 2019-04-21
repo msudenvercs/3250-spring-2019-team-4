@@ -482,7 +482,7 @@ class JavaClassFile:
 
         # Print data from tables in a human readable format
 
-    def display_data(self):  # pragma: no cover TODO
+    def display_data(self):  # pragma: no cover
         values = {}
         index = 1
         class_file_constant_table = self.classfile_constant_table
@@ -550,9 +550,7 @@ class JavaClassFile:
         print("Call path for #" + start_index + ": " + str(call_path))
         return call_path
 
-    # TODO find a way to recursively compile the string path needed for the invokevirtual call instead of using global var
-
-    def invoke_virtual_read_cp(self, cp_data, array):     #TODO: Better name
+    def invoke_virtual_read_cp(self, cp_data, array):
         # TODO I hate ifs find a better way when I have time aka the end of the semester 'cause i'm busy RIP
         tag = cp_data[0:2]
         data = cp_data[2:]
