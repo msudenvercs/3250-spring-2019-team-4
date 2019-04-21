@@ -766,9 +766,9 @@ class JavaClassFile:
 
 
 # -----END OF METHOD DEFINITIONS-----
-a = JavaClassFile("Integer_Test.class")
-a.display_data()
-a.invoke_virtual("0005")
+#a = JavaClassFile("Integer_Test.class")
+#a.display_data()
+#a.invoke_virtual("0005")
 #a.print_data()
 #a.format_constant_table()
 #a.get_virtual()

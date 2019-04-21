@@ -5,6 +5,7 @@ All Methods for OP Codes go in this file
 import importlib
 import os
 
+
 class op_codes:
         def op_codeb6(self, stack, call_path):        # invoke virtualq
                 """
