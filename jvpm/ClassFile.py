@@ -543,9 +543,8 @@ class JavaClassFile:
     def invoke_virtual(self, start_index):
         # Index should be 2 hexadecimal bytes next to the invokevirtual call
         int_index = int(start_index, 16) - 1
-        print(self.classfile_constant_table)
         self.invoke_virtual_read_cp(self.classfile_constant_table[int_index])
-        print(self.call_path)
+        print("Call path for #" + start_index + ": " + str(self.call_path))
 
     # TODO find a way to recursively compile the string path needed for the invokevirtual call instead of using global var
     call_path = []
