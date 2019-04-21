@@ -492,10 +492,10 @@ class JavaClassFile:
         for i in range(len(self.classfile_constant_table)):
             tag = str(class_file_constant_table[i][0:2])
             data = class_file_constant_table[i][2:]
-            print(data)
 
             if tag == "01":  # String
                 tag_type = ConstantPoolTag(tag).get_tag_type(tag)
+                data = data[4:]
                 data = bytes.fromhex(data).decode('utf-8')
                 values[index] = [tag_type, data]
 
@@ -511,7 +511,7 @@ class JavaClassFile:
 
             elif tag == "09":  # Field Ref
                 tag_type = ConstantPoolTag(tag).get_tag_type(tag)
-                data_index_01 = data[0:2]
+                data_index_01 = data[0:4]
                 data_index_02 = data[4:]
                 data = ('#' + str(int(data_index_01, 16)) + ', ' + '#' + str(int(data_index_02, 16)))
                 values[index] = [tag_type, data]
@@ -540,35 +540,58 @@ class JavaClassFile:
 
         print("\n-----INTERFACE TABLE-----")
 
-    def invoke_virtual(self, index):
-        # Index should be 2 hexadecimal bytes
-        int_index = int(index, 16)
+    def invoke_virtual(self, start_index):
+        # Index should be 2 hexadecimal bytes next to the invokevirtual call
+        int_index = int(start_index, 16) - 1
+        print(self.classfile_constant_table)
+        self.invoke_virtual_read_cp(self.classfile_constant_table[int_index])
+        print(self.call_path)
 
-
+    # TODO find a way to recursively compile the string path needed for the invokevirtual call instead of using global var
+    call_path = []
 
     def invoke_virtual_read_cp(self, cp_data):     #TODO: Better name
-        #TODO I hate ifs find a better way when I have time aka the end of the semester 'cause i'm busy RIP
+        # TODO I hate ifs find a better way when I have time aka the end of the semester 'cause i'm busy RIP
         tag = cp_data[0:2]
         data = cp_data[2:]
 
         if tag == "01":         # String
+            data = data[4:]
             string_data = bytes.fromhex(data).decode('utf-8')
+            self.call_path.append(string_data)
             return string_data
+
+        elif tag == "07":       # Class Reference
+            index = int(data, 16) - 1
+            self.invoke_virtual_read_cp(self.classfile_constant_table[index])
+
+        elif tag == "08":       # String Reference
+            index = int(data, 16) - 1
+            self.invoke_virtual_read_cp(self.classfile_constant_table[index])
+
+        elif tag == "09":       # Field Reference
+            field_ref_1 = int(data[0:4], 16) - 1
+            field_ref_2 = int(data[4:], 16) - 1
+            self.invoke_virtual_read_cp(self.classfile_constant_table[field_ref_1])
+            self.invoke_virtual_read_cp(self.classfile_constant_table[field_ref_2])
+
+        elif tag == "0A":       # Method Reference
+            method_ref_1 = int(data[0:4], 16) - 1
+            method_ref_2 = int(data[4:], 16) - 1
+            self.invoke_virtual_read_cp(self.classfile_constant_table[method_ref_1])
+            self.invoke_virtual_read_cp(self.classfile_constant_table[method_ref_2])
+
+        elif tag == "0B":       # Interface Method Reference
+            index = int(data, 16) - 1
+            self.invoke_virtual_read_cp(self.classfile_constant_table[index])
+
         elif tag == "0C":       # Name and Type Description
-            name_index = data[0:2]
-            type_index = data[4:]
+            name_index = int(data[0:4], 16) - 1
+            type_index = int(data[4:], 16) - 1
             self.invoke_virtual_read_cp(self.classfile_constant_table[name_index])
             self.invoke_virtual_read_cp(self.classfile_constant_table[type_index])
-        elif tag == "07":       # Class Reference
-            print("TODO")
-        elif tag == "08":       # String Reference
-            print("TODO")
-        elif tag == "09":       # Field Reference
-            print("TODO")
-        elif tag == "0A":       # Method Reference
-            print("TODO")
-        elif tag == "0B":       # Interface Method Reference
-            print("TODO")
+
+
 
 
 
@@ -741,8 +764,9 @@ class JavaClassFile:
 
 
 # -----END OF METHOD DEFINITIONS-----
-a = JavaClassFile("test.class")
+a = JavaClassFile("Integer_Test.class")
 a.display_data()
+a.invoke_virtual("0005")
 #a.print_data()
 #a.format_constant_table()
 #a.get_virtual()
