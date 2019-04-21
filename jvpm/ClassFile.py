@@ -675,6 +675,13 @@ class JavaClassFile:
 
         print("\n-----INTERFACE TABLE-----")
 
+    def long_helper(stack_z):
+        lower = stack_z.pop()
+        upper = stack_z.pop() << 32
+        longval = upper | lower
+        stack_z.push(longval)
+        return stack_z
+
     # Python "Constructor"
     def __init__(self, file_name):
         # TODO: Make it so that the .class file can be specified by name, this could help in testing opcode reading

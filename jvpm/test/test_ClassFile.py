@@ -165,4 +165,12 @@ class testClass(unittest.TestCase):
     def test_get_attribute_table_size(self):
         self.assertEqual(ClassFile.JavaClassFile.get_attribute_table_size(self.unittest_file), 8)
 
+    def test_long_helper(self):
+        test_stack = [2147483647, 4294967295, 2147483648, 1]
+        test_stack = ClassFile.long_helper(test_stack)
+        self.assertEqual(test_stack.pop(), -9223372036854775808)
+        test_stack = ClassFile.long_helper(test_stack)
+        self.assertEqual(test_stack.pop(), 9223372036854775807)
+
+
     
