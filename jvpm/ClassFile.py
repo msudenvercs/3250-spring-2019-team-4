@@ -539,17 +539,20 @@ class JavaClassFile:
             print(str(i) + ": " + str(values[i]))
 
         print("\n-----INTERFACE TABLE-----")
+        print("TODO")
+        print("-----INTERFACE TABLE-----\n")
 
     def invoke_virtual(self, start_index):
+        call_path = []
         # Index should be 2 hexadecimal bytes next to the invokevirtual call
         int_index = int(start_index, 16) - 1
-        self.invoke_virtual_read_cp(self.classfile_constant_table[int_index])
-        print("Call path for #" + start_index + ": " + str(self.call_path))
+        self.invoke_virtual_read_cp(self.classfile_constant_table[int_index], call_path)
+        print("Call path for #" + start_index + ": " + str(call_path))
+        return call_path
 
     # TODO find a way to recursively compile the string path needed for the invokevirtual call instead of using global var
-    call_path = []
 
-    def invoke_virtual_read_cp(self, cp_data):     #TODO: Better name
+    def invoke_virtual_read_cp(self, cp_data, array):     #TODO: Better name
         # TODO I hate ifs find a better way when I have time aka the end of the semester 'cause i'm busy RIP
         tag = cp_data[0:2]
         data = cp_data[2:]
@@ -557,38 +560,38 @@ class JavaClassFile:
         if tag == "01":         # String
             data = data[4:]
             string_data = bytes.fromhex(data).decode('utf-8')
-            self.call_path.append(string_data)
+            array.append(string_data)
             return string_data
 
         elif tag == "07":       # Class Reference
             index = int(data, 16) - 1
-            self.invoke_virtual_read_cp(self.classfile_constant_table[index])
+            self.invoke_virtual_read_cp(self.classfile_constant_table[index], array)
 
         elif tag == "08":       # String Reference
             index = int(data, 16) - 1
-            self.invoke_virtual_read_cp(self.classfile_constant_table[index])
+            self.invoke_virtual_read_cp(self.classfile_constant_table[index], array)
 
         elif tag == "09":       # Field Reference
             field_ref_1 = int(data[0:4], 16) - 1
             field_ref_2 = int(data[4:], 16) - 1
-            self.invoke_virtual_read_cp(self.classfile_constant_table[field_ref_1])
-            self.invoke_virtual_read_cp(self.classfile_constant_table[field_ref_2])
+            self.invoke_virtual_read_cp(self.classfile_constant_table[field_ref_1], array)
+            self.invoke_virtual_read_cp(self.classfile_constant_table[field_ref_2], array)
 
         elif tag == "0A":       # Method Reference
             method_ref_1 = int(data[0:4], 16) - 1
             method_ref_2 = int(data[4:], 16) - 1
-            self.invoke_virtual_read_cp(self.classfile_constant_table[method_ref_1])
-            self.invoke_virtual_read_cp(self.classfile_constant_table[method_ref_2])
+            self.invoke_virtual_read_cp(self.classfile_constant_table[method_ref_1], array)
+            self.invoke_virtual_read_cp(self.classfile_constant_table[method_ref_2], array)
 
         elif tag == "0B":       # Interface Method Reference
             index = int(data, 16) - 1
-            self.invoke_virtual_read_cp(self.classfile_constant_table[index])
+            self.invoke_virtual_read_cp(self.classfile_constant_table[index], array)
 
         elif tag == "0C":       # Name and Type Description
             name_index = int(data[0:4], 16) - 1
             type_index = int(data[4:], 16) - 1
-            self.invoke_virtual_read_cp(self.classfile_constant_table[name_index])
-            self.invoke_virtual_read_cp(self.classfile_constant_table[type_index])
+            self.invoke_virtual_read_cp(self.classfile_constant_table[name_index], array)
+            self.invoke_virtual_read_cp(self.classfile_constant_table[type_index], array)
 
 
 
