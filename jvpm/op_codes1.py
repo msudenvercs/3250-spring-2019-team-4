@@ -4,8 +4,7 @@ All Methods for OP Codes go in this file
 
 class op_codes:
 
-        #emulates println for the different data types  ******going to be redone*****
-        def op_codeb6(self, stack, index):        # invoke virtual
+        def op_codeb6(self, stack, call_path):        # invoke virtual
             print("TODO")
 
 
