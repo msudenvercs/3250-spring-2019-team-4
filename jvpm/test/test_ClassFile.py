@@ -166,7 +166,5 @@ class testClass(unittest.TestCase):
         self.assertEqual(ClassFile.JavaClassFile.get_attribute_table_size(self.unittest_file), 8)
 
     def test_invoke_virtual(self):  # TODO
-        print("TODO")
-
-    def test_invoke_virtual_read_cp(self):  # TODO
-        print("TODO")
+        self.assertEqual(ClassFile.JavaClassFile.invoke_virtual(self.unittest_file, "0007"),
+                         ['java/io/PrintStream', 'println', '(Ljava/lang/String;)V'])

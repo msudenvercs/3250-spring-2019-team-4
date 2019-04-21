@@ -550,7 +550,8 @@ class JavaClassFile:
         print("Call path for #" + start_index + ": " + str(call_path))
         return call_path
 
-    def invoke_virtual_read_cp(self, cp_data, array):
+    # Recursive helper method, output will be tested with invoke_virtual(self, start_index)
+    def invoke_virtual_read_cp(self, cp_data, array): # pragma: no cover
         # TODO I hate ifs find a better way when I have time aka the end of the semester 'cause i'm busy RIP
         tag = cp_data[0:2]
         data = cp_data[2:]
@@ -618,7 +619,7 @@ class JavaClassFile:
         print("opcodes:", self.opcodes)
         print("virtual:",self.virtual)
         if self.virtual != "":
-            op_codes.invokeVirtual(self.stack_z,self.virtual)
+            op_codes.op_codeb6(self.stack_z, self.virtual)
 
     def get_opcodes(self):
         index = 18
@@ -777,7 +778,6 @@ class JavaClassFile:
 #b.print_string()
 
 #a.display_data()
-
 
 '''
     def op_code_caller(self, input):
