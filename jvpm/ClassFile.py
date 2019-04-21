@@ -547,7 +547,6 @@ class JavaClassFile:
         # Index should be 2 hexadecimal bytes next to the invokevirtual call
         int_index = int(start_index, 16) - 1
         self.invoke_virtual_read_cp(self.classfile_constant_table[int_index], call_path)
-        print("Call path for #" + start_index + ": " + str(call_path))
         return call_path
 
     # Recursive helper method, output will be tested with invoke_virtual(self, start_index)
