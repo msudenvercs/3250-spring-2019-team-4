@@ -527,16 +527,16 @@ class JavaClassFile:
                 self.execute_opcodes(opcodes,opcode)
         return self.virtual
 
-    def execute_opcodes(self,opcodes, opcode):
+    def execute_opcodes(self, opcodes, opcode):
         get_return = ""
         map = {
-            "B2": self.opcode_b2,
-            "B1": self.opcode_b1,
-            "12": self.opcode_12,
-            "10": self.opcode_10
+            "B2": op_codes1.opcode_b2(opcodes, opcode),
+            "B1": op_codes1.opcode_b1(opcodes, opcode),
+            "12": op_codes1.opcode_12(opcodes, opcode),
+            "10": op_codes1.opcode_10(opcodes, opcode)
         }
         try:
-            map[opcode](opcodes,opcode)
+            map[opcode](opcodes, opcode)
         except KeyError:
             self.default(opcode)
 
