@@ -1,3 +1,5 @@
+from jvpm import ClassFile
+
 '''
 All Methods for OP Codes go in this file
 '''

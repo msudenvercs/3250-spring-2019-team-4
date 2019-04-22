@@ -1,4 +1,5 @@
 import unittest
+from jvpm import ClassFile
 from jvpm import op_codes1
 
 
