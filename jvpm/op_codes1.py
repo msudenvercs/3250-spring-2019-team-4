@@ -1,5 +1,5 @@
 from jvpm import ClassFile
-
+from jvpm import test_op_codes
 '''
 All Methods for OP Codes go in this file
 '''
