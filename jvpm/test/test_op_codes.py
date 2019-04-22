@@ -275,5 +275,3 @@ class test_op_codes(unittest.TestCase):
         index = 2
         test_stack = op_codes1.op_codes.op_code2e(test_array, index)
         self.assertEqual(test_stack.pop(), 32768)
-
-    def test_opcode36(self):
