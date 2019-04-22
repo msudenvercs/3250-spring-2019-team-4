@@ -1,5 +1,7 @@
 
 import unittest
+import io
+import sys
 from jvpm import ClassFile
 
 class testClass(unittest.TestCase):
@@ -166,4 +168,7 @@ class testClass(unittest.TestCase):
         self.assertEqual(ClassFile.JavaClassFile.get_attribute_table_size(self.unittest_file), 8)
 
     def test_print_string(self):
-        self.assertEqual(ClassFile.JavaClassFile.print_string(self.unittest_file), "This is COOL!")
+        capturedOutput = io.StringIO()
+        sys.stdout = capturedOutput
+        unittest_file.print_string()
+        self.assertEqual((capturedOutput), "This is COOL!")
