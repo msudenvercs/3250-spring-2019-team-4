@@ -712,10 +712,14 @@ class JavaClassFile:
 #a.format_constant_table()
 #a.get_virtual()
 #a.print_table_info()
-b = JavaClassFile("wud.class")
-b.format_constant_table()
-b.get_virtual()
-b.print_string()
+#b = JavaClassFile("wud.class")
+#b.format_constant_table()
+#b.get_virtual()
+#b.print_string()
+c = JavaClassFile("long_test.class")
+c.format_constant_table()
+c.get_virtual()
+c.print_table_info()
 
 #a.display_data()
 

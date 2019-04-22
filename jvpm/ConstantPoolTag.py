@@ -33,7 +33,7 @@ class ConstantPoolTag(Enum):
             "0C": 4,    # Name and Type Descriptor
             "0F": 3,    # Method Handle
             "10": 2,    # Method Type
-            "12": 4     # InvokeDynamic
+            "12": 4,     # InvokeDynamic
         }.get(tag, None)
 
     def get_tag_type(self, tag):
