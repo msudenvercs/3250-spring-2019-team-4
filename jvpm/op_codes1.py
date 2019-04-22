@@ -1,5 +1,5 @@
 from jvpm import ClassFile
-from jvpm import test_op_codes
+from jvpm.test import test_op_codes
 '''
 All Methods for OP Codes go in this file
 '''
@@ -297,7 +297,7 @@ class op_codes:
 
         #opcodes moved from ClassFile.py
         def op_codeb2(self, opcodes, opcode):
-            pool_index = opcodes.index(opcode)
+            pool_index = ClassFile.opcodes.index(opcode)
             code_index = int("".join(map(str, opcodes[pool_index+1:pool_index+3])),16)
             print(code_index-1)
             self.recursive(code_index-1)
@@ -306,8 +306,8 @@ class op_codes:
             return None
 
         def op_code10(self, opcodes, opcode):
-            pool_index = opcodes.index(opcode)
-            constant = int("".join(map(str, opcodes[pool_index+2:pool_index+3])),16)
+            self.pool_index = opcodes.index(opcode)
+            self.constant = int("".join(map(str, opcodes[pool_index+2:pool_index+3])),16)
             self.stack_z.append(constant)
 
         def op_code12(self, opcodes, opcode):

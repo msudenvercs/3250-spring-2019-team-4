@@ -18,6 +18,10 @@ class JavaClassFile:
     classfile_attribute_table = []
     classfile_attribute_table_size = -1
     stack_z = []
+    formatted_constant_table = []
+    constant_parts = []
+    constant_slpit = []
+    opcodes = []
 
     def get_magic_number(self):
         magic_num = ""
@@ -479,12 +483,6 @@ class JavaClassFile:
         print("Attribute Table: " + str(self.classfile_attribute_table))
         print("Attribute Table Size: " + str(self.classfile_attribute_table_size))
 
-    # decoding constant pool and calling opcodes, TODO clean code
-    formatted_constant_table = []
-    constant_parts =[]
-    constant_slpit = []
-    opcodes = []
-
     def format_constant_table(self):
         for constant in self.classfile_constant_table:
             self.constant_split = [constant[i:i+2] for i in range(0, len(constant), 2)]
@@ -524,7 +522,7 @@ class JavaClassFile:
                     check = 2
                 if opcode[0] == "B":
                     check = 1
-                self.execute_opcodes(opcodes,opcode)
+                self.execute_opcodes(opcodes, opcode)
         return self.virtual
 
     def execute_opcodes(self, opcodes, opcode):
@@ -548,6 +546,7 @@ class JavaClassFile:
     #recursive method to interpret contant pool
     virtual = ""
     def recursive(self, index):
+        print(index)
         check = ""
         for call in self.formatted_constant_table[index]:
             if check == "UTF-8":
