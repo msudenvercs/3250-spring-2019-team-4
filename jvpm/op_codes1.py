@@ -236,28 +236,31 @@ class op_codes:
                         stack_z.append(varsarray[index])
                         return stack_z
 
-        # def op_code36(stack_z, varsarray, index):
-        #        if (index > len(varsarray)):
-        #               raise IndexError
-        #      else:
-        #                stack_z.append(varsarray[index])
-        #                return stack_z
+        #write tests for these opcodes
+        def op_code36(stack_z, varsarray, index):
+            if (index > len(varsarray)):
+                raise IndexError
+            else:
+                stack_z.append(varsarray[index])
+                return stack_z
 
-        # def op_code3b(stack_z, varsarray):
-        #                stack_z.append(varsarray[0])
-        #                return stack_z
+        def op_code3b(stack_z, varsarray):
+            stack_z.append(varsarray[0])
+            return stack_z
 
-        # def op_code3c(stack_z, varsarray):
-        #               stack_z.append(varsarray[1])
-        #              return stack_z
+        def op_code3c(stack_z, varsarray):
+            stack_z.append(varsarray[1])
+                return stack_z
 
-        # def op_code3d(stack_z, varsarray):
-        #               stack_z.append(varsarray[2])
-        #                return stack_z
+        def op_code3d(stack_z, varsarray):
+            stack_z.append(varsarray[2])
+                return stack_z
 
-        # def op_code3e(stack_z, varsarray):
-        #               stack_z.append(varsarray[3])
-        #              return stack_z
+        def op_code3e(stack_z, varsarray):
+            stack_z.append(varsarray[3])
+            return stack_z
+
+        #////////////////////
 
         def op_code93(stack_z): # int to short
                 MAX_JAVA_INT = 2147483647
