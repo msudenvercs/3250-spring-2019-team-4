@@ -297,6 +297,7 @@ class op_codes:
         def op_codeb2(self, opcodes, opcode):
             pool_index = opcodes.index(opcode)
             code_index = int("".join(map(str, opcodes[pool_index+1:pool_index+3])),16)
+            print(code_index-1)
             self.recursive(code_index-1)
 
         def op_codeb1(self, opcodes, opcode):
