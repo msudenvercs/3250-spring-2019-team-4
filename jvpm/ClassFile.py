@@ -1,5 +1,5 @@
 from jvpm.ConstantPoolTag import *
-from jvpm.op_codes1 import *
+from jvpm import op_codes1
 import os
 
 
