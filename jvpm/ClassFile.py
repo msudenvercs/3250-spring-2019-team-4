@@ -530,10 +530,10 @@ class JavaClassFile:
     def execute_opcodes(self, opcodes, opcode):
         get_return = ""
         map = {
-            "B2": op_codes1.op_codes.op_codeb2(opcodes, opcode),
-            "B1": op_codes1.op_codes.op_codeb1(opcodes, opcode),
-            "12": op_codes1.op_codes.op_code12(opcodes, opcode),
-            "10": op_codes1.op_codes.op_code10(opcodes, opcode)
+            "B2": op_codes1.op_codes.op_codeb2(self, opcodes, opcode),
+            "B1": op_codes1.op_codes.op_codeb1(self, opcodes, opcode),
+            "12": op_codes1.op_codes.op_code12(self, opcodes, opcode),
+            "10": op_codes1.op_codes.op_code10(self, opcodes, opcode)
         }
         try:
             map[opcode](opcodes, opcode)
