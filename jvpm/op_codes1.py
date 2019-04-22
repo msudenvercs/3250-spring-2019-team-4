@@ -246,21 +246,21 @@ class op_codes:
                 varsarray.append(stack_z.pop())
                 return varsarray
 
-        def op_code3b(stack_z, varsarray):  #store int value into variable 0
-            varsarray.append(stack_z[0])
-            return varsarray
+        #def op_code3b(stack_z, varsarray):  #store int value into variable 0
+        #    varsarray.append(stack_z[0])
+        #    return varsarray
 
-        def op_code3c(stack_z, varsarray): #store int value into variable 1
-            varsarray.append(stack_z[1])
-            return varsarray
+        #def op_code3c(stack_z, varsarray): #store int value into variable 1
+        #    varsarray.append(stack_z[1])
+        #    return varsarray
 
-        def op_code3d(stack_z, varsarray): #store int value into variable 2
-            varsarray.append(stack_z[2])
-            return varsarray
+        #def op_code3d(stack_z, varsarray): #store int value into variable 2
+        #    varsarray.append(stack_z[2])
+        #    return varsarray
 
-        def op_code3e(stack_z, varsarray): #store int value into variable 3
-            varsarray.append(stack_z[3])
-            return varsarray
+        #def op_code3e(stack_z, varsarray): #store int value into variable 3
+        #    varsarray.append(stack_z[3])
+        #    return varsarray
 
         #////////////////////
 
