@@ -547,7 +547,7 @@ class JavaClassFile:
 
     #recursive method to interpret contant pool
     virtual = ""
-    def recursive(self,index):
+    def recursive(self, index):
         check = ""
         for call in self.formatted_constant_table[index]:
             if check == "UTF-8":
