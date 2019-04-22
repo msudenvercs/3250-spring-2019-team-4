@@ -294,20 +294,20 @@ class op_codes:
                         raise IndexError
 
         #opcodes moved from ClassFile.py
-        def opcode_b2(self,opcodes,opcode):
+        def opcode_b2(self, opcodes, opcode):
             pool_index = opcodes.index(opcode)
             code_index = int("".join(map(str, opcodes[pool_index+1:pool_index+3])),16)
             self.recursive(code_index-1)
 
-        def opcode_b1(self,opcodes,opcode):
+        def opcode_b1(self, opcodes, opcode):
             return None
 
-        def opcode_10(self,opcodes,opcode):
+        def opcode_10(self, opcodes, opcode):
             pool_index = opcodes.index(opcode)
             constant = int("".join(map(str, opcodes[pool_index+2:pool_index+3])),16)
             self.stack_z.append(constant)
 
-        def opcode_12(self,opcodes, opcode):
+        def opcode_12(self, opcodes, opcode):
             pool_index = opcodes.index(opcode)
             table_index = int("".join(map(str, opcodes[pool_index+1:pool_index+2])),16)
             string = self.formatted_constant_table[table_index][1]
