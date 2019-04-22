@@ -236,29 +236,30 @@ class op_codes:
                         stack_z.append(varsarray[index])
                         return stack_z
 
-        #write tests for these opcodes
-        def op_code36(stack_z, varsarray, index):
+        #WRITE TESTS FOR THESE OPCODES
+        def op_code36(stack_z, varsarray, index):   #store int value into var. index
+
             if (index > len(varsarray)):
                 raise IndexError
             else:
-                stack_z.append(varsarray[index])
-                return stack_z
+                varsarray.append(stack_z.pop())
+                return varsarray
 
-        def op_code3b(stack_z, varsarray):
-            stack_z.append(varsarray[0])
-            return stack_z
+        def op_code3b(stack_z, varsarray):  #store int value into variable 0
+            varsarray.append(stack_z[0])
+            return varsarray
 
-        def op_code3c(stack_z, varsarray):
-            stack_z.append(varsarray[1])
-                return stack_z
+        def op_code3c(stack_z, varsarray): #store int value into variable 1
+            varsarray.append(stack_z[1])
+                return varsarray
 
-        def op_code3d(stack_z, varsarray):
-            stack_z.append(varsarray[2])
-                return stack_z
+        def op_code3d(stack_z, varsarray): #store int value into variable 2
+            varsarray.append(stack_z[2])
+                return varsarray
 
-        def op_code3e(stack_z, varsarray):
-            stack_z.append(varsarray[3])
-            return stack_z
+        def op_code3e(stack_z, varsarray): #store int value into variable 3
+            varsarray.append(stack_z[3])
+            return varsarray
 
         #////////////////////
 
