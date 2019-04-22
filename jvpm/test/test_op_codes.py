@@ -227,34 +227,34 @@ class test_op_codes(unittest.TestCase):
     def test_opcode36(self):
         test_stack = []
         test_localvar = [20, 5, 8, 9]
-        test_stack = op_codes1.op_codes.op_code36(test_stack, test_localvar, 2)
-        self.assertEqual(test_stack.pop(), 8)
-        test_stack = op_codes1.op_codes.op_code36(test_stack, test_localvar, 0)
-        self.assertEqual(test_stack.pop(), 20)
+        test_stack = op_codes1.op_codes.op_code36(test_localvar, test_stack, 2)
+        self.assertEqual(test_localvar.pop(), 8)
+        test_stack = op_codes1.op_codes.op_code36(test_localvar, test_stack, 0)
+        self.assertEqual(test_localvar.pop(), 20)
 
-    def test_opcode3b(self):
-        test_stack = []
-        test_localvar = [20, 5, 8, 9]
-        test_stack = op_codes1.op_codes.op_code3b(test_stack, test_localvar, 2)
-        self.assertEqual(test_stack.pop(), 20)
+    #def test_opcode3b(self):
+    #    test_stack = []
+    #    test_localvar = [20, 5, 8, 9]
+    #    test_stack = op_codes1.op_codes.op_code3b(test_stack, test_localvar, 2)
+    #    self.assertEqual(test_localvar.pop(), 20)
 
-    def test_opcode3c(self):
-        test_stack = []
-        test_localvar = [20, 5, 8, 9]
-        test_stack = op_codes1.op_codes.op_code3c(test_stack, test_localvar, 2)
-        self.assertEqual(test_stack.pop(), 5)
+    #def test_opcode3c(self):
+    #    test_stack = []
+    #    test_localvar = [20, 5, 8, 9]
+    #    test_stack = op_codes1.op_codes.op_code3c(test_stack, test_localvar, 2)
+    #    self.assertEqual(test_localvar.pop(), 5)
 
-    def test_opcode3d(self):
-        test_stack = []
-        test_localvar = [20, 5, 8, 9]
-        test_stack = op_codes1.op_codes.op_code3d(test_stack, test_localvar, 2)
-        self.assertEqual(test_stack.pop(), 8)
+    #def test_opcode3d(self):
+    #    test_stack = []
+    #    test_localvar = [20, 5, 8, 9]
+    #    test_stack = op_codes1.op_codes.op_code3d(test_stack, test_localvar, 2)
+    #    self.assertEqual(test_localvar.pop(), 8)
 
-    def test_opcode3e(self):
-        test_stack = []
-        test_localvar = [20, 5, 8, 9]
-        test_stack = op_codes1.op_codes.op_code3e(test_stack, test_localvar, 2)
-        self.assertEqual(test_stack.pop(), 9)
+    #def test_opcode3e(self):
+    #    test_stack = []
+    #    test_localvar = [20, 5, 8, 9]
+    #    test_stack = op_codes1.op_codes.op_code3e(test_stack, test_localvar, 2)
+    #    self.assertEqual(test_localvar.pop(), 9)
 
     #/////////////////////////////////
 
