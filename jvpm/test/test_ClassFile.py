@@ -166,4 +166,4 @@ class testClass(unittest.TestCase):
         self.assertEqual(ClassFile.JavaClassFile.get_attribute_table_size(self.unittest_file), 8)
 
     def test_print_string(self):
-        self.assertEqual(ClassFile.JavaClassFile.get_string(self.unittest_file), "This is COOL!")
+        self.assertEqual(ClassFile.JavaClassFile.print_string(self.unittest_file), "This is COOL!")
