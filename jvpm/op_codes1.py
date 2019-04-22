@@ -1,3 +1,5 @@
+
+
 '''
 All Methods for OP Codes go in this file
 '''
@@ -251,11 +253,11 @@ class op_codes:
 
         def op_code3c(stack_z, varsarray): #store int value into variable 1
             varsarray.append(stack_z[1])
-                return varsarray
+            return varsarray
 
         def op_code3d(stack_z, varsarray): #store int value into variable 2
             varsarray.append(stack_z[2])
-                return varsarray
+            return varsarray
 
         def op_code3e(stack_z, varsarray): #store int value into variable 3
             varsarray.append(stack_z[3])
