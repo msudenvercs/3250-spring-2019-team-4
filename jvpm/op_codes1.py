@@ -7,7 +7,7 @@ import os
 
 
 class op_codes:
-        def op_codeb6(self, stack, call_path):        # invoke virtualq
+        def op_codeb6(self, stack, call_path):        # invoke virtual
                 """
                 I thought it would be better to separate the file path from the method name
                 so instead of call path being a single string containing the path+method e.g java/util/Scanner/nextInt
