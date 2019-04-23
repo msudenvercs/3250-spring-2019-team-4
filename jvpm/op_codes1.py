@@ -2,6 +2,8 @@
 All Methods for OP Codes go in this file
 '''
 
+import numpy
+
 class op_codes:
 
         #emulates println for the different data types  ******going to be redone*****
@@ -292,3 +294,27 @@ class op_codes:
                         return stack_z
                 else:
                         raise IndexError
+
+        def long_builder(hex):
+                return numpy.int64(hex)
+
+        def op_code16(hex):
+                stack_z.append(long_builder(hex))
+                return stack_z
+
+        def op_code1e(stack_z, local_vars):
+                stack_z = op_code16(stack_z, local_vars[0])
+                return stack_z
+
+        def op_code1f(stack_z, local_vars):
+                stack_z = op_code16(stack_z, local_vars[1])
+                return stack_z
+
+        def op_code20(stack_z, local_vars):
+                stack_z = op_code16(stack_z, local_vars[2])
+                return stack_z
+
+        def op_code21(stack_z, local_vars):
+                stack_z = op_code16(stack_z, local_vars[3])
+                return stack_z
+

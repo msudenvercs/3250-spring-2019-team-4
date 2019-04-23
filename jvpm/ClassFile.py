@@ -707,43 +707,7 @@ class JavaClassFile:
 
 
 # -----END OF METHOD DEFINITIONS-----
-#a = JavaClassFile("test.class")
-#a.print_data()
-#a.format_constant_table()
-#a.get_virtual()
-#a.print_table_info()
 b = JavaClassFile("wud.class")
 b.format_constant_table()
 b.get_virtual()
 b.print_string()
-
-#a.display_data()
-
-
-'''
-    def op_code_caller(self, input):
-        op_code_dict = {
-            "0x60":op_codes1.op_codes.op_code60
-            "0x7e":op_codes1.op_codes.op_code7e
-            "0x02":op_codes1.op_codes.op_code02
-            "0x03":op_codes1.op_codes.op_code03
-            "0x04":op_codes1.op_codes.op_code04
-            "0x05"op_codes1.op_codes.:op_code05
-            "0x06":op_codes1.op_codes.op_code06
-            "0x07":op_codes1.op_codes.op_code07
-            "0x08":op_codes1.op_codes.op_code08
-            "0x6C":op_codes1.op_codes.op_code6c
-            "0x68":op_codes1.op_codes.op_code68
-            "0x70":op_codes1.op_codes.op_code70
-            "0x74":op_codes1.op_codes.op_code74
-            "0x78":op_codes1.op_codes.op_code78
-            "0x7A":op_codes1.op_codes.op_code7a
-            "0x7C":op_codes1.op_codes.op_code7c
-            "0x80":op_codes1.op_codes.op_code80
-            "0x64":op_codes1.op_codes.op_code64
-            "0x82":op_codes1.op_codes.op_code82
-        }
-
-        send(op_code_dict[input](stack_z))
-
-'''
