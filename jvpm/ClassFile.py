@@ -558,8 +558,9 @@ class JavaClassFile:
     def opcode_12(self,opcodes, opcode):
         pool_index = opcodes.index(opcode)
         table_index = int("".join(map(str, opcodes[pool_index+1:pool_index+2])),16)
-        string = self.formatted_constant_table[table_index][1]
-        print(string)
+        string = self.formatted_constant_table[table_index-1][1]
+        #add a check to see if it is a string then call recursive else just push int or
+        #float into stack
         self.stack_z.append(string)
     #/////////
 
@@ -699,7 +700,7 @@ class JavaClassFile:
 
 
 # -----END OF METHOD DEFINITIONS-----
-a = JavaClassFile("test.class")
+a = JavaClassFile("HelloWorld.class")
 a.print_data()
 a.format_constant_table()
 a.get_virtual()
