@@ -550,7 +550,7 @@ class JavaClassFile:
         return call_path
 
     # Recursive helper method, output will be tested with invoke_virtual(self, start_index)
-    def invoke_virtual_read_cp(self, cp_data, array): # pragma: no cover
+    def invoke_virtual_read_cp(self, cp_data, array):  # pragma: no cover
         # TODO I hate ifs find a better way when I have time aka the end of the semester 'cause i'm busy RIP
         tag = cp_data[0:2]
         data = cp_data[2:]
@@ -736,7 +736,7 @@ class JavaClassFile:
     #        counter = counter +1
         print("opcodes:", self.opcodes)
         print("virtual:",self.virtual)
-        op_codes.invokeVirtual(self.stack_z, self.virtual)
+        op_codes.op_codeb6(self.stack_z, self.virtual)
 
     # Python "Constructor"
     def __init__(self, file_name):
