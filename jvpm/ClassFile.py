@@ -1,6 +1,7 @@
 from jvpm.ConstantPoolTag import *
 from jvpm.op_codes1 import *
 import os
+import struct
 
 
 class JavaClassFile:
@@ -585,7 +586,8 @@ class JavaClassFile:
             "09": self.tag_ref_helper,
             "08": self.tag_ref_helper,
             "07": self.tag_ref_helper,
-            "01": self.tag_utf8_helper
+            "01": self.tag_utf8_helper,
+            "04": self.float_helper
         }
         try:
             map[tag](tag)
@@ -610,6 +612,14 @@ class JavaClassFile:
         self.formatted_constant_table.append(self.constant_parts)
         self.constant_parts = []
 
+    def float_helper(self,tag):
+        self.constant_parts.append(ConstantPoolTag(tag).get_tag_type(tag))
+        float_hex = ""
+        for i in range(1,len(self.constant_split)):
+            float_hex = float_hex + self.constant_split[i]
+        self.constant_parts.append(struct.unpack('!f', bytes.fromhex(float_hex))[0])
+        self.formatted_constant_table.append(self.constant_parts)
+        self.constant_parts = []
 
 
     # Print data from tables in a human readable format
