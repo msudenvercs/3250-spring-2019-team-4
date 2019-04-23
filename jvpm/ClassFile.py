@@ -591,11 +591,6 @@ class JavaClassFile:
             self.invoke_virtual_read_cp(self.classfile_constant_table[name_index], array)
             self.invoke_virtual_read_cp(self.classfile_constant_table[type_index], array)
 
-
-
-
-
-
     # decoding constant pool and calling opcodes, TODO clean code
     formatted_constant_table = []
     constant_parts =[]
