@@ -296,25 +296,26 @@ class op_codes:
                         raise IndexError
 
         def long_builder(hex):
-                return numpy.int64(hex)
+                return int(numpy.binary_repr(int(hex, 16), width=64), 2)
 
         def op_code16(hex):
-                stack_z.append(long_builder(hex))
+                stack_z = []
+                stack_z.append(op_codes.long_builder(hex))
                 return stack_z
 
         def op_code1e(stack_z, local_vars):
-                stack_z = op_code16(stack_z, local_vars[0])
+                stack_z = op_codes.op_code16(local_vars[0])
                 return stack_z
 
         def op_code1f(stack_z, local_vars):
-                stack_z = op_code16(stack_z, local_vars[1])
+                stack_z = op_codes.op_code16(local_vars[1])
                 return stack_z
 
         def op_code20(stack_z, local_vars):
-                stack_z = op_code16(stack_z, local_vars[2])
+                stack_z = op_codes.op_code16(local_vars[2])
                 return stack_z
 
         def op_code21(stack_z, local_vars):
-                stack_z = op_code16(stack_z, local_vars[3])
+                stack_z = op_codes.op_code16(local_vars[3])
                 return stack_z
 

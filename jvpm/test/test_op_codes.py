@@ -246,29 +246,33 @@ class test_op_codes(unittest.TestCase):
 
 
     def test_long_builder(self):
-        hexstr = "7FFFFFFFFFFFFFFF"
-        self.assertEqual(op_codes1.op_codes.long_builder(hexstr), 9223372036854775807)
+        hexstr = "7FFFFFFFFFFFFFFE"
+        self.assertEqual(op_codes1.op_codes.long_builder(hexstr), 9223372036854775806)
 
     def test_opcode16(self):
         hexstr = "7FFFFFFFFFFFFFFF"
-        self.assertEqual(op_codes1.op_codes.op_code16(hexstr), 9223372036854775807)
+        self.assertEqual(op_codes1.op_codes.op_code16(hexstr).pop(), 9223372036854775807)
 
     def test_opcode1e(self):
         test_local_vars = ["7FFFFFFFFFFFFFFF", "7FFFFFFFFFFFFFFF", "7FFFFFFFFFFFFFFF", "7FFFFFFFFFFFFFFF"]
+        test_stack = []
         test_stack = op_codes1.op_codes.op_code1e(test_stack, test_local_vars)
         self.assertEqual(test_stack.pop(), 9223372036854775807)
 
     def test_opcode1f(self):
         test_local_vars = ["7FFFFFFFFFFFFFFF", "07FFFFFFFFFFFFFF", "7FFFFFFFFFFFFFFF", "7FFFFFFFFFFFFFFF"]
-        test_stack = op_codes1.op_codes.op_code1e(test_stack, test_local_vars)
+        test_stack = []
+        test_stack = op_codes1.op_codes.op_code1f(test_stack, test_local_vars)
         self.assertEqual(test_stack.pop(), 576460752303423487)
 
     def test_opcode20(self):
         test_local_vars = ["7FFFFFFFFFFFFFFF", "7FFFFFFFFFFFFFFF", "007FFFFFFFFFFFFF", "7FFFFFFFFFFFFFFF"]
-        test_stack = op_codes1.op_codes.op_code1e(test_stack, test_local_vars)
+        test_stack = []
+        test_stack = op_codes1.op_codes.op_code20(test_stack, test_local_vars)
         self.assertEqual(test_stack.pop(), 36028797018963967)
 
     def test_opcode21(self):
         test_local_vars = ["7FFFFFFFFFFFFFFF", "7FFFFFFFFFFFFFFF", "7FFFFFFFFFFFFFFF", "007FFFFFFFFFFFFF"]
-        test_stack = op_codes1.op_codes.op_code1e(test_stack, test_local_vars)
+        test_stack = []
+        test_stack = op_codes1.op_codes.op_code21(test_stack, test_local_vars)
         self.assertEqual(test_stack.pop(), 36028797018963967)
