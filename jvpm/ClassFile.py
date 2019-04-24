@@ -722,7 +722,7 @@ class JavaClassFile:
         self.formatted_constant_table.append(self.constant_parts)
         self.constant_parts = []
 
-
+    """
     def print_string(self):
     #    print("\n-----CONSTANT TABLE-----")
     #    counter = 1;
@@ -732,7 +732,7 @@ class JavaClassFile:
         print("opcodes:", self.opcodes)
         print("virtual:",self.virtual)
         op_codes.op_codeb6(self.stack_z, self.virtual)
-
+    """
     # Python "Constructor"
     def __init__(self, file_name):
         # TODO: Make it so that the .class file can be specified by name, this could help in testing opcode reading
