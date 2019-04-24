@@ -318,4 +318,18 @@ class op_codes:
         def op_code21(stack_z, local_vars):
                 stack_z = op_codes.op_code16(local_vars[3])
                 return stack_z
-
+        
+        def op_code61(stack_z):
+                lmax = 9223372036854775807
+                lmin = -9223372036854775808
+                var1 = stack_z.pop()
+                var2 = stack_z.pop()
+                
+                if var1+var2 > lmax:
+                        stack_z.append(lmin+(var1+var2+lmin))
+                elif var1+var2 < lmin:
+                        stack_z.append(lmax+(var1+var2+lmax+1))
+                else:
+                        stack_z.append(var1+var2)
+                return stack_z
+                

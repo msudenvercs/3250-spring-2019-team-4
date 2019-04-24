@@ -276,3 +276,14 @@ class test_op_codes(unittest.TestCase):
         test_stack = []
         test_stack = op_codes1.op_codes.op_code21(test_stack, test_local_vars)
         self.assertEqual(test_stack.pop(), 36028797018963967)
+        
+    def test_opcode61(self):
+        test_stack = [9223372036854775807, 1, -9223372036854775808, -1, 9223372036854775807, 10]
+        test_stack = op_codes1.op_codes.op_code61(test_stack)
+        self.assertEqual(test_stack.pop(), -9223372036854775799)
+        test_stack = op_codes1.op_codes.op_code61(test_stack)
+        self.assertEqual(test_stack.pop(),9223372036854775806)
+        test_stack = op_codes1.op_codes.op_code61(test_stack)
+        self.assertEqual(test_stack.pop(), -9223372036854775808)
+        
+        
