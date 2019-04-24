@@ -1,8 +1,21 @@
 import unittest
 from jvpm import op_codes1
 
-
 class test_op_codes(unittest.TestCase):
+
+    """
+    def test_opcodeb6(self):    # TODO Make better tests as invokevirtual can call a variety of methods
+        test_stack = []
+        test_input = 1337
+        test_call_path = ["java/util/Scanner", "nextInt", "()I"]
+        operator = op_codes1.op_codes()
+
+        operator.op_codeb6(test_stack, test_call_path)
+
+        @unittest.patch('builtins.input', return_value = test_input)
+        def test_nextInt(self, input):
+            self.assertEqual(test_stack.pop(), 1337)
+    """
 
     def test_opcode05(self): #load 2 onto stack
         test_stack = [1, 2]

@@ -2,26 +2,32 @@
 All Methods for OP Codes go in this file
 '''
 
+import importlib
+import os
+
+
 class op_codes:
+        def op_codeb6(self, stack, call_path):        # invoke virtual
+                """
+                I thought it would be better to separate the file path from the method name
+                so instead of call path being a single string containing the path+method e.g java/util/Scanner/nextInt
+                it should be an array that contains 2 elements, the path, [java/util/Scanner], and the method [nextInt]
+                This might not be the best way to do it but I couldn't think of a better one
+                Stack implementation will be for another time
+                """
 
-        #emulates println for the different data types  ******going to be redone*****
-        def invokeVirtual(stack_z, tag):
-            if(tag == "java/lang/SystemoutLjava/io/PrintStream;"):
-                print(stack_z.pop())
-            elif(tag == "java/io/PrintStreamprint(D)V"):
-                print(stack_z.pop())
+                split_path = call_path[0].split('/')  # Separate path into components
+                file_name = split_path[len(split_path) - 1]  # File name will be the "anchor"
+                file_path = ".".join(split_path[:len(split_path) - 1])  # Path to the anchor
+                method_name = call_path[1]  # Not sure if this is correct for all invokevirtual, revision inevitable
 
-            elif(tag  == "java/io/PrintStreamprint(Z)V"):
-                poppedValue = stack_z.pop()
-                if(poppedValue == 1):
-                    print ("true")
-                elif(poppedValue == 0):
-                    print ("false")
-                else:
-                    print("this is not implemented.")
-            elif(tag == "java/io/PrintStreamprintln(Ljava/lang/String;)V"):
-                print(stack_z.pop())
+                class_name = importlib.import_module(("." + file_name), file_path)
+                # TODO Catch error where method that does not exist is called
+                method_call = getattr(class_name, method_name)
 
+                result = method_call()
+                stack.append(result)
+                return result   # Will remove when done with testing as the result should only be pushed onto the stack
 
         def op_code70(stack_z):     #remainder
                 var1 = stack_z.pop() % stack_z.pop()
