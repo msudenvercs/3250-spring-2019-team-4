@@ -278,7 +278,11 @@ class test_op_codes(unittest.TestCase):
         self.assertEqual(test_stack.pop(), 36028797018963967)
         
     def test_opcode61(self):
-        test_stack = [9223372036854775807, 1, -9223372036854775808, -1, 9223372036854775807, 10]
+        test_stack = [9223372036854775807, 1, -9223372036854775808, -1, 9223372036854775807, 10, -10, -9223372036854775808, 10, 20]
+        test_stack = op_codes1.op_codes.op_code61(test_stack)
+        self.assertEqual(test_stack.pop(), 30)
+        test_stack = op_codes1.op_codes.op_code61(test_stack)
+        self.assertEqual(test_stack.pop(), 9223372036854775797)
         test_stack = op_codes1.op_codes.op_code61(test_stack)
         self.assertEqual(test_stack.pop(), -9223372036854775799)
         test_stack = op_codes1.op_codes.op_code61(test_stack)
