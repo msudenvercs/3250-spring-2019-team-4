@@ -1,9 +1,10 @@
 
 import unittest
+import sys
+import io
 from jvpm import ClassFile
 
 class testClass(unittest.TestCase):
-    unittest_file = ClassFile.JavaClassFile("test.class")
 
     def test_get_magic_number(self):
         self.assertEqual(ClassFile.JavaClassFile.get_magic_number(self.unittest_file), 'CAFEBABE')
@@ -168,5 +169,10 @@ class testClass(unittest.TestCase):
     def test_invoke_virtual(self):  # TODO
         self.assertEqual(ClassFile.JavaClassFile.invoke_virtual(self.unittest_file, "0007"),
                          ['java/io/PrintStream', 'println', '(Ljava/lang/String;)V'])
+
     def test_print_string(self):
-        self.assertEqual(ClassFile.JavaClassFile.print_string(self.unittest_file), "This is COOL!")
+        unittest_file = ClassFile.JavaClassFile("test.class")
+        capturedOutput = io.StringIO()
+        sys.stdout = capturedOutput
+        unittest_file.print_string()
+        self.assertEqual((capturedOutput), "This is COOL!")
