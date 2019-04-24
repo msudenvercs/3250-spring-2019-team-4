@@ -729,11 +729,6 @@ class JavaClassFile:
 
 
     def print_string(self):
-    #    print("\n-----CONSTANT TABLE-----")
-    #    counter = 1;
-    #    for i in self.formatted_constant_table:
-    #        print(counter ,i)
-    #        counter = counter +1
         print("opcodes:", self.opcodes)
         print("virtual:",self.virtual)
         op_codes.invokeVirtual(self.stack_z, self.virtual)
