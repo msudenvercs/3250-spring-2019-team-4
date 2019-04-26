@@ -363,5 +363,22 @@ class op_codes:
                 else:
                         stack_z.append(1)
                 return stack_z
+        
+        def op_code7b(stack_z):
+                var1 = stack_z.pop()
+                var2 = stack_z.pop()
+                lmin = -9223372036854775808
+                lmax = 9223372036854775807
+                
+                if (var1 < 0) and (var2 == lmin or var2 == lmax):
+                        if var2 == lmax:
+                                stack_z.append(1<<(var1+2))
+                        else:
+                                stack_z.append(1<<(var1+1))
+                else:
+                        stack_z.append(var1 >> var2)
+                return stack_z
+                        
+                
                 
                 
