@@ -334,5 +334,22 @@ class op_codes:
                 return stack_z
         
         def op_code6d(stack_z):
+                var1 = stack_z.pop()
+                var2 = stack_z.pop()
+                if var1 == 0 or var2 == 0:
+                        raise ArithmeticError
+                else:
+                        stack_z.append(var2 // var1)
+                return stack_z
+        
+        def op_code75(stack_z):
+                lmin = -9223372036854775808
+                var1 = stack_z.pop()
+                
+                if var1 == lmin:
+                        stack_z.append(lmin)
+                else:
+                        stack_z.append(var1 * -1)
+                return stack_z
                 
                 
