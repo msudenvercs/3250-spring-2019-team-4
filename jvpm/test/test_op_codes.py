@@ -320,7 +320,7 @@ class test_op_codes(unittest.TestCase):
         self.assertEqual(test_stack.pop(), 0)
         
     def test_opcode7b(self):
-        test_stack = [9223372036854775807, -2, -9223372036854775808, -5, 9223372036854775807, 2, -9223372036854775808, 5]
+        test_stack = [-9223372036854775808, 9223372036854775807, 9223372036854775807, -9223372036854775808, -9223372036854775808, -9223372036854775808, 9223372036854775807, 9223372036854775807, 9223372036854775807, -2, -9223372036854775808, -5, 9223372036854775807, 2, -9223372036854775808, 5]
         test_stack = op_codes1.op_codes.op_code7b(test_stack)
         self.assertEqual(test_stack.pop(), -288230376151711744)
         test_stack = op_codes1.op_codes.op_code7b(test_stack)
@@ -329,5 +329,12 @@ class test_op_codes(unittest.TestCase):
         self.assertEqual(test_stack.pop(), -16)
         test_stack = op_codes1.op_codes.op_code7b(test_stack)
         self.assertEqual(test_stack.pop(), 1)
-        
+        test_stack = op_codes1.op_codes.op_code7b(test_stack)
+        self.assertEqual(test_stack.pop(), 0)
+        test_stack = op_codes1.op_codes.op_code7b(test_stack)
+        self.assertEqual(test_stack.pop(), -9223372036854775808)
+        test_stack = op_codes1.op_codes.op_code7b(test_stack)
+        self.assertEqual(test_stack.pop(), 9223372036854775807)
+        test_stack = op_codes1.op_codes.op_code7b(test_stack)
+        self.assertEqual(test_stack.pop(), -1)
         
