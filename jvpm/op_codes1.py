@@ -332,4 +332,7 @@ class op_codes:
                 else:
                         stack_z.append(var1+var2)
                 return stack_z
+        
+        def op_code6d(stack_z):
+                
                 
