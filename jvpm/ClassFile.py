@@ -33,17 +33,23 @@ class JavaClassFile:
         return magic_num
 
     def get_major(self):
-        major_version = format(self.data[6], "02X") + format(self.data[7], "02X")
+        major_version = format(self.data[6], "02X") + format(
+            self.data[7], "02X"
+        )
 
         return major_version
 
     def get_minor(self):
-        minor_version = format(self.data[4], "02X") + format(self.data[5], "02X")
+        minor_version = format(self.data[4], "02X") + format(
+            self.data[5], "02X"
+        )
 
         return minor_version
 
     def get_pool_count_raw(self):
-        pool_count_raw = format(self.data[8], "02X") + format(self.data[9], "02X")
+        pool_count_raw = format(self.data[8], "02X") + format(
+            self.data[9], "02X"
+        )
 
         return pool_count_raw
 
@@ -90,7 +96,9 @@ class JavaClassFile:
                 byte_location += int(num_bytes)
             # Tag represents something else, which means only that value needs to be read
             else:
-                num_bytes = ConstantPoolTag(data_value).get_byte_length(data_value)
+                num_bytes = ConstantPoolTag(data_value).get_byte_length(
+                    data_value
+                )
                 constant += data_value
                 byte_location += 1
                 size += 1
@@ -115,8 +123,9 @@ class JavaClassFile:
         access_flag_byte1 = 10 + cpsize
         access_flag_byte2 = 11 + cpsize
 
-        access_flag = (format(self.data[access_flag_byte1], "02X") +
-                       format(self.data[access_flag_byte2], "02X"))
+        access_flag = format(self.data[access_flag_byte1], "02X") + format(
+            self.data[access_flag_byte2], "02X"
+        )
         return access_flag
 
     # Assumes that the size of the class index is 2 bytes from 4.4.1 of the java.class documentation
@@ -127,8 +136,9 @@ class JavaClassFile:
         class_index_byte1 = 12 + cpsize
         class_index_byte2 = 13 + cpsize
 
-        class_index = (format(self.data[class_index_byte1], "02X") +
-                       format(self.data[class_index_byte2], "02X"))
+        class_index = format(self.data[class_index_byte1], "02X") + format(
+            self.data[class_index_byte2], "02X"
+        )
 
         class_index = int(class_index, 16)
         class_identifier = constant_table[class_index]
@@ -142,8 +152,9 @@ class JavaClassFile:
         superclass_index_byte1 = 14 + cpsize
         superclass_index_byte2 = 15 + cpsize
         # Index of the constant pool table
-        superclass_index = (format(self.data[superclass_index_byte1], "02X") +
-                            format(self.data[superclass_index_byte2], "02X"))
+        superclass_index = format(
+            self.data[superclass_index_byte1], "02X"
+        ) + format(self.data[superclass_index_byte2], "02X")
         superclass_index = int(superclass_index, 16)
 
         superclass_identifier = constant_table[superclass_index]
@@ -155,8 +166,9 @@ class JavaClassFile:
         interface_count_index_byte1 = 16 + cpsize
         interface_count_index_byte2 = 17 + cpsize
 
-        interface_count = (format(self.data[interface_count_index_byte1], "02X") +
-                           format(self.data[interface_count_index_byte2], "02X"))
+        interface_count = format(
+            self.data[interface_count_index_byte1], "02X"
+        ) + format(self.data[interface_count_index_byte2], "02X")
 
         return interface_count
 
@@ -198,8 +210,9 @@ class JavaClassFile:
         field_count_index_byte1 = 18 + cpsize + isize
         field_count_index_byte2 = 19 + cpsize + isize
 
-        field_count = (format(self.data[field_count_index_byte1], "02X") +
-                       format(self.data[field_count_index_byte2], "02X"))
+        field_count = format(
+            self.data[field_count_index_byte1], "02X"
+        ) + format(self.data[field_count_index_byte2], "02X")
         return field_count
 
     def get_field_table(self):
@@ -215,7 +228,9 @@ class JavaClassFile:
             for i in range(field_count):
                 field_table_element = ""
                 for j in range(8):  # field_info consists of 8 bytes (4x u2)
-                    field_table_element += format(self.data[byte_location], "02X")
+                    field_table_element += format(
+                        self.data[byte_location], "02X"
+                    )
                     byte_location += 1
                     size += 1
 
@@ -224,7 +239,9 @@ class JavaClassFile:
                     for j in range(attribute_size):
                         attribute = ""
                         for k in range(6):
-                            attribute += format(self.data[byte_location], "02X")
+                            attribute += format(
+                                self.data[byte_location], "02X"
+                            )
                             byte_location += 1
                             size += 1
                         field_table_element += attribute
@@ -233,7 +250,9 @@ class JavaClassFile:
 
                         attribute_info = ""
                         for k in range(attribute_info_length):
-                            attribute_info += format(self.data[byte_location], "02X")
+                            attribute_info += format(
+                                self.data[byte_location], "02X"
+                            )
                             byte_location += 1
                             size += 1
                         field_table_element += attribute_info
@@ -292,8 +311,9 @@ class JavaClassFile:
 
         method_count_byte1 = 20 + cpsize + isize + fsize
         method_count_byte2 = 21 + cpsize + isize + fsize
-        method_count = (format(self.data[method_count_byte1], "02X") +
-                        format(self.data[method_count_byte2], "02X"))
+        method_count = format(self.data[method_count_byte1], "02X") + format(
+            self.data[method_count_byte2], "02X"
+        )
 
         return method_count
 
@@ -322,11 +342,15 @@ class JavaClassFile:
                         size += 1
                     method_table_element += attribute
 
-                    attribute_info_length = int(attribute[4:12], 16)  # attribute_length
+                    attribute_info_length = int(
+                        attribute[4:12], 16
+                    )  # attribute_length
                     # simply added all the bytes related to the attribute length
                     attribute_info = ""
                     for k in range(attribute_info_length):
-                        attribute_info += format(self.data[byte_location], "02X")
+                        attribute_info += format(
+                            self.data[byte_location], "02X"
+                        )
                         byte_location += 1
                         size += 1
                     method_table_element += attribute_info
@@ -385,8 +409,9 @@ class JavaClassFile:
         attribute_count_byte1 = 22 + cpsize + isize + fsize + msize
         attribute_count_byte2 = 23 + cpsize + isize + fsize + msize
 
-        attribute_count = (format(self.data[attribute_count_byte1], "02X") +
-                           format(self.data[attribute_count_byte2], "02X"))
+        attribute_count = format(
+            self.data[attribute_count_byte1], "02X"
+        ) + format(self.data[attribute_count_byte2], "02X")
 
         return attribute_count
 
@@ -434,39 +459,41 @@ class JavaClassFile:
     def get_attribute_table_size(self):
         return self.classfile_attribute_table_size
 
-    #parses constant table to check for #3, #13, #18, #24, #25, and #26
+    # parses constant table to check for #3, #13, #18, #24, #25, and #26
     def decode_constant_table(constant_table):
         for i in constant_table:
-            #strings will be replaced with hexadecimal
-            if (i == "#3"):
-                if (i == "#17"):
-                    if (i == "#24"):
+            # strings will be replaced with hexadecimal
+            if i == "#3":
+                if i == "#17":
+                    if i == "#24":
                         return "PrintStream"
-                if (i == "#18"):
-                    if (i == "#25"):
+                if i == "#18":
+                    if i == "#25":
                         return "println"
-                    elif (i == "#26"):
+                    elif i == "#26":
                         return "(I)V"
                 return
 
-
-
     # For Testing
 
-    def print_data(self):   # pragma: no cover
+    def print_data(self):  # pragma: no cover
         print("Magic Number: " + self.get_magic_number())
         print("Major Version: " + self.get_major())
         print("Minor Version: " + self.get_minor())
         print("Pool Count: " + self.get_pool_count_raw())
         print("Pool Count - 1: " + self.get_pool_count())
         print("Constant Table: " + str(self.classfile_constant_table))
-        print("Constant Table Size: " + str(self.classfile_constant_table_size))
+        print(
+            "Constant Table Size: " + str(self.classfile_constant_table_size)
+        )
         print("Access Flag: " + self.get_access_flag())
         print("Class Identifier: " + self.get_class_identifier())
         print("Super Class Identifier: " + self.get_superclass_identifier())
         print("Interface Count: " + self.get_interface_count())
         print("Interface Table: " + str(self.classfile_interface_table))
-        print("Interface Table Size: " + str(self.classfile_interface_table_size))
+        print(
+            "Interface Table Size: " + str(self.classfile_interface_table_size)
+        )
         print("Interfaces: " + str(self.get_interfaces()))
         print("Field Count: " + self.get_field_count())
         print("Field Table: " + str(self.classfile_field_table))
@@ -478,7 +505,9 @@ class JavaClassFile:
         print("Methods: " + str(self.classfile_methods))
         print("Attribute Count: " + self.get_attribute_count())
         print("Attribute Table: " + str(self.classfile_attribute_table))
-        print("Attribute Table Size: " + str(self.classfile_attribute_table_size))
+        print(
+            "Attribute Table Size: " + str(self.classfile_attribute_table_size)
+        )
 
         # Print data from tables in a human readable format
 
@@ -496,38 +525,56 @@ class JavaClassFile:
             if tag == "01":  # String
                 tag_type = ConstantPoolTag(tag).get_tag_type(tag)
                 data = data[4:]
-                data = bytes.fromhex(data).decode('utf-8')
+                data = bytes.fromhex(data).decode("utf-8")
                 values[index] = [tag_type, data]
 
             elif tag == "07":  # Class Ref
                 tag_type = ConstantPoolTag(tag).get_tag_type(tag)
-                data = '#' + str(int(data, 16))
+                data = "#" + str(int(data, 16))
                 values[index] = [tag_type, data]
 
             elif tag == "08":  # String Ref
                 tag_type = ConstantPoolTag(tag).get_tag_type(tag)
-                data = '#' + str(int(data, 16))
+                data = "#" + str(int(data, 16))
                 values[index] = [tag_type, data]
 
             elif tag == "09":  # Field Ref
                 tag_type = ConstantPoolTag(tag).get_tag_type(tag)
                 data_index_01 = data[0:4]
                 data_index_02 = data[4:]
-                data = ('#' + str(int(data_index_01, 16)) + ', ' + '#' + str(int(data_index_02, 16)))
+                data = (
+                    "#"
+                    + str(int(data_index_01, 16))
+                    + ", "
+                    + "#"
+                    + str(int(data_index_02, 16))
+                )
                 values[index] = [tag_type, data]
 
             elif tag == "0A":  # Method Ref
                 tag_type = ConstantPoolTag(tag).get_tag_type(tag)
                 data_index_01 = data[0:4]
                 data_index_02 = data[4:]
-                data = ('#' + str(int(data_index_01, 16)) + ', ' + '#' + str(int(data_index_02, 16)))
+                data = (
+                    "#"
+                    + str(int(data_index_01, 16))
+                    + ", "
+                    + "#"
+                    + str(int(data_index_02, 16))
+                )
                 values[index] = [tag_type, data]
 
             elif tag == "0C":  # Name and Type Description
                 tag_type = ConstantPoolTag(tag).get_tag_type(tag)
                 data_index_01 = data[0:4]
                 data_index_02 = data[4:]
-                data = ('#' + str(int(data_index_01, 16)) + ', ' + '#' + str(int(data_index_02, 16)))
+                data = (
+                    "#"
+                    + str(int(data_index_01, 16))
+                    + ", "
+                    + "#"
+                    + str(int(data_index_02, 16))
+                )
                 values[index] = [tag_type, data]
 
             else:
@@ -546,7 +593,9 @@ class JavaClassFile:
         call_path = []
         # Index should be 2 hexadecimal bytes next to the invokevirtual call
         int_index = int(start_index, 16) - 1
-        self.invoke_virtual_read_cp(self.classfile_constant_table[int_index], call_path)
+        self.invoke_virtual_read_cp(
+            self.classfile_constant_table[int_index], call_path
+        )
         return call_path
 
     # Recursive helper method, output will be tested with invoke_virtual(self, start_index)
@@ -555,73 +604,95 @@ class JavaClassFile:
         tag = cp_data[0:2]
         data = cp_data[2:]
 
-        if tag == "01":         # String
+        if tag == "01":  # String
             data = data[4:]
-            string_data = bytes.fromhex(data).decode('utf-8')
+            string_data = bytes.fromhex(data).decode("utf-8")
             array.append(string_data)
             return string_data
 
-        elif tag == "07":       # Class Reference
+        elif tag == "07":  # Class Reference
             index = int(data, 16) - 1
-            self.invoke_virtual_read_cp(self.classfile_constant_table[index], array)
+            self.invoke_virtual_read_cp(
+                self.classfile_constant_table[index], array
+            )
 
-        elif tag == "08":       # String Reference
+        elif tag == "08":  # String Reference
             index = int(data, 16) - 1
-            self.invoke_virtual_read_cp(self.classfile_constant_table[index], array)
+            self.invoke_virtual_read_cp(
+                self.classfile_constant_table[index], array
+            )
 
-        elif tag == "09":       # Field Reference
+        elif tag == "09":  # Field Reference
             field_ref_1 = int(data[0:4], 16) - 1
             field_ref_2 = int(data[4:], 16) - 1
-            self.invoke_virtual_read_cp(self.classfile_constant_table[field_ref_1], array)
-            self.invoke_virtual_read_cp(self.classfile_constant_table[field_ref_2], array)
+            self.invoke_virtual_read_cp(
+                self.classfile_constant_table[field_ref_1], array
+            )
+            self.invoke_virtual_read_cp(
+                self.classfile_constant_table[field_ref_2], array
+            )
 
-        elif tag == "0A":       # Method Reference
+        elif tag == "0A":  # Method Reference
             method_ref_1 = int(data[0:4], 16) - 1
             method_ref_2 = int(data[4:], 16) - 1
-            self.invoke_virtual_read_cp(self.classfile_constant_table[method_ref_1], array)
-            self.invoke_virtual_read_cp(self.classfile_constant_table[method_ref_2], array)
+            self.invoke_virtual_read_cp(
+                self.classfile_constant_table[method_ref_1], array
+            )
+            self.invoke_virtual_read_cp(
+                self.classfile_constant_table[method_ref_2], array
+            )
 
-        elif tag == "0B":       # Interface Method Reference
+        elif tag == "0B":  # Interface Method Reference
             index = int(data, 16) - 1
-            self.invoke_virtual_read_cp(self.classfile_constant_table[index], array)
+            self.invoke_virtual_read_cp(
+                self.classfile_constant_table[index], array
+            )
 
-        elif tag == "0C":       # Name and Type Description
+        elif tag == "0C":  # Name and Type Description
             name_index = int(data[0:4], 16) - 1
             type_index = int(data[4:], 16) - 1
-            self.invoke_virtual_read_cp(self.classfile_constant_table[name_index], array)
-            self.invoke_virtual_read_cp(self.classfile_constant_table[type_index], array)
+            self.invoke_virtual_read_cp(
+                self.classfile_constant_table[name_index], array
+            )
+            self.invoke_virtual_read_cp(
+                self.classfile_constant_table[type_index], array
+            )
 
     # decoding constant pool and calling opcodes, TODO clean code
     formatted_constant_table = []
-    constant_parts =[]
+    constant_parts = []
     constant_slpit = []
     opcodes = []
 
     def format_constant_table(self):
         for constant in self.classfile_constant_table:
-            self.constant_split = [constant[i:i+2] for i in range(0, len(constant), 2)]
+            self.constant_split = [
+                constant[i : i + 2] for i in range(0, len(constant), 2)
+            ]
             tag = self.constant_split[0]
             self.constant_helper(tag)
         return self.formatted_constant_table
 
     def print_table_info(self):
         print("\n-----CONSTANT TABLE-----")
-        counter = 1;
+        counter = 1
         for i in self.formatted_constant_table:
-            print(counter ,i)
-            counter = counter +1
+            print(counter, i)
+            counter = counter + 1
         print("opcodes:", self.opcodes)
-        print("virtual:",self.virtual)
+        print("virtual:", self.virtual)
         if self.virtual != "":
             op_codes.op_codeb6(self.stack_z, self.virtual)
 
     def get_opcodes(self):
         index = 18
         for method in self.classfile_method_table:
-            method_split = [method[i:i+2] for i in range(0, len(method), 2)]
-            opcodes_len = method_split[index:index+4]
-            hex = int("".join(map(str, opcodes_len)),16)
-            self.opcodes.append(method_split[index+4:index+4+hex])
+            method_split = [
+                method[i : i + 2] for i in range(0, len(method), 2)
+            ]
+            opcodes_len = method_split[index : index + 4]
+            hex = int("".join(map(str, opcodes_len)), 16)
+            self.opcodes.append(method_split[index + 4 : index + 4 + hex])
         return self.opcodes
 
     def get_virtual(self):
@@ -636,58 +707,66 @@ class JavaClassFile:
                     check = 2
                 if opcode[0] == "B":
                     check = 1
-                self.execute_opcodes(opcodes,opcode)
+                self.execute_opcodes(opcodes, opcode)
         return self.virtual
 
-    def execute_opcodes(self,opcodes, opcode):
+    def execute_opcodes(self, opcodes, opcode):
         get_return = ""
         map = {
             "B2": self.opcode_b2,
             "B1": self.opcode_b1,
             "12": self.opcode_12,
-            "10": self.opcode_10
+            "10": self.opcode_10,
         }
         try:
-            map[opcode](opcodes,opcode)
+            map[opcode](opcodes, opcode)
         except KeyError:
             self.default(opcode)
 
-    #these methods will go in opcodes1 file or othe
-    def opcode_b2(self,opcodes,opcode):
+    # these methods will go in opcodes1 file or othe
+    def opcode_b2(self, opcodes, opcode):
         pool_index = opcodes.index(opcode)
-        code_index = int("".join(map(str, opcodes[pool_index+1:pool_index+3])),16)
-        self.recursive(code_index-1)
+        code_index = int(
+            "".join(map(str, opcodes[pool_index + 1 : pool_index + 3])), 16
+        )
+        self.recursive(code_index - 1)
 
-    def opcode_b1(self,opcodes,opcode):
+    def opcode_b1(self, opcodes, opcode):
         return None
 
-    def opcode_10(self,opcodes,opcode):
+    def opcode_10(self, opcodes, opcode):
         pool_index = opcodes.index(opcode)
-        constant = int("".join(map(str, opcodes[pool_index+2:pool_index+3])),16)
+        constant = int(
+            "".join(map(str, opcodes[pool_index + 2 : pool_index + 3])), 16
+        )
         self.stack_z.append(constant)
 
-    def opcode_12(self,opcodes, opcode):
+    def opcode_12(self, opcodes, opcode):
         pool_index = opcodes.index(opcode)
-        table_index = int("".join(map(str, opcodes[pool_index+1:pool_index+2])),16)
+        table_index = int(
+            "".join(map(str, opcodes[pool_index + 1 : pool_index + 2])), 16
+        )
         string = self.formatted_constant_table[table_index][1]
         print(string)
         self.stack_z.append(string)
-    #/////////
 
-    def default(self,opcode):
-        return "Missing Method: " , opcode
+    # /////////
 
-    #recursive method to interpret contant pool
+    def default(self, opcode):
+        return "Missing Method: ", opcode
+
+    # recursive method to interpret contant pool
     virtual = ""
-    def recursive(self,index):
+
+    def recursive(self, index):
         check = ""
         for call in self.formatted_constant_table[index]:
             if check == "UTF-8":
                 self.virtual = self.virtual + call
             elif call == "UTF-8":
                 check = call
-            if isinstance(call,int):
-                self.recursive(call-1)
+            if isinstance(call, int):
+                self.recursive(call - 1)
         return self.virtual
 
     def constant_helper(self, tag):
@@ -697,22 +776,22 @@ class JavaClassFile:
             "09": self.tag_ref_helper,
             "08": self.tag_ref_helper,
             "07": self.tag_ref_helper,
-            "01": self.tag_utf8_helper
+            "01": self.tag_utf8_helper,
         }
         try:
             map[tag](tag)
         except KeyError:
             self.default(tag)
 
-    def tag_ref_helper(self,tag):
+    def tag_ref_helper(self, tag):
         self.constant_parts.append(ConstantPoolTag(tag).get_tag_type(tag))
-        for i in range(1,len(self.constant_split),2):
-            ref = self.constant_split[i]+self.constant_split[i+1]
-            self.constant_parts.append(int(ref,16))
+        for i in range(1, len(self.constant_split), 2):
+            ref = self.constant_split[i] + self.constant_split[i + 1]
+            self.constant_parts.append(int(ref, 16))
         self.formatted_constant_table.append(self.constant_parts)
         self.constant_parts = []
 
-    def tag_utf8_helper(self,tag):
+    def tag_utf8_helper(self, tag):
         self.constant_parts.append(ConstantPoolTag(tag).get_tag_type(tag))
         hex_list = []
         for i in self.constant_split[3:]:
@@ -743,7 +822,7 @@ class JavaClassFile:
         class_file_name = file_name
         # class_file_directory = os.path.abspath(os.path.join(class_file_path, class_file_name))
 
-        with open(class_file_name, 'rb') as class_file:
+        with open(class_file_name, "rb") as class_file:
             # Literally sets the object of this class to whatever is on the other side of the equals sign
             # For example with object a of class x and self.data = 0 in constructor, print(a.data) would print 0
             self.data = class_file.read()
@@ -759,21 +838,21 @@ class JavaClassFile:
 
 
 # -----END OF METHOD DEFINITIONS-----
-#a = JavaClassFile("Integer_Test.class")
-#a.display_data()
-#a.invoke_virtual("0005")
-#a.print_data()
-#a.format_constant_table()
-#a.get_virtual()
-#a.print_table_info()
-#b = JavaClassFile("wud.class")
-#b.format_constant_table()
-#b.get_virtual()
-#b.print_string()
+# a = JavaClassFile("Integer_Test.class")
+# a.display_data()
+# a.invoke_virtual("0005")
+# a.print_data()
+# a.format_constant_table()
+# a.get_virtual()
+# a.print_table_info()
+# b = JavaClassFile("wud.class")
+# b.format_constant_table()
+# b.get_virtual()
+# b.print_string()
 
-#a.display_data()
+# a.display_data()
 
-'''
+"""
     def op_code_caller(self, input):
         op_code_dict = {
             "0x60":op_codes1.op_codes.op_code60
@@ -799,4 +878,4 @@ class JavaClassFile:
 
         send(op_code_dict[input](stack_z))
 
-'''
+"""
