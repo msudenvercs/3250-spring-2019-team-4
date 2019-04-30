@@ -458,22 +458,6 @@ class JavaClassFile:
 
     def get_attribute_table_size(self):
         return self.classfile_attribute_table_size
-
-    # parses constant table to check for #3, #13, #18, #24, #25, and #26
-    def decode_constant_table(constant_table):
-        for i in constant_table:
-            # strings will be replaced with hexadecimal
-            if i == "#3":
-                if i == "#17":
-                    if i == "#24":
-                        return "PrintStream"
-                if i == "#18":
-                    if i == "#25":
-                        return "println"
-                    elif i == "#26":
-                        return "(I)V"
-                return
-
     # For Testing
 
     def print_data(self):  # pragma: no cover
@@ -658,41 +642,36 @@ class JavaClassFile:
                 self.classfile_constant_table[type_index], array
             )
 
-    # decoding constant pool and calling opcodes, TODO clean code
     formatted_constant_table = []
-    constant_parts = []
+    constant_parts =[]
     constant_slpit = []
     opcodes = []
 
     def format_constant_table(self):
         for constant in self.classfile_constant_table:
-            self.constant_split = [
-                constant[i : i + 2] for i in range(0, len(constant), 2)
-            ]
+            self.constant_split = [constant[i:i+2] for i in range(0, len(constant), 2)]
             tag = self.constant_split[0]
             self.constant_helper(tag)
         return self.formatted_constant_table
 
     def print_table_info(self):
         print("\n-----CONSTANT TABLE-----")
-        counter = 1
+        counter = 1;
         for i in self.formatted_constant_table:
-            print(counter, i)
-            counter = counter + 1
+            print(counter ,i)
+            counter = counter +1
         print("opcodes:", self.opcodes)
-        print("virtual:", self.virtual)
+        print("virtual:",self.virtual)
         if self.virtual != "":
-            op_codes.op_codeb6(self.stack_z, self.virtual)
+            op_codes.invokeVirtual(self.stack_z,self.virtual)
 
     def get_opcodes(self):
         index = 18
         for method in self.classfile_method_table:
-            method_split = [
-                method[i : i + 2] for i in range(0, len(method), 2)
-            ]
-            opcodes_len = method_split[index : index + 4]
-            hex = int("".join(map(str, opcodes_len)), 16)
-            self.opcodes.append(method_split[index + 4 : index + 4 + hex])
+            method_split = [method[i:i+2] for i in range(0, len(method), 2)]
+            opcodes_len = method_split[index:index+4]
+            hex = int("".join(map(str, opcodes_len)),16)
+            self.opcodes.append(method_split[index+4:index+4+hex])
         return self.opcodes
 
     def get_virtual(self):
@@ -707,66 +686,57 @@ class JavaClassFile:
                     check = 2
                 if opcode[0] == "B":
                     check = 1
-                self.execute_opcodes(opcodes, opcode)
+                self.execute_opcodes(opcodes,opcode)
         return self.virtual
 
-    def execute_opcodes(self, opcodes, opcode):
+    def execute_opcodes(self,opcodes, opcode):
         get_return = ""
         map = {
-            "B2": self.opcode_b2,
-            "B1": self.opcode_b1,
-            "12": self.opcode_12,
-            "10": self.opcode_10,
+            "B2": self.get_path,
+            "B1": self.get_void,
+            "12": self.get_constant,
+            "10": self.get_object
         }
         try:
-            map[opcode](opcodes, opcode)
+            map[opcode](opcodes,opcode)
         except KeyError:
             self.default(opcode)
 
-    # these methods will go in opcodes1 file or othe
-    def opcode_b2(self, opcodes, opcode):
+    def get_path(self,opcodes,opcode):
         pool_index = opcodes.index(opcode)
-        code_index = int(
-            "".join(map(str, opcodes[pool_index + 1 : pool_index + 3])), 16
-        )
-        self.recursive(code_index - 1)
+        code_index = int("".join(map(str, opcodes[pool_index+1:pool_index+3])),16)
+        self.recursive(code_index-1)
 
-    def opcode_b1(self, opcodes, opcode):
+    def get_void(self,opcodes,opcode):
         return None
 
-    def opcode_10(self, opcodes, opcode):
+    def get_constant(self,opcodes,opcode):
         pool_index = opcodes.index(opcode)
-        constant = int(
-            "".join(map(str, opcodes[pool_index + 2 : pool_index + 3])), 16
-        )
+        constant = int("".join(map(str, opcodes[pool_index+2:pool_index+3])),16)
         self.stack_z.append(constant)
 
-    def opcode_12(self, opcodes, opcode):
+    def get_object(self,opcodes, opcode):
         pool_index = opcodes.index(opcode)
-        table_index = int(
-            "".join(map(str, opcodes[pool_index + 1 : pool_index + 2])), 16
-        )
-        string = self.formatted_constant_table[table_index][1]
-        print(string)
+        table_index = int("".join(map(str, opcodes[pool_index+1:pool_index+2])),16)
+        string = self.formatted_constant_table[table_index-1][1]
+        #add a check to see if it is a string then call recursive else just push int or
+        #float into stack
+        #isinstance(string, str)
         self.stack_z.append(string)
 
-    # /////////
+    def default(self,opcode):
+        return "Missing Method: " , opcode
 
-    def default(self, opcode):
-        return "Missing Method: ", opcode
-
-    # recursive method to interpret contant pool
     virtual = ""
-
-    def recursive(self, index):
+    def recursive(self,index):
         check = ""
         for call in self.formatted_constant_table[index]:
             if check == "UTF-8":
                 self.virtual = self.virtual + call
             elif call == "UTF-8":
                 check = call
-            if isinstance(call, int):
-                self.recursive(call - 1)
+            if isinstance(call,int):
+                self.recursive(call-1)
         return self.virtual
 
     def constant_helper(self, tag):
@@ -777,21 +747,23 @@ class JavaClassFile:
             "08": self.tag_ref_helper,
             "07": self.tag_ref_helper,
             "01": self.tag_utf8_helper,
+            "03": self.int_helper,
+            "04": self.float_helper
         }
         try:
             map[tag](tag)
         except KeyError:
             self.default(tag)
 
-    def tag_ref_helper(self, tag):
+    def tag_ref_helper(self,tag):
         self.constant_parts.append(ConstantPoolTag(tag).get_tag_type(tag))
-        for i in range(1, len(self.constant_split), 2):
-            ref = self.constant_split[i] + self.constant_split[i + 1]
-            self.constant_parts.append(int(ref, 16))
+        for i in range(1,len(self.constant_split),2):
+            ref = self.constant_split[i]+self.constant_split[i+1]
+            self.constant_parts.append(int(ref,16))
         self.formatted_constant_table.append(self.constant_parts)
         self.constant_parts = []
 
-    def tag_utf8_helper(self, tag):
+    def tag_utf8_helper(self,tag):
         self.constant_parts.append(ConstantPoolTag(tag).get_tag_type(tag))
         hex_list = []
         for i in self.constant_split[3:]:
@@ -801,17 +773,25 @@ class JavaClassFile:
         self.formatted_constant_table.append(self.constant_parts)
         self.constant_parts = []
 
-    """
-    def print_string(self):
-    #    print("\n-----CONSTANT TABLE-----")
-    #    counter = 1;
-    #    for i in self.formatted_constant_table:
-    #        print(counter ,i)
-    #        counter = counter +1
-        print("opcodes:", self.opcodes)
-        print("virtual:",self.virtual)
-        op_codes.op_codeb6(self.stack_z, self.virtual)
-    """
+    def int_helper(self,tag):
+        self.constant_parts.append(ConstantPoolTag(tag).get_tag_type(tag))
+        float_hex = ""
+        for i in range(1,len(self.constant_split)):
+            float_hex = float_hex + self.constant_split[i]
+        self.constant_parts.append(struct.unpack('!i', bytes.fromhex(float_hex))[0])
+        self.formatted_constant_table.append(self.constant_parts)
+        self.constant_parts = []
+
+    def float_helper(self,tag):
+        self.constant_parts.append(ConstantPoolTag(tag).get_tag_type(tag))
+        float_hex = ""
+        for i in range(1,len(self.constant_split)):
+            float_hex = float_hex + self.constant_split[i]
+        self.constant_parts.append(struct.unpack('!f', bytes.fromhex(float_hex))[0])
+        self.formatted_constant_table.append(self.constant_parts)
+        self.constant_parts = []
+
+
     # Python "Constructor"
     def __init__(self, file_name):
         # TODO: Make it so that the .class file can be specified by name, this could help in testing opcode reading
@@ -838,44 +818,16 @@ class JavaClassFile:
 
 
 # -----END OF METHOD DEFINITIONS-----
-# a = JavaClassFile("Integer_Test.class")
-# a.display_data()
-# a.invoke_virtual("0005")
-# a.print_data()
-# a.format_constant_table()
-# a.get_virtual()
-# a.print_table_info()
+#a = JavaClassFile("Integer_Test.class")
+#a.display_data()
+#a.invoke_virtual("0005")
+#a.print_data()
+#a.format_constant_table()
+#a.get_virtual()
+#a.print_table_info()
 # b = JavaClassFile("wud.class")
 # b.format_constant_table()
 # b.get_virtual()
 # b.print_string()
 
 # a.display_data()
-
-"""
-    def op_code_caller(self, input):
-        op_code_dict = {
-            "0x60":op_codes1.op_codes.op_code60
-            "0x7e":op_codes1.op_codes.op_code7e
-            "0x02":op_codes1.op_codes.op_code02
-            "0x03":op_codes1.op_codes.op_code03
-            "0x04":op_codes1.op_codes.op_code04
-            "0x05"op_codes1.op_codes.:op_code05
-            "0x06":op_codes1.op_codes.op_code06
-            "0x07":op_codes1.op_codes.op_code07
-            "0x08":op_codes1.op_codes.op_code08
-            "0x6C":op_codes1.op_codes.op_code6c
-            "0x68":op_codes1.op_codes.op_code68
-            "0x70":op_codes1.op_codes.op_code70
-            "0x74":op_codes1.op_codes.op_code74
-            "0x78":op_codes1.op_codes.op_code78
-            "0x7A":op_codes1.op_codes.op_code7a
-            "0x7C":op_codes1.op_codes.op_code7c
-            "0x80":op_codes1.op_codes.op_code80
-            "0x64":op_codes1.op_codes.op_code64
-            "0x82":op_codes1.op_codes.op_code82
-        }
-
-        send(op_code_dict[input](stack_z))
-
-"""
