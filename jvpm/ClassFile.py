@@ -561,6 +561,7 @@ class JavaClassFile:
         string = self.formatted_constant_table[table_index-1][1]
         #add a check to see if it is a string then call recursive else just push int or
         #float into stack
+        #isinstance(string, str)
         self.stack_z.append(string)
     #/////////
 
@@ -588,6 +589,7 @@ class JavaClassFile:
             "08": self.tag_ref_helper,
             "07": self.tag_ref_helper,
             "01": self.tag_utf8_helper,
+            "05": self.long_helper,
             "04": self.float_helper
         }
         try:
@@ -619,6 +621,15 @@ class JavaClassFile:
         for i in range(1,len(self.constant_split)):
             float_hex = float_hex + self.constant_split[i]
         self.constant_parts.append(struct.unpack('!f', bytes.fromhex(float_hex))[0])
+        self.formatted_constant_table.append(self.constant_parts)
+        self.constant_parts = []
+
+    def long_helper(self,tag):
+        self.constant_parts.append(ConstantPoolTag(tag).get_tag_type(tag))
+        float_hex = ""
+        for i in range(1,len(self.constant_split)):
+            float_hex = float_hex + self.constant_split[i]
+        self.constant_parts.append(struct.unpack('!l', bytes.fromhex(float_hex))[0])
         self.formatted_constant_table.append(self.constant_parts)
         self.constant_parts = []
 
@@ -700,7 +711,7 @@ class JavaClassFile:
 
 
 # -----END OF METHOD DEFINITIONS-----
-a = JavaClassFile("HelloWorld.class")
+a = JavaClassFile("long.class")
 a.print_data()
 a.format_constant_table()
 a.get_virtual()
