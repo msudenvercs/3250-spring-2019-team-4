@@ -589,6 +589,7 @@ class JavaClassFile:
             "08": self.tag_ref_helper,
             "07": self.tag_ref_helper,
             "01": self.tag_utf8_helper,
+            "03": self.int_helper,
             "05": self.long_helper,
             "04": self.float_helper
         }
@@ -612,6 +613,15 @@ class JavaClassFile:
             hex_list.append(chr(int(i, 16)))
         ref = "".join(map(str, hex_list))
         self.constant_parts.append(ref)
+        self.formatted_constant_table.append(self.constant_parts)
+        self.constant_parts = []
+
+    def int_helper(self,tag):
+        self.constant_parts.append(ConstantPoolTag(tag).get_tag_type(tag))
+        float_hex = ""
+        for i in range(1,len(self.constant_split)):
+            float_hex = float_hex + self.constant_split[i]
+        self.constant_parts.append(struct.unpack('!i', bytes.fromhex(float_hex))[0])
         self.formatted_constant_table.append(self.constant_parts)
         self.constant_parts = []
 
@@ -711,7 +721,7 @@ class JavaClassFile:
 
 
 # -----END OF METHOD DEFINITIONS-----
-a = JavaClassFile("long.class")
+a = JavaClassFile("float.class")
 a.print_data()
 a.format_constant_table()
 a.get_virtual()
