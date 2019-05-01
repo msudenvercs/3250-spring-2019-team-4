@@ -238,7 +238,7 @@ class op_codes:
                         stack_z.append(varsarray[index])
                         return stack_z
 
-        #WRITE TESTS FOR THESE OPCODES
+
         def op_code36(varsarray, stack_z, index):   #store int value into var. index
             if (index > len(varsarray)):
                 raise IndexError

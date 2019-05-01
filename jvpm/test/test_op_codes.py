@@ -222,7 +222,7 @@ class test_op_codes(unittest.TestCase):
         test_stack = op_codes1.op_codes.op_code15(test_stack, test_localvar, 0)
         self.assertEqual(test_stack.pop(), 20)
 
-    #testing opcodes 36, 3b, 3c, 3d, 3e
+    # Test Opcodes for istore: 36, 3b, 3c, 3d, 3e
 
     def test_opcode36(self):
         test_stack = []
