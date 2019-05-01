@@ -226,7 +226,7 @@ class test_op_codes(unittest.TestCase):
 
     def test_opcode36(self):
         test_stack = []
-        test_localvar = [20, m5, 8, 9]
+        test_localvar = [20, 8, 9]
         test_stack = op_codes1.op_codes.op_code36(test_stack, test_localvar, 0)
         self.assertEqual(test_stack.pop(), 9)
 
