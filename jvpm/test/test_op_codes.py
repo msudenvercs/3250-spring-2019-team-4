@@ -254,7 +254,6 @@ class test_op_codes(unittest.TestCase):
         test_stack = op_codes1.op_codes.op_code3e(test_localvar, test_stack)
         self.assertEqual(test_stack.pop(), 4)
 
-    #/////////////////////////////////
 
     def test_opcode93(self):
         test_stack = [2147483647, -2147483647, 32768, -32770]
