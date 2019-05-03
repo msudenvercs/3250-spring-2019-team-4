@@ -168,6 +168,17 @@ class testClass(unittest.TestCase):
     def test_invoke_virtual(self):
         self.assertEqual(ClassFile.JavaClassFile.invoke_virtual(self.unittest_file, "0007"),
                          ['java/io/PrintStream', 'println', '(Ljava/lang/String;)V'])
+
+    def test_find_main(self):
+        """
+        main op codes should be as follows for the test.class file:
+        iconst_1
+        istore_1
+        iinc    1, 1
+        return
+        """
+        self.assertEqual(ClassFile.JavaClassFile.find_main(self.unittest_file),
+                         "043C840101B1")
     """
     def test_print_string(self):
         self.assertEqual(ClassFile.JavaClassFile.print_string(self.unittest_file), "This is COOL!")

@@ -373,7 +373,7 @@ class JavaClassFile:
 
             method_attribute_count = int(method_table[i][12:16], 16)
             attributes_raw = []
-            attributes = {}
+            attributes = []
 
             for j in range(method_attribute_count):
                 attribute = method_table[i][16:]
@@ -384,17 +384,15 @@ class JavaClassFile:
                 attribute_length = attributes_raw[j][4:12]
                 attribute_info = attributes_raw[j][12:]
 
-                attribute_key = "Attribute " + str(j + 1)
+                attributes.append(bytes.fromhex(attribute_name).decode("utf-8")[3:])
+                attributes.append(attribute_info)
 
-                attributes[attribute_key] = attribute_name
-                attributes[attribute_key + " Length"] = attribute_length
-                attributes[attribute_key + " Code"] = attribute_info
-
-            method_key = "Method " + str(i + 1)
-
-            methods[method_key] = method_name
-            methods[method_key + " Descriptor"] = method_descriptor
-            methods[method_key + " Attributes"] = attributes
+            method_key = str(i + 1)
+            method_list = []
+            method_list.append(bytes.fromhex(method_name).decode("utf-8")[3:])
+            method_list.append(bytes.fromhex(method_descriptor).decode("utf-8")[3:])
+            method_list.append(attributes)
+            methods[method_key] = method_list
 
         self.classfile_methods = methods
 
@@ -648,6 +646,21 @@ class JavaClassFile:
     constant_slpit = []
     opcodes = []
 
+    def find_main(self):
+        method_dictionary = self.classfile_methods
+        info = ""
+
+        for key in method_dictionary:
+            if method_dictionary[key][0] == "([Ljava/lang/String;)V":
+                attribute_list = method_dictionary[key][2]
+                info = attribute_list[1]
+
+        code_length = int(info[8:16], 16)
+        code = info[16:(16 + code_length * 2)]
+        return code
+
+
+
     def format_constant_table(self):
         for constant in self.classfile_constant_table:
             self.constant_split = [constant[i:i+2] for i in range(0, len(constant), 2)]
@@ -819,17 +832,20 @@ class JavaClassFile:
         self.get_attribute_table()
 
 
-# -----END OF METHOD DEFINITIONS-----
-# a = JavaClassFile("Integer_Test.class")
-# a.display_data()
-# a.invoke_virtual("0005")
-# a.print_data()
-# a.format_constant_table()
-# a.get_virtual()
-# a.print_table_info()
-# b = JavaClassFile("wud.class")
-# b.format_constant_table()
-# b.get_virtual()
-# b.print_string()
+if __name__ == "__main__":
+    a = JavaClassFile("test.class")
+    print("Main: " + a.find_main())
+    # a.display_data()
+    # a.invoke_virtual("0005")
+    # a.print_data()
+    # a.format_constant_table()
+    # a.get_virtual()
+    # a.print_table_info()
+    # b = JavaClassFile("wud.class")
+    # b.format_constant_table()
+    # b.get_virtual()
+    # b.print_string()
 
-# a.display_data()
+    # a.display_data()
+
+# -----END OF METHOD DEFINITIONS-----
