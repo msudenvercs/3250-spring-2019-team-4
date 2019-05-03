@@ -129,28 +129,13 @@ class testClass(unittest.TestCase):
         self.assertEqual(ClassFile.JavaClassFile.get_method_table_size(self.unittest_file), 156)
 
     def test_get_methods(self):
-        expected_table = {'Method 1': '010003282956',
-                          'Method 1 Descriptor': '010004436F6465',
-                          'Method 1 Attributes':
-                              {'Attribute 1': '01000F4C696E654E756D6265725461626C65',
-                               'Attribute 1 Length': '00000027',
-                               'Attribute 1 Code': '000200010000000B2AB700012A1202B50003B100000001000F0000000A00020000000100040002'
-                               },
-                          'Method 2': '010016285B4C6A6176612F6C616E672F537472696E673B2956',
-                          'Method 2 Descriptor': '01000A68656C6C6F576F726C64',
-                          'Method 2 Attributes':
-                              {'Attribute 1': '01000F4C696E654E756D6265725461626C65',
-                               'Attribute 1 Length': '00000026',
-                               'Attribute 1 Code': '0001000200000006043C840101B100000001000F0000000E0003000000040002000500050007'
-                               },
-                          'Method 3': '01000A536F7572636546696C65',
-                          'Method 3 Descriptor': '010004436F6465',
-                          'Method 3 Attributes':
-                              {'Attribute 1': '01000F4C696E654E756D6265725461626C65',
-                               'Attribute 1 Length': '00000025',
-                               'Attribute 1 Code': '0002000100000009B200041206B60007B100000001000F0000000A00020000000B0008000C'
-                               }
-                          }
+        expected_table = {'1':
+                              ['()V', 'Code',
+                               ['LineNumberTable', '000200010000000B2AB700012A1202B50003B100000001000F0000000A00020000000100040002']],
+                          '2': ['([Ljava/lang/String;)V', 'helloWorld',
+                                ['LineNumberTable', '0001000200000006043C840101B100000001000F0000000E0003000000040002000500050007']],
+                          '3': ['SourceFile', 'Code',
+                                ['LineNumberTable', '0002000100000009B200041206B60007B100000001000F0000000A00020000000B0008000C']]}
 
         self.assertEqual(ClassFile.JavaClassFile.get_methods(self.unittest_file), expected_table)
 
@@ -168,6 +153,17 @@ class testClass(unittest.TestCase):
     def test_invoke_virtual(self):
         self.assertEqual(ClassFile.JavaClassFile.invoke_virtual(self.unittest_file, "0007"),
                          ['java/io/PrintStream', 'println', '(Ljava/lang/String;)V'])
+
+    def test_find_main(self):
+        """
+        main op codes should be as follows for the test.class file:
+        iconst_1
+        istore_1
+        iinc    1, 1
+        return
+        """
+        self.assertEqual(ClassFile.JavaClassFile.find_main(self.unittest_file),
+                         "043C840101B1")
     """
     def test_print_string(self):
         self.assertEqual(ClassFile.JavaClassFile.print_string(self.unittest_file), "This is COOL!")
