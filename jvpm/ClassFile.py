@@ -834,7 +834,6 @@ class JavaClassFile:
 
 if __name__ == "__main__":
     a = JavaClassFile("test.class")
-    print("Main: " + a.find_main())
     # a.display_data()
     # a.invoke_virtual("0005")
     # a.print_data()
