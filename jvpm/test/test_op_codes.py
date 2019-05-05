@@ -276,3 +276,27 @@ class test_op_codes(unittest.TestCase):
         test_stack = []
         test_stack = op_codes1.op_codes.op_code21(test_stack, test_local_vars)
         self.assertEqual(test_stack.pop(), 36028797018963967)
+
+    def test_lor(self):
+        test_var1 = ["7FFFFFFFFFFFFFFA", "7FFFFFFFFFFFFFFB"]
+        test_stack = []
+        test_stack = op_codes1.op_codes.lor(test_stack, test_var1)
+        self.assertEqual(test_stack.pop(), 576460752303423484)
+
+    def test_lshsl(self):
+        test_var1 = ["7FFFFFFFFFFFFFFA", "7FFFFFFFFFFFFFFB"]
+        test_stack = []
+        test_stack = op_codes1.op_codes.lshl(test_stack, test_var1)
+        self.assertEqual(test_stack.pop(), 576460752303423485)
+
+    def test_lshr(self):
+        test_var1 = ["7FFFFFFFFFFFFFFA", "7FFFFFFFFFFFFFFB"]
+        test_stack = []
+        test_stack = op_codes1.op_codes.lshr(test_stack, test_var1)
+        self.assertEqual(test_stack.pop(), 576460752303423482)
+
+    def test_lxor(self):
+        test_var1 =  ["7FFFFFFFFFFFFFFA", "7FFFFFFFFFFFFFFB"]
+        test_stack = []
+        test_stack = op_codes1.op_codes.lxor(test_stack, test_var1)
+        self.assertEqual(test_stack.pop(), 576460752303423484)
