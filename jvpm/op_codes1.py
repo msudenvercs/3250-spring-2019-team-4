@@ -319,26 +319,27 @@ class op_codes:
                 stack_z = op_codes.op_code16(local_vars[3])
                 return stack_z
 
-        def lor(stack_z): #bitwise OR for longs
-                stack_z = op_codes.opcode16
-                var1 = stack_z.pop() | stack_z.pop()
-                stack_z.append(var1)
+        def lor(self, stack_z, local_vars): #bitwise OR for longs
+                operator = op_codes()
+                stack_z = operator.op_code16(local_vars[1])
+                local_vars = stack_z.pop() | stack_z.pop()
+                stack_z.append(local_vars)
                 return stack_z
 
-        def lshl(stack_z): #shift left for longs
-                stack_z = op_codes.opcode16
-                var1 = stack_z.pop() << stack_z.pop()
-                stack_z.append(var1)
+        def lshl(stack_z, local_vars): #shift left for longs
+                stack_z = op_codes.op_code16(local_vars[1])
+                local_vars = stack_z.pop() << stack_z.pop()
+                stack_z.append(local_vars)
                 return stack_z
 
-        def lshr(stack_z): #shift right for longs
-                stack_z = op_codes.op_code16
-                var1 = stack_z.pop() >> stack_z.pop()
-                stack_z.append(var1)
+        def lshr(stack_z, local_vars): #shift right for longs
+                stack_z = op_codes.op_code16(local_vars[1])
+                local_vars = stack_z.pop() >> stack_z.pop()
+                stack_z.append(local_vars)
                 return stack_z
 
-        def lxor(stack_z): #bitwise XOR for longs
-                stack_z = op_codes.opcode16
-                var1 = stack_z.pop ^ stack_z.pop()
-                stack_z.append(var1)
+        def lxor(stack_z, local_vars): #bitwise XOR for longs
+                stack_z = op_codes.op_code16(local_vars[1])
+                local_vars = stack_z.pop ^ stack_z.pop()
+                stack_z.append(local_vars)
                 return stack_z
