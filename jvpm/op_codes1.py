@@ -321,7 +321,7 @@ class op_codes:
 
         def lor(self, stack_z, local_vars): #bitwise OR for longs
                 operator = op_codes()
-                stack_z = operator.op_code16(local_vars[1])
+                stack_z.append(operator.op_code16(local_vars[1]))
                 local_vars = stack_z.pop() | stack_z.pop()
                 stack_z.append(local_vars)
                 return stack_z
