@@ -37,24 +37,6 @@ class op_codes:
             result
         )  # Will remove when done with testing as the result should only be pushed onto the stack
 
-    # emulates println for the different data types  ******going to be redone*****
-    def invokeVirtual(stack_z, tag):
-        if tag == "java/lang/SystemoutLjava/io/PrintStream;":
-            print(stack_z.pop())
-        elif tag == "java/io/PrintStreamprint(D)V":
-            print(stack_z.pop())
-
-        elif tag == "java/io/PrintStreamprint(Z)V":
-            poppedValue = stack_z.pop()
-            if poppedValue == 1:
-                print("true")
-            elif poppedValue == 0:
-                print("false")
-            else:
-                print("this is not implemented.")
-        elif tag == "java/io/PrintStreamprintln(Ljava/lang/String;)V":
-            print(stack_z.pop())
-
     def op_code70(stack_z):  # remainder
         var1 = stack_z.pop() % stack_z.pop()
         stack_z.append(var1)
