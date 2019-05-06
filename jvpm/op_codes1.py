@@ -4,7 +4,7 @@ All Methods for OP Codes go in this file
 
 import importlib
 import os
-
+import numpy
 
 class op_codes:
     def op_codeb6(self, stack, call_path):  # invoke virtual
@@ -36,6 +36,24 @@ class op_codes:
         return (
             result
         )  # Will remove when done with testing as the result should only be pushed onto the stack
+
+    # emulates println for the different data types  ******going to be redone*****
+    def invokeVirtual(stack_z, tag):
+        if tag == "java/lang/SystemoutLjava/io/PrintStream;":
+            print(stack_z.pop())
+        elif tag == "java/io/PrintStreamprint(D)V":
+            print(stack_z.pop())
+
+        elif tag == "java/io/PrintStreamprint(Z)V":
+            poppedValue = stack_z.pop()
+            if poppedValue == 1:
+                print("true")
+            elif poppedValue == 0:
+                print("false")
+            else:
+                print("this is not implemented.")
+        elif tag == "java/io/PrintStreamprintln(Ljava/lang/String;)V":
+            print(stack_z.pop())
 
     def op_code70(stack_z):  # remainder
         var1 = stack_z.pop() % stack_z.pop()
@@ -260,3 +278,100 @@ class op_codes:
             return stack_z
         else:
             raise IndexError
+
+    def long_builder(hex):
+        return int(numpy.binary_repr(int(hex, 16), width=64), 2)
+
+    def op_code16(hex):
+        stack_z = []
+        stack_z.append(op_codes.long_builder(hex))
+        return stack_z
+
+    def op_code1e(stack_z, local_vars):
+        stack_z = op_codes.op_code16(local_vars[0])
+        return stack_z
+
+    def op_code1f(stack_z, local_vars):
+        stack_z = op_codes.op_code16(local_vars[1])
+        return stack_z
+
+    def op_code20(stack_z, local_vars):
+        stack_z = op_codes.op_code16(local_vars[2])
+        return stack_z
+
+    def op_code21(stack_z, local_vars):
+        stack_z = op_codes.op_code16(local_vars[3])
+        return stack_z
+
+    def op_code61(stack_z):
+        lmax = 9223372036854775807
+        lmin = -9223372036854775808
+        var1 = stack_z.pop()
+        var2 = stack_z.pop()
+
+        if var1 + var2 > lmax:
+            stack_z.append(lmin + (var1 + var2 + lmin))
+        elif var1 + var2 < lmin:
+            stack_z.append(lmax + (var1 + var2 + lmax + 1))
+        else:
+            stack_z.append(var1 + var2)
+        return stack_z
+
+    def op_code6d(stack_z):
+        var1 = stack_z.pop()
+        var2 = stack_z.pop()
+        if var1 == 0 or var2 == 0:
+            raise ArithmeticError
+        else:
+            stack_z.append(var2 // var1)
+        return stack_z
+
+    def op_code75(stack_z):
+        lmin = -9223372036854775808
+        var1 = stack_z.pop()
+
+        if var1 == lmin:
+            stack_z.append(lmin)
+        else:
+            stack_z.append(var1 * -1)
+        return stack_z
+
+    def op_code94(stack_z):
+        var1 = stack_z.pop()
+        var2 = stack_z.pop()
+
+        if var1 == var2:
+            stack_z.append(0)
+        elif var1 > var2:
+            stack_z.append(-1)
+        else:
+            stack_z.append(1)
+        return stack_z
+
+    def op_code7b(stack_z):
+        var1 = stack_z.pop()
+        var2 = stack_z.pop()
+        lmin = -9223372036854775808
+        lmax = 9223372036854775807
+
+        if (var1 < 0 and var1 > lmin) and (var2 == lmin or var2 == lmax):
+            if var2 == lmax:
+                stack_z.append(1 << (var1 * -1 - 2))
+            else:
+                stack_z.append((1 << (var1 * -1 - 1)) * -1)
+
+        elif (var1 == lmin or var1 == lmax) and (var2 == lmin or var2 == lmax):
+            if var2 == lmin:
+                stack_z.append(-1)
+            else:
+                stack_z.append(lmax)
+
+        elif (var1 == var2) and var1 == lmax:
+            stack_z.append(0)
+
+        elif (var1 == var2) and var2 == lmin:
+            stack_z.append(lmin)
+
+        else:
+            stack_z.append(var2 >> var1)
+        return stack_z

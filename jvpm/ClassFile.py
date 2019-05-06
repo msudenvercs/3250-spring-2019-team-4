@@ -642,7 +642,7 @@ class JavaClassFile:
                 self.classfile_constant_table[type_index], array
             )
     formatted_constant_table = []
-    constant_parts =[]
+    constant_parts = []
     constant_slpit = []
     opcodes = []
 
@@ -663,29 +663,31 @@ class JavaClassFile:
 
     def format_constant_table(self):
         for constant in self.classfile_constant_table:
-            self.constant_split = [constant[i:i+2] for i in range(0, len(constant), 2)]
+            self.constant_split = [
+                constant[i : i + 2] for i in range(0, len(constant), 2)
+            ]
             tag = self.constant_split[0]
             self.constant_helper(tag)
         return self.formatted_constant_table
 
     def print_table_info(self):
         print("\n-----CONSTANT TABLE-----")
-        counter = 1;
+        counter = 1
         for i in self.formatted_constant_table:
-            print(counter ,i)
-            counter = counter +1
+            print(counter, i)
+            counter = counter + 1
         print("opcodes:", self.opcodes)
-        print("virtual:",self.virtual)
+        print("virtual:", self.virtual)
         if self.virtual != "":
-            op_codes.invokeVirtual(self.stack_z,self.virtual)
+            op_codes.invokeVirtual(self.stack_z, self.virtual)
 
     def get_opcodes(self):
         index = 18
         for method in self.classfile_method_table:
-            method_split = [method[i:i+2] for i in range(0, len(method), 2)]
-            opcodes_len = method_split[index:index+4]
-            hex = int("".join(map(str, opcodes_len)),16)
-            self.opcodes.append(method_split[index+4:index+4+hex])
+            method_split = [method[i : i + 2] for i in range(0, len(method), 2)]
+            opcodes_len = method_split[index : index + 4]
+            hex = int("".join(map(str, opcodes_len)), 16)
+            self.opcodes.append(method_split[index + 4 : index + 4 + hex])
         return self.opcodes
 
     def get_virtual(self):
@@ -700,10 +702,10 @@ class JavaClassFile:
                     check = 2
                 if opcode[0] == "B":
                     check = 1
-                self.execute_opcodes(opcodes,opcode)
+                self.execute_opcodes(opcodes, opcode)
         return self.virtual
 
-    def execute_opcodes(self,opcodes, opcode):
+    def execute_opcodes(self, opcodes, opcode):
         get_return = ""
         map = {
             "B2": self.get_path,
@@ -712,7 +714,7 @@ class JavaClassFile:
             "10": self.get_object
         }
         try:
-            map[opcode](opcodes,opcode)
+            map[opcode](opcodes, opcode)
         except KeyError:
             self.default(opcode)
 
@@ -726,7 +728,7 @@ class JavaClassFile:
 
     def get_constant(self,opcodes,opcode):
         pool_index = opcodes.index(opcode)
-        constant = int("".join(map(str, opcodes[pool_index+2:pool_index+3])),16)
+        constant = int("".join(map(str, opcodes[pool_index + 2 : pool_index + 3])), 16)
         self.stack_z.append(constant)
 
     def get_object(self,opcodes, opcode):
@@ -737,22 +739,24 @@ class JavaClassFile:
         #float into stack
         #isinstance(string, str)
         self.stack_z.append(string)
-    #/////////
 
-    def default(self,opcode):
-        return "Missing Method: " , opcode
+    # /////////
 
-    #recursive method to interpret contant pool
+    def default(self, opcode):
+        return "Missing Method: ", opcode
+
+    # recursive method to interpret contant pool
     virtual = ""
-    def recursive(self,index):
+
+    def recursive(self, index):
         check = ""
         for call in self.formatted_constant_table[index]:
             if check == "UTF-8":
                 self.virtual = self.virtual + call
             elif call == "UTF-8":
                 check = call
-            if isinstance(call,int):
-                self.recursive(call-1)
+            if isinstance(call, int):
+                self.recursive(call - 1)
         return self.virtual
 
     def constant_helper(self, tag):
@@ -771,15 +775,15 @@ class JavaClassFile:
         except KeyError:
             self.default(tag)
 
-    def tag_ref_helper(self,tag):
+    def tag_ref_helper(self, tag):
         self.constant_parts.append(ConstantPoolTag(tag).get_tag_type(tag))
-        for i in range(1,len(self.constant_split),2):
-            ref = self.constant_split[i]+self.constant_split[i+1]
-            self.constant_parts.append(int(ref,16))
+        for i in range(1, len(self.constant_split), 2):
+            ref = self.constant_split[i] + self.constant_split[i + 1]
+            self.constant_parts.append(int(ref, 16))
         self.formatted_constant_table.append(self.constant_parts)
         self.constant_parts = []
 
-    def tag_utf8_helper(self,tag):
+    def tag_utf8_helper(self, tag):
         self.constant_parts.append(ConstantPoolTag(tag).get_tag_type(tag))
         hex_list = []
         for i in self.constant_split[3:]:
