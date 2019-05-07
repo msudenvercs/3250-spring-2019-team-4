@@ -238,6 +238,12 @@ class test_op_codes(unittest.TestCase):
     def test_longBuilder(self):
         test_hex = "7FFFFFFFFFFFFFFF"
         self.assertEqual(op_codes1.op_codes.long_builder(test_hex), 9223372036854775807)
+        
+    def test_opcode16(self):
+        test_hex = "7FFFFFFFFFFFFFFF"
+        test_stack = []
+        test_stack = op_codes1.op_codes.op_code16(test_hex)
+        self.assertEqual(test_stack.pop(), 9223372036854775807)
 
     def test_opcode2e(self):
         test_stack = []
