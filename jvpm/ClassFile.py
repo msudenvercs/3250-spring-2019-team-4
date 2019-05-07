@@ -713,10 +713,10 @@ class JavaClassFile:
     def execute_opcodes(self, opcodes, opcode):
         get_return = ""
         map = {
-            "B2": self.opcode_b2,
-            "B1": self.opcode_b1,
-            "12": self.opcode_12,
-            "10": self.opcode_10,
+            "B2": self.getstatic,
+            "B1": self.returnVoid,
+            "12": self.ldc,
+            "10": self.bipush,
         }
         try:
             map[opcode](opcodes, opcode)
@@ -724,24 +724,24 @@ class JavaClassFile:
             self.default(opcode)
 
     # these methods will go in opcodes1 file or othe
-    def opcode_b2(self, opcodes, opcode):
+    def getstatic(self, opcodes, opcode):
         pool_index = opcodes.index(opcode)
         code_index = int(
             "".join(map(str, opcodes[pool_index + 1 : pool_index + 3])), 16
         )
         self.recursive(code_index - 1)
 
-    def opcode_b1(self, opcodes, opcode):
+    def returnVoid(self, opcodes, opcode):  # return void from method
         return None
 
-    def opcode_10(self, opcodes, opcode):
+    def bipush(self, opcodes, opcode):  # push a byte onto stack as an int
         pool_index = opcodes.index(opcode)
         constant = int(
             "".join(map(str, opcodes[pool_index + 2 : pool_index + 3])), 16
         )
         self.stack_z.append(constant)
 
-    def opcode_12(self, opcodes, opcode):
+    def ldc(self, opcodes, opcode):  # push constant index from constant pool
         pool_index = opcodes.index(opcode)
         table_index = int(
             "".join(map(str, opcodes[pool_index + 1 : pool_index + 2])), 16
