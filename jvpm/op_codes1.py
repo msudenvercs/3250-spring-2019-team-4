@@ -142,7 +142,7 @@ class op_codes:
             var1 = 0
 
         elif var1 == MAX_JAVA_INT:
-            if (var2 % 2) != 0:
+            if (var2 % 2) == 0:
                 var1 = var2 * -1
             else:
                 var1 = MAX_JAVA_INT - (var2 - 1)
