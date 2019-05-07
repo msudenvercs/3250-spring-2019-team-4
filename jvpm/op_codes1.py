@@ -329,31 +329,3 @@ class op_codes:
         else:
             stack_z.append(1)
         return stack_z
-
-    def op_code7b(stack_z):
-        var1 = stack_z.pop()
-        var2 = stack_z.pop()
-        lmin = -9223372036854775808
-        lmax = 9223372036854775807
-
-        if (var1 < 0 and var1 > lmin) and (var2 == lmin or var2 == lmax):
-            if var2 == lmax:
-                stack_z.append(1 << (var1 * -1 - 2))
-            else:
-                stack_z.append((1 << (var1 * -1 - 1)) * -1)
-
-        elif (var1 == lmin or var1 == lmax) and (var2 == lmin or var2 == lmax):
-            if var2 == lmin:
-                stack_z.append(-1)
-            else:
-                stack_z.append(lmax)
-
-        elif (var1 == var2) and var1 == lmax:
-            stack_z.append(0)
-
-        elif (var1 == var2) and var2 == lmin:
-            stack_z.append(lmin)
-
-        else:
-            stack_z.append(var2 >> var1)
-        return stack_z
