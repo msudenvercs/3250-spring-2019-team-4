@@ -234,6 +234,10 @@ class test_op_codes(unittest.TestCase):
         self.assertEqual(test_stack.pop(), 0)
         test_stack = op_codes1.op_codes.op_code93(test_stack)
         self.assertEqual(test_stack.pop(), -1)
+        
+    def test_longBuilder(self):
+        test_hex = "7FFFFFFFFFFFFFFF"
+        self.assertEqual(op_codes1.op_codes.long_builder(test_hex), 9223372036854775807)
 
     def test_opcode2e(self):
         test_stack = []
