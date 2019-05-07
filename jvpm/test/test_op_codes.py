@@ -251,3 +251,30 @@ class test_op_codes(unittest.TestCase):
         index = 2
         test_stack = op_codes1.op_codes.op_code2e(test_array, index)
         self.assertEqual(test_stack.pop(), 32768)
+        
+    def test_opcode1e(self):
+        test_stack = []
+        local_variables = ['7FFFFFFFFFFFFFFF', '000000D6BF94D5E5', '000008637BD05AF6', '000053E2D6238DA3']
+        test_stack = op_codes1.op_codes.op_code1e(test_stack, local_variables)
+        self.assertEqual(test_stack.pop(), 9223372036854775807)
+        
+    def test_opcode1f(self):
+        test_stack = []
+        local_variables = ['7FFFFFFFFFFFFFFF', '000000D6BF94D5E5', '000008637BD05AF6', '000053E2D6238DA3']
+        test_stack = op_codes1.op_codes.op_code1f(test_stack, local_variables)
+        self.assertEqual(test_stack.pop(), 922337203685)
+        
+    def test_opcode20(self):
+        test_stack = []
+        local_variables = ['7FFFFFFFFFFFFFFF', '000000D6BF94D5E5', '000008637BD05AF6', '000053E2D6238DA3']
+        test_stack = op_codes1.op_codes.op_code20(test_stack, local_variables)
+        self.assertEqual(test_stack.pop(), 9223372036854)
+        
+        
+    def test_opcode21(self):
+        test_stack = []
+        local_variables = ['7FFFFFFFFFFFFFFF', '000000D6BF94D5E5', '000008637BD05AF6', '000053E2D6238DA3']
+        test_stack = op_codes1.op_codes.op_code21(test_stack, local_variables)
+        self.assertEqual(test_stack.pop(), 92233720368547)
+        
+    
