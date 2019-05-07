@@ -294,7 +294,7 @@ class op_codes:
         if var1 + var2 > lmax:
             stack_z.append(lmin + (var1 + var2 + lmin))
         elif var1 + var2 < lmin:
-            stack_z.append(lmax + (var1 + var2 + lmax + 1))
+            stack_z.append(lmax + (var1 + var2 + lmax + 1) + 1)
         else:
             stack_z.append(var1 + var2)
         return stack_z
