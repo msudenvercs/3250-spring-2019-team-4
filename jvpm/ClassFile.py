@@ -664,66 +664,7 @@ class JavaClassFile:
     constant_slpit = []
     opcodes = []
 
-    def format_constant_table(self):
-        for constant in self.classfile_constant_table:
-            self.constant_split = [
-                constant[i : i + 2] for i in range(0, len(constant), 2)
-            ]
-            tag = self.constant_split[0]
-            self.constant_helper(tag)
-        return self.formatted_constant_table
-
-    def print_table_info(self):
-        print("\n-----CONSTANT TABLE-----")
-        counter = 1
-        for i in self.formatted_constant_table:
-            print(counter, i)
-            counter = counter + 1
-        print("opcodes:", self.opcodes)
-        print("virtual:", self.virtual)
-        if self.virtual != "":
-            op_codes.op_codeb6(self.stack_z, self.virtual)
-
-    def get_opcodes(self):
-        index = 18
-        for method in self.classfile_method_table:
-            method_split = [
-                method[i : i + 2] for i in range(0, len(method), 2)
-            ]
-            opcodes_len = method_split[index : index + 4]
-            hex = int("".join(map(str, opcodes_len)), 16)
-            self.opcodes.append(method_split[index + 4 : index + 4 + hex])
-        return self.opcodes
-
-    def get_virtual(self):
-        index = 0
-        for opcodes in self.get_opcodes():
-            check = 0
-            for opcode in opcodes:
-                if check == 1 or check == 2:
-                    check = check + 1
-                    continue
-                if opcode == "10" or opcode == "12":
-                    check = 2
-                if opcode[0] == "B":
-                    check = 1
-                self.execute_opcodes(opcodes, opcode)
-        return self.virtual
-
-    def execute_opcodes(self, opcodes, opcode):
-        get_return = ""
-        map = {
-            "B2": self.getstatic,
-            "B1": self.returnVoid,
-            "12": self.ldc,
-            "10": self.bipush,
-        }
-        try:
-            map[opcode](opcodes, opcode)
-        except KeyError:
-            self.default(opcode)
-
-    # these methods will go in opcodes1 file or othe
+    # these methods will go in opcodes1 file or other
     def getstatic(self, opcodes, opcode):
         pool_index = opcodes.index(opcode)
         code_index = int(
@@ -769,38 +710,6 @@ class JavaClassFile:
                 self.recursive(call - 1)
         return self.virtual
 
-    def constant_helper(self, tag):
-        map = {
-            "0C": self.tag_ref_helper,
-            "0A": self.tag_ref_helper,
-            "09": self.tag_ref_helper,
-            "08": self.tag_ref_helper,
-            "07": self.tag_ref_helper,
-            "01": self.tag_utf8_helper,
-        }
-        try:
-            map[tag](tag)
-        except KeyError:
-            self.default(tag)
-
-    def tag_ref_helper(self, tag):
-        self.constant_parts.append(ConstantPoolTag(tag).get_tag_type(tag))
-        for i in range(1, len(self.constant_split), 2):
-            ref = self.constant_split[i] + self.constant_split[i + 1]
-            self.constant_parts.append(int(ref, 16))
-        self.formatted_constant_table.append(self.constant_parts)
-        self.constant_parts = []
-
-    def tag_utf8_helper(self, tag):
-        self.constant_parts.append(ConstantPoolTag(tag).get_tag_type(tag))
-        hex_list = []
-        for i in self.constant_split[3:]:
-            hex_list.append(chr(int(i, 16)))
-        ref = "".join(map(str, hex_list))
-        self.constant_parts.append(ref)
-        self.formatted_constant_table.append(self.constant_parts)
-        self.constant_parts = []
-
     """
     def print_string(self):
     #    print("\n-----CONSTANT TABLE-----")
@@ -842,11 +751,8 @@ class JavaClassFile:
 # a.display_data()
 # a.invoke_virtual("0005")
 # a.print_data()
-# a.format_constant_table()
 # a.get_virtual()
-# a.print_table_info()
 # b = JavaClassFile("wud.class")
-# b.format_constant_table()
 # b.get_virtual()
 # b.print_string()
 
