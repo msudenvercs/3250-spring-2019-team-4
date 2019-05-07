@@ -279,28 +279,18 @@ class test_op_codes(unittest.TestCase):
 
     def test_lor(self):
         operator = op_codes1.op_codes()
-        test_local_vars = ["7FFFFFFFFFFFFFFA", "7FFFFFFFFFFFFFFB"]
-        test_stack = []
-        test_stack.append(operator.lor(test_stack, test_local_vars))
-        self.assertEqual(test_stack.pop(), 576460752303423484)
+        test_stack = ["7FFFFFFFFFFFFFFA", "7FFFFFFFFFFFFFFB"]
+        test_stack = operator.lor(test_stack)
+        self.assertEqual(test_stack.pop(), 9223372036854775803)
 
     def test_lshsl(self):
         operator = op_codes1.op_codes()
-        test_local_vars = ["7FFFFFFFFFFFFFFA", "7FFFFFFFFFFFFFFB"]
-        test_stack = []
-        test_stack.append(operator.lshl(test_stack, test_local_vars))
+        test_stack = ["7FFFFFFFFFFFFFFA", "7FFFFFFFFFFFFFFB"]
+        test_stack = operator.lshl(test_stack)
         self.assertEqual(test_stack.pop(), 576460752303423485)
-
-    def test_lshr(self):
-        operator = op_codes1.op_codes()
-        test_local_vars = ["7FFFFFFFFFFFFFFA", "7FFFFFFFFFFFFFFB"]
-        test_stack = []
-        test_stack.append(operator.lshr(test_stack, test_local_vars))
-        self.assertEqual(test_stack.pop(), 576460752303423482)
 
     def test_lxor(self):
         operator = op_codes1.op_codes()
-        test_local_vars = ["7FFFFFFFFFFFFFFA", "7FFFFFFFFFFFFFFB"]
-        test_stack = []
-        test_stack.append(operator.lxor(test_stack, test_local_vars))
-        self.assertEqual(test_stack.pop(), 576460752303423484)
+        test_stack = ["7FFFFFFFFFFFFFFA", "7FFFFFFFFFFFFFFB"]
+        test_stack = (operator.lxor(test_stack))
+        self.assertEqual(test_stack.pop(), 1)

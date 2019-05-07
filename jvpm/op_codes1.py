@@ -3,6 +3,7 @@ All Methods for OP Codes go in this file
 '''
 
 import numpy
+import sys
 
 class op_codes:
 
@@ -319,30 +320,48 @@ class op_codes:
                 stack_z = op_codes.op_code16(local_vars[3])
                 return stack_z
 
-        def lor(self, stack_z, local_vars): #bitwise OR for longs
-                operator = op_codes()
-                stack_z.append(operator.op_code16(local_vars))
-                local_vars = stack_z.pop() | stack_z.pop()
+        def lor(self, stack_z): #bitwise OR for longs
+                local_vars1 = int(stack_z.pop(), 16)
+                local_vars2 = int(stack_z.pop(), 16)
+                local_vars = local_vars1 | local_vars2
                 stack_z.append(local_vars)
                 return stack_z
 
-        def lshl(stack_z, local_vars): #shift left for longs
-                operator = op_codes()
-                stack_z.append(operator.op_code16(local_vars))
-                local_vars = stack_z.pop() << stack_z.pop()
-                stack_z.append(local_vars)
+        def lshl(self, stack_z): #shift left for longs
+                local_vars1 = int(stack_z.pop(), 16)
+                local_vars2 = int(stack_z.pop(), 16)
+
+                lmin_val = -9223372036854775808
+                lmax_val = 9223372036854775807
+
+
+                if (local_vars1 < 0 and local_vars1 > lmin_val) and (local_vars2 == lmin_val):
+                        if local_vars2 == lmax_val:
+                                stack_z.append(1 >> (local_vars1 * -1 - 2))
+                        else:
+                                stack_z.append((1 >> (local_vars1 * -1 - 1)) * -1)
+
+                elif (local_vars1 == lmin_val or local_vars1 == lmax_val) and \
+                        (local_vars2 == lmin_val or local_vars2 == lmax_val):
+
+                        if local_vars2 == lmin_val:
+                                stack_z.append(-1)
+                        else:
+                                stack_z.append(lmax_val)
+
+                elif(local_vars1 == local_vars2) and (local_vars1 == lmax_val):
+                        stack_z.append(lmin_val)
+
+                elif (local_vars1 == local_vars2) and (local_vars2 == lmin_val):
+                        stack_z.append(lmin_val)
+
+                else:
+                        stack_z.append(local_vars1 << local_vars2)
                 return stack_z
 
-        def lshr(stack_z, local_vars): #shift right for longs
-                operator = op_codes()
-                stack_z.append(operator.op_code16(local_vars))
-                local_vars = stack_z.pop() >> stack_z.pop()
-                stack_z.append(local_vars)
-                return stack_z
-
-        def lxor(stack_z, local_vars): #bitwise XOR for longs
-                operator = op_codes()
-                stack_z.append(operator.op_code16(local_vars))
-                local_vars = stack_z.pop ^ stack_z.pop()
+        def lxor(self, stack_z): #bitwise XOR for longs
+                local_vars1 = int(stack_z.pop(), 16)
+                local_vars2 = int(stack_z.pop(), 16)
+                local_vars = local_vars1 ^ local_vars2
                 stack_z.append(local_vars)
                 return stack_z
