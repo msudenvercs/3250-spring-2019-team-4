@@ -4,6 +4,7 @@ All Methods for OP Codes go in this file
 
 import importlib
 import os
+import numpy
 
 
 class op_codes:

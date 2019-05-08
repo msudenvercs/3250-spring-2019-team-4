@@ -142,29 +142,6 @@ class test_op_codes(unittest.TestCase):
         test_stack = op_codes1.op_codes.iconst_1(test_stack)
         self.assertEqual(test_stack.pop(), 1)
 
-    #def test_i2b(self): #convert int to byte
-    #    test_stack = [1, 2, 2147483647, -214748367, 500, -500, 256, -256, 768, 770]
-    #    test_stack = op_codes1.op_codes.i2b(test_stack)
-    #    self.assertEqual(test_stack.pop(), bytes([254]))
-    #    test_stack = op_codes1.op_codes.i2b(test_stack)
-    #    self.assertEqual(test_stack.pop(), bytes([0]))
-    #    test_stack = op_codes1.op_codes.i2b(test_stack)
-    #    self.assertEqual(test_stack.pop(), bytes([0]))
-    #    test_stack = op_codes1.op_codes.i2b(test_stack)
-    #    self.assertEqual(test_stack.pop(), bytes([0]))
-    #    test_stack = op_codes1.op_codes.i2b(test_stack)
-    #    self.assertEqual(test_stack.pop(), bytes([12]))
-    #    test_stack = op_codes1.op_codes.i2b(test_stack)
-    #    self.assertEqual(test_stack.pop(), bytearray([256-12]))
-    #    test_stack = op_codes1.op_codes.i2b(test_stack)
-    #    self.assertEqual(test_stack.pop(), bytes([0]))
-    #    test_stack = op_codes1.op_codes.i2b(test_stack)
-    #    self.assertEqual(test_stack.pop(), bytes([-1]))
-    #    test_stack = op_codes1.op_codes.i2b(test_stack)
-    #    self.assertEqual(test_stack.pop(), bytes([2]))
-    #    test_stack = op_codes1.op_codes.i2b(test_stack)
-    #    self.assertEqual(test_stack.pop(), bytes([1]))
-
     def test_i2c(self):
         test_stack = [-100, 65, 75, 90, 97, 100, 122]
         test_stack = op_codes1.op_codes.i2c(test_stack)
