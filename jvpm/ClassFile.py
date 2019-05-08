@@ -726,16 +726,16 @@ class JavaClassFile:
     # recursive method to interpret contant pool
     virtual = ""
 
-    def recursive(self, index):
-        check = ""
-        for call in self.formatted_constant_table[index]:
-            if check == "UTF-8":
-                self.virtual = self.virtual + call
-            elif call == "UTF-8":
-                check = call
-            if isinstance(call, int):
-                self.recursive(call - 1)
-        return self.virtual
+    #def recursive(self, index):
+    #    check = ""
+    #    for call in self.formatted_constant_table[index]:
+    #        if check == "UTF-8":
+    #            self.virtual = self.virtual + call
+    #        elif call == "UTF-8":
+    #            check = call
+    #        if isinstance(call, int):
+    #            self.recursive(call - 1)
+    #    return self.virtual
 
     def constant_helper(self, tag):
         map = {
