@@ -94,3 +94,23 @@
     #    else:
     #        stack_z.append(var2 >> var1)
     #    return stack_z
+    
+    #def format_constant_table(self):
+    #    for constant in self.classfile_constant_table:
+    #        self.constant_split = [
+    #            constant[i : i + 2] for i in range(0, len(constant), 2)
+    #        ]
+    #        tag = self.constant_split[0]
+    #        self.constant_helper(tag)
+    #    return self.formatted_constant_table
+	
+    #def print_table_info(self):
+    #    print("\n-----CONSTANT TABLE-----")
+    #    counter = 1
+    #    for i in self.formatted_constant_table:
+    #        print(counter, i)
+    #        counter = counter + 1
+    #    print("opcodes:", self.opcodes)
+    #    print("virtual:", self.virtual)
+    #    if self.virtual != "":
+    #        op_codes.invokeVirtual(self.stack_z, self.virtual)
