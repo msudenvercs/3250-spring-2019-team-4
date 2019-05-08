@@ -322,3 +322,5 @@ class test_op_codes(unittest.TestCase):
         test_stack = ["7FFFFFFFFFFFFFFA", "7FFFFFFFFFFFFFFB"]
         test_stack = operator.lor(test_stack)
         self.assertEqual(test_stack.pop(), 9223372036854775803)
+        
+    #test
