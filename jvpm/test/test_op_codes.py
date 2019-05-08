@@ -310,3 +310,15 @@ class test_op_codes(unittest.TestCase):
         self.assertEqual(test_stack.pop(), 0)
         test_stack = op_codes1.op_codes.op_code94(test_stack)
         self.assertEqual(test_stack.pop(), 1)
+
+    def test_lxor(self):
+        operator = op_codes1.op_codes()
+        test_stack = ["7FFFFFFFFFFFFFFA", "7FFFFFFFFFFFFFFB"]
+        test_stack = (operator.lxor(test_stack))
+        self.assertEqual(test_stack.pop(), 1)
+
+    def test_lor(self):
+        operator = op_codes1.op_codes()
+        test_stack = ["7FFFFFFFFFFFFFFA", "7FFFFFFFFFFFFFFB"]
+        test_stack = operator.lor(test_stack)
+        self.assertEqual(test_stack.pop(), 9223372036854775803)

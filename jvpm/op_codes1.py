@@ -329,3 +329,18 @@ class op_codes:
         else:
             stack_z.append(1)
         return stack_z
+
+    def lxor(self, stack_z):  # bitwise XOR for longs
+        local_vars1 = int(stack_z.pop(), 16)
+        local_vars2 = int(stack_z.pop(), 16)
+        local_vars = local_vars1 ^ local_vars2
+        stack_z.append(local_vars)
+        return stack_z
+
+
+    def lor(self, stack_z):  # bitwise OR for longs
+        local_vars1 = int(stack_z.pop(), 16)
+        local_vars2 = int(stack_z.pop(), 16)
+        local_vars = local_vars1 | local_vars2
+        stack_z.append(local_vars)
+        return stack_z
