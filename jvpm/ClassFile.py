@@ -661,14 +661,14 @@ class JavaClassFile:
 
 
 
-    def format_constant_table(self):
-        for constant in self.classfile_constant_table:
-            self.constant_split = [
-                constant[i : i + 2] for i in range(0, len(constant), 2)
-            ]
-            tag = self.constant_split[0]
-            self.constant_helper(tag)
-        return self.formatted_constant_table
+    #def format_constant_table(self):
+    #    for constant in self.classfile_constant_table:
+    #        self.constant_split = [
+    #            constant[i : i + 2] for i in range(0, len(constant), 2)
+    #        ]
+    #        tag = self.constant_split[0]
+    #        self.constant_helper(tag)
+    #    return self.formatted_constant_table
 
     def print_table_info(self):
         print("\n-----CONSTANT TABLE-----")
