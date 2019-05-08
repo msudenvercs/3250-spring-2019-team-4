@@ -726,29 +726,13 @@ class JavaClassFile:
     # recursive method to interpret contant pool
     virtual = ""
 
-    #def constant_helper(self, tag):
-    #    map = {
-    #        "0C": self.tag_ref_helper,
-    #        "0A": self.tag_ref_helper,
-    #        "09": self.tag_ref_helper,
-    #        "08": self.tag_ref_helper,
-    #        "07": self.tag_ref_helper,
-    #        "01": self.tag_utf8_helper,
-    #        "03": self.int_helper,
-    #        "04": self.float_helper
-    #    }
-    #    try:
-    #        map[tag](tag)
-    #    except KeyError:
-    #        self.default(tag)
-
-    def tag_ref_helper(self, tag):
-        self.constant_parts.append(ConstantPoolTag(tag).get_tag_type(tag))
-        for i in range(1, len(self.constant_split), 2):
-            ref = self.constant_split[i] + self.constant_split[i + 1]
-            self.constant_parts.append(int(ref, 16))
-        self.formatted_constant_table.append(self.constant_parts)
-        self.constant_parts = []
+    #def tag_ref_helper(self, tag):
+    #    self.constant_parts.append(ConstantPoolTag(tag).get_tag_type(tag))
+    #    for i in range(1, len(self.constant_split), 2):
+    #        ref = self.constant_split[i] + self.constant_split[i + 1]
+    #        self.constant_parts.append(int(ref, 16))
+    #    self.formatted_constant_table.append(self.constant_parts)
+    #    self.constant_parts = []
 
     def tag_utf8_helper(self, tag):
         self.constant_parts.append(ConstantPoolTag(tag).get_tag_type(tag))
