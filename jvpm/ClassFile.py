@@ -791,7 +791,3 @@ if __name__ == "__main__":
     # b.format_constant_table()
     # b.get_virtual()
     # b.print_string()
-
-    # a.display_data()
-
-# -----END OF METHOD DEFINITIONS-----
