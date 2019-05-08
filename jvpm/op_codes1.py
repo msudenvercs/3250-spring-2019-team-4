@@ -37,27 +37,27 @@ class op_codes:
             result
         )  # Will remove when done with testing as the result should only be pushed onto the stack
 
-    def irem(self, stack_z):  # remainder
+    def irem( stack_z):  # remainder
         var1 = stack_z.pop() % stack_z.pop()
         stack_z.append(var1)
         return stack_z
 
-    def ishl(self, stack_z):  # int logical shift left
+    def ishl( stack_z):  # int logical shift left
         var1 = stack_z.pop() << stack_z.pop()
         stack_z.append(var1)
         return stack_z
 
-    def ior(self, stack_z):  # bitwise int OR
+    def ior( stack_z):  # bitwise int OR
         var1 = stack_z.pop() | stack_z.pop()
         stack_z.append(var1)
         return stack_z
 
-    def iushr(self, stack_z):  # int logical shift right
+    def iushr( stack_z):  # int logical shift right
         var1 = stack_z.pop() >> stack_z.pop()
         stack_z.append(var1)
         return stack_z
 
-    def ishr(self, stack):  # int arithmetic shift right
+    def ishr( stack):  # int arithmetic shift right
         # Assumes values put on the stack have already been converted to decimal integers
         value = stack.pop()
         shift_amount = stack.pop()
@@ -65,28 +65,28 @@ class op_codes:
         result = value >> shift_amount
         stack.append(result)
 
-    def ixor(self, stack_z):  # bitwise XOR
+    def ixor( stack_z):  # bitwise XOR
         var1 = stack_z.pop() ^ stack_z.pop()
         stack_z.append(var1)
         return stack_z
 
-    def iconst_2(self, stack_z):  # loads int 2 onto stack
+    def iconst_2( stack_z):  # loads int 2 onto stack
         stack_z.append(2)
         return stack_z
 
-    def iconst_3(self, stack_z):  # loads int 3 onto stack
+    def iconst_3( stack_z):  # loads int 3 onto stack
         stack_z.append(3)
         return stack_z
 
-    def iconst_4(self, stack_z):  # loads int 4 onto stack
+    def iconst_4( stack_z):  # loads int 4 onto stack
         stack_z.append(4)
         return stack_z
 
-    def iconst_5(self, stack_z):  # loads int 5 onto stack
+    def iconst_5( stack_z):  # loads int 5 onto stack
         stack_z.append(5)
         return stack_z
 
-    def iadd(self, stack_z):  # int add
+    def iadd( stack_z):  # int add
         MAX_JAVA_INT = 2147483647
         MIN_JAVA_INT = -2147483647
         var1 = stack_z.pop()
@@ -104,7 +104,7 @@ class op_codes:
         stack_z.append(var1)
         return stack_z
 
-    def isub(self, stack):  # int subtract
+    def isub( stack):  # int subtract
         # Assumes values put on the stack have already been converted to decimal integers
         x = stack.pop()
         y = stack.pop()
@@ -112,12 +112,12 @@ class op_codes:
         result = x - y
         stack.append(result)
 
-    def iand(self, stack_z):  # bitwise and for integers
+    def iand( stack_z):  # bitwise and for integers
         var1 = stack_z.pop() & stack_z.pop()
         stack_z.append(var1)
         return stack_z
 
-    def idiv(self, stack_z):  # integer division
+    def idiv( stack_z):  # integer division
         var1 = stack_z.pop()
         var2 = stack_z.pop()
 
@@ -167,47 +167,24 @@ class op_codes:
         stack_z.append(var1)
         return stack_z
 
-    def ineg(self, stack_z):  # change int to negative
+    def ineg( stack_z):  # change int to negative
         var1 = stack_z.pop() * -1
         stack_z.append(var1)
         return stack_z
 
-    def iconst_m1(self, stack_z):  # loads int -1 into the stack
+    def iconst_m1( stack_z):  # loads int -1 into the stack
         stack_z.append(-1)
         return stack_z
 
-    def iconst_0(self, stack_z):  # loads int 0 into the stack
+    def iconst_0( stack_z):  # loads int 0 into the stack
         stack_z.append(0)
         return stack_z
 
-    def iconst_1(self, stack_z):  # loads 1 into the stack
+    def iconst_1( stack_z):  # loads 1 into the stack
         stack_z.append(1)
         return stack_z
 
-    # def i2b(self, stack_z):
-    #        var1 = stack_z.pop()
-    #        if var1 >= 0:
-    #                if (var1 % 256) == 0:
-    #                        stack_z.append(bytes([0]))
-    #                else:
-    #                        if (var1 // 256) % 2 == 0:
-    #                                var1 -= (256 * (var1//256))
-    #                                stack_z.append(bytes[var1])
-    #                        elif ((var1 // 256) % 2) > 1:
-    #                                var1 -= (256 * (var1//256 + 1))
-    #                                stack_z.append(bytearray([256-var1]))
-    #                        else:
-    #                                var1 -= (256 * (var1//256 + 1))
-    #                                stack_z.append(bytes[var1])
-    #        else:
-    #                if (var1 % 256) == 0:
-    #                        stack_z.append(bytes([0]))
-    #                else:
-    #                        var1 += (256 * (var1//256) * -1)
-    #                        stack_z.append(bytes([var1]))
-    #        return stack_z
-
-    def i2c(self, stack_z):  # converts int to character
+    def i2c( stack_z):  # converts int to character
         var1 = stack_z.pop()
         if var1 >= 32 & var1 <= 127:
             stack_z.append(chr(var1))
@@ -215,65 +192,42 @@ class op_codes:
             stack_z.append("?")
         return stack_z
 
-    def i2d(self, stack_z):  # converts int to double
+    def i2d( stack_z):  # converts int to double
         stack_z.append(float(stack_z.pop()))
         return stack_z
 
-    def i2f(self, stack_z):  #converts int to float
+    def i2f( stack_z):  #converts int to float
         return op_codes.i2d(stack_z)
 
-    def i2l(self, stack_z):  #converts int to long
+    def i2l( stack_z):  #converts int to long
         var1 = stack_z.pop()
         stack_z.append(int(var1))
         return stack_z
 
-    def iload_0(self, stack_z, varsarray):  # load int value from local var 0
+    def iload_0( stack_z, varsarray):  # load int value from local var 0
         stack_z.append(varsarray[0])
         return stack_z
 
-    def iload_1(self, stack_z, varsarray):  # load int value from local var 1
+    def iload_1( stack_z, varsarray):  # load int value from local var 1
         stack_z.append(varsarray[1])
         return stack_z
 
-    def iload_2(self, stack_z, varsarray):  # load int value from local var 2
+    def iload_2( stack_z, varsarray):  # load int value from local var 2
         stack_z.append(varsarray[2])
         return stack_z
 
-    def iload_3(self, stack_z, varsarray):  # load int value from local var 3
+    def iload_3( stack_z, varsarray):  # load int value from local var 3
         stack_z.append(varsarray[3])
         return stack_z
 
-    def iload(self, stack_z, varsarray, index): # load int value from local var index
+    def iload( stack_z, varsarray, index): # load int value from local var index
         if index > len(varsarray):
             raise IndexError
         else:
             stack_z.append(varsarray[index])
             return stack_z
 
-    # def op_code36(stack_z, varsarray, index):
-    #        if (index > len(varsarray)):
-    #               raise IndexError
-    #      else:
-    #                stack_z.append(varsarray[index])
-    #                return stack_z
-
-    # def op_code3b(stack_z, varsarray):
-    #                stack_z.append(varsarray[0])
-    #                return stack_z
-
-    # def op_code3c(stack_z, varsarray):
-    #               stack_z.append(varsarray[1])
-    #              return stack_z
-
-    # def op_code3d(stack_z, varsarray):
-    #               stack_z.append(varsarray[2])
-    #                return stack_z
-
-    # def op_code3e(stack_z, varsarray):
-    #               stack_z.append(varsarray[3])
-    #              return stack_z
-
-    def i2s(self, stack_z):  # int to short
+    def i2s( stack_z):  # int to short
         MAX_JAVA_INT = 2147483647
         MIN_JAVA_INT = -2147483647
         var1 = stack_z.pop()
@@ -299,7 +253,7 @@ class op_codes:
         stack_z.append(var1)
         return stack_z
 
-    def iaload(self, array, index):  # load an int from an array
+    def iaload( array, index):  # load an int from an array
         if index < len(array):
             stack_z = []
             stack_z.append(array[index])
