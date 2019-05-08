@@ -114,3 +114,30 @@
     #    print("virtual:", self.virtual)
     #    if self.virtual != "":
     #        op_codes.invokeVirtual(self.stack_z, self.virtual)
+    
+    #def recursive(self, index):
+    #    check = ""
+    #    for call in self.formatted_constant_table[index]:
+    #        if check == "UTF-8":
+    #            self.virtual = self.virtual + call
+    #        elif call == "UTF-8":
+    #            check = call
+    #        if isinstance(call, int):
+    #            self.recursive(call - 1)
+    #    return self.virtual
+    
+    #def constant_helper(self, tag):
+    #    map = {
+    #        "0C": self.tag_ref_helper,
+    #        "0A": self.tag_ref_helper,
+    #        "09": self.tag_ref_helper,
+    #        "08": self.tag_ref_helper,
+    #        "07": self.tag_ref_helper,
+    #        "01": self.tag_utf8_helper,
+    #        "03": self.int_helper,
+    #        "04": self.float_helper
+    #    }
+    #    try:
+    #        map[tag](tag)
+    #    except KeyError:
+    #        self.default(tag)
