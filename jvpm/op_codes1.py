@@ -47,17 +47,17 @@ class op_codes:
         stack_z.append(var1)
         return stack_z
 
-    def ior( stack_z):  # bitwise int OR
+    def ior(self):  # bitwise int OR
         var1 = stack_z.pop() | stack_z.pop()
         stack_z.append(var1)
         return stack_z
 
-    def iushr( stack_z):  # int logical shift right
+    def iushr(self):  # int logical shift right
         var1 = stack_z.pop() >> stack_z.pop()
         stack_z.append(var1)
         return stack_z
 
-    def ishr(stack):  # int arithmetic shift right
+    def ishr(self):  # int arithmetic shift right
         # Assumes values put on the stack have already been converted to decimal integers
         value = stack.pop()
         shift_amount = stack.pop()
@@ -66,7 +66,7 @@ class op_codes:
         stack.append(result)
         return stack
 
-    def ixor( stack_z):  # bitwise XOR
+    def ixor(self):  # bitwise XOR
         var1 = stack_z.pop() ^ stack_z.pop()
         stack_z.append(var1)
         return stack_z
