@@ -71,23 +71,23 @@ class op_codes:
         stack_z.append(var1)
         return stack_z
 
-    def iconst_2( stack_z):  # loads int 2 onto stack
+    def iconst_2(self):  # loads int 2 onto stack
         stack_z.append(2)
         return stack_z
 
-    def iconst_3( stack_z):  # loads int 3 onto stack
+    def iconst_3(self):  # loads int 3 onto stack
         stack_z.append(3)
         return stack_z
 
-    def iconst_4( stack_z):  # loads int 4 onto stack
+    def iconst_4(self):  # loads int 4 onto stack
         stack_z.append(4)
         return stack_z
 
-    def iconst_5( stack_z):  # loads int 5 onto stack
+    def iconst_5(self):  # loads int 5 onto stack
         stack_z.append(5)
         return stack_z
 
-    def iadd( stack_z):  # int add
+    def iadd(self):  # int add
         MAX_JAVA_INT = 2147483647
         MIN_JAVA_INT = -2147483647
         var1 = stack_z.pop()
@@ -105,7 +105,7 @@ class op_codes:
         stack_z.append(var1)
         return stack_z
 
-    def isub( stack):  # int subtract
+    def isub(self):  # int subtract
         # Assumes values put on the stack have already been converted to decimal integers
         x = stack.pop()
         y = stack.pop()
@@ -114,12 +114,12 @@ class op_codes:
         stack.append(result)
         return stack
 
-    def iand( stack_z):  # bitwise and for integers
+    def iand(self):  # bitwise and for integers
         var1 = stack_z.pop() & stack_z.pop()
         stack_z.append(var1)
         return stack_z
 
-    def idiv( stack_z):  # integer division
+    def idiv(self):  # integer division
         var1 = stack_z.pop()
         var2 = stack_z.pop()
 
