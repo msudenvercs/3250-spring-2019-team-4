@@ -37,12 +37,12 @@ class op_codes:
             result
         )  # Will remove when done with testing as the result should only be pushed onto the stack
 
-    def irem( stack_z):  # remainder
+    def irem(self):  # remainder
         var1 = stack_z.pop() % stack_z.pop()
         stack_z.append(var1)
         return stack_z
 
-    def ishl( stack_z):  # int logical shift left
+    def ishl(self):  # int logical shift left
         var1 = stack_z.pop() << stack_z.pop()
         stack_z.append(var1)
         return stack_z
