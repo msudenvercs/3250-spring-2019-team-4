@@ -194,7 +194,7 @@ class op_codes:
             stack_z.append("?")
         return stack_z
 
-    def i2d(self):  # converts int to double
+    def i2d(self, stack_z):  # converts int to double
         stack_z.append(float(stack_z.pop()))
         return stack_z
 
@@ -206,23 +206,23 @@ class op_codes:
         stack_z.append(int(var1))
         return stack_z
 
-    def iload_0( stack_z, varsarray):  # load int value from local var 0
+    def iload_0(stack_z, varsarray):  # load int value from local var 0
         stack_z.append(varsarray[0])
         return stack_z
 
-    def iload_1( stack_z, varsarray):  # load int value from local var 1
+    def iload_1(stack_z, varsarray):  # load int value from local var 1
         stack_z.append(varsarray[1])
         return stack_z
 
-    def iload_2( stack_z, varsarray):  # load int value from local var 2
+    def iload_2(stack_z, varsarray):  # load int value from local var 2
         stack_z.append(varsarray[2])
         return stack_z
 
-    def iload_3( stack_z, varsarray):  # load int value from local var 3
+    def iload_3(stack_z, varsarray):  # load int value from local var 3
         stack_z.append(varsarray[3])
         return stack_z
 
-    def iload( stack_z, varsarray, index): # load int value from local var index
+    def iload(stack_z, varsarray, index): # load int value from local var index
         if index > len(varsarray):
             raise IndexError
         else:
@@ -287,7 +287,7 @@ class op_codes:
         stack_z = op_codes.op_code16(local_vars[3])
         return stack_z
 
-    def op_code61(stack_z):
+    def op_code61(self,stack_z):
         lmax = 9223372036854775807
         lmin = -9223372036854775808
         var1 = stack_z.pop()
@@ -301,7 +301,7 @@ class op_codes:
             stack_z.append(var1 + var2)
         return stack_z
 
-    def op_code6d(stack_z):
+    def op_code6d(self, stack_z):
         var1 = stack_z.pop()
         var2 = stack_z.pop()
         if var1 == 0 or var2 == 0:
@@ -310,7 +310,7 @@ class op_codes:
             stack_z.append((var2 // var1)+1)
         return stack_z
 
-    def op_code75(stack_z):
+    def op_code75(self, stack_z):
         lmin = -9223372036854775808
         var1 = stack_z.pop()
 
@@ -320,7 +320,7 @@ class op_codes:
             stack_z.append(var1 * -1)
         return stack_z
 
-    def op_code94(stack_z):
+    def op_code94(self, stack_z):
         var1 = stack_z.pop()
         var2 = stack_z.pop()
 
