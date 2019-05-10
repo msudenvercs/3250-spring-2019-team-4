@@ -194,14 +194,14 @@ class op_codes:
             stack_z.append("?")
         return stack_z
 
-    def i2d( stack_z):  # converts int to double
+    def i2d(self):  # converts int to double
         stack_z.append(float(stack_z.pop()))
         return stack_z
 
-    def i2f( stack_z):  #converts int to float
+    def i2f(self):  #converts int to float
         return op_codes.i2d(stack_z)
 
-    def i2l( stack_z):  #converts int to long
+    def i2l(self):  #converts int to long
         var1 = stack_z.pop()
         stack_z.append(int(var1))
         return stack_z
