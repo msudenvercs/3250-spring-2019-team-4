@@ -131,7 +131,7 @@ class op_codes:
         stack_z.append(var1)
         return stack_z
 
-    def imul(stack_z):  # int multiplication
+    def imul(self):  # int multiplication
         MAX_JAVA_INT = 2147483647
         MIN_JAVA_INT = -2147483647
         var1 = stack_z.pop()
@@ -169,24 +169,24 @@ class op_codes:
         stack_z.append(var1)
         return stack_z
 
-    def ineg( stack_z):  # change int to negative
+    def ineg(self):  # change int to negative
         var1 = stack_z.pop() * -1
         stack_z.append(var1)
         return stack_z
 
-    def iconst_m1( stack_z):  # loads int -1 into the stack
+    def iconst_m1(self):  # loads int -1 into the stack
         stack_z.append(-1)
         return stack_z
 
-    def iconst_0( stack_z):  # loads int 0 into the stack
+    def iconst_0(self):  # loads int 0 into the stack
         stack_z.append(0)
         return stack_z
 
-    def iconst_1( stack_z):  # loads 1 into the stack
+    def iconst_1(self):  # loads 1 into the stack
         stack_z.append(1)
         return stack_z
 
-    def i2c( stack_z):  # converts int to character
+    def i2c(self):  # converts int to character
         var1 = stack_z.pop()
         if var1 >= 32 & var1 <= 127:
             stack_z.append(chr(var1))
