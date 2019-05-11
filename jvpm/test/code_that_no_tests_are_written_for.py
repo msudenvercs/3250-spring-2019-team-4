@@ -20,31 +20,8 @@
     #                        var1 += (256 * (var1//256) * -1)
     #                        stack_z.append(bytes([var1]))
     #        return stack_z
-    
-    # def op_code36(stack_z, varsarray, index):
-    #        if (index > len(varsarray)):
-    #               raise IndexError
-    #      else:
-    #                stack_z.append(varsarray[index])
-    #                return stack_z
 
-    # def op_code3b(stack_z, varsarray):
-    #                stack_z.append(varsarray[0])
-    #                return stack_z
-
-    # def op_code3c(stack_z, varsarray):
-    #               stack_z.append(varsarray[1])
-    #              return stack_z
-
-    # def op_code3d(stack_z, varsarray):
-    #               stack_z.append(varsarray[2])
-    #                return stack_z
-
-    # def op_code3e(stack_z, varsarray):
-    #               stack_z.append(varsarray[3])
-    #              return stack_z
-    
-     #def test_opcode91(self): #convert int to byte
+# def test_opcode91(self): #convert int to byte
     #    test_stack = [1, 2, 2147483647, -214748367, 500, -500, 256, -256, 768, 770]
     #    test_stack = op_codes1.op_codes.op_code91(test_stack)
     #    self.assertEqual(test_stack.pop(), bytes([254]))
@@ -66,7 +43,7 @@
     #    self.assertEqual(test_stack.pop(), bytes([2]))
     #    test_stack = op_codes1.op_codes.op_code91(test_stack)
     #    self.assertEqual(test_stack.pop(), bytes([1]))
-    
+
     #def op_code7b(stack_z):
     #    var1 = stack_z.pop()
     #    var2 = stack_z.pop()
@@ -94,7 +71,7 @@
     #    else:
     #        stack_z.append(var2 >> var1)
     #    return stack_z
-    
+
     #def format_constant_table(self):
     #    for constant in self.classfile_constant_table:
     #        self.constant_split = [
@@ -103,7 +80,7 @@
     #        tag = self.constant_split[0]
     #        self.constant_helper(tag)
     #    return self.formatted_constant_table
-	
+
     #def print_table_info(self):
     #    print("\n-----CONSTANT TABLE-----")
     #    counter = 1
@@ -114,7 +91,7 @@
     #    print("virtual:", self.virtual)
     #    if self.virtual != "":
     #        op_codes.invokeVirtual(self.stack_z, self.virtual)
-    
+
     #def recursive(self, index):
     #    check = ""
     #    for call in self.formatted_constant_table[index]:
@@ -125,7 +102,7 @@
     #        if isinstance(call, int):
     #            self.recursive(call - 1)
     #    return self.virtual
-    
+
     #def constant_helper(self, tag):
     #    map = {
     #        "0C": self.tag_ref_helper,
@@ -141,7 +118,7 @@
     #        map[tag](tag)
     #    except KeyError:
     #        self.default(tag)
-    
+
     #def tag_ref_helper(self, tag):
     #    self.constant_parts.append(ConstantPoolTag(tag).get_tag_type(tag))
     #    for i in range(1, len(self.constant_split), 2):
