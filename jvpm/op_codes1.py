@@ -7,7 +7,7 @@ All Methods for OP Codes go in this file
 class op_codes:
 
         #emulates println for the different data types  ******going to be redone*****
-        def invokeVirtual(stack_z, tag):
+        def invokeVirtual(self, stack_z, tag):
             if(tag == "java/lang/SystemoutLjava/io/PrintStream;"):
                 print(stack_z.pop())
             elif(tag == "java/io/PrintStreamprint(D)V"):
@@ -25,17 +25,17 @@ class op_codes:
                 print(stack_z.pop())
 
 
-        def op_code70(stack_z):     #remainder
+        def op_code70(self,stack_z):     #remainder
                 var1 = stack_z.pop() % stack_z.pop()
                 stack_z.append(var1)
                 return stack_z
 
-        def op_code78(stack_z):     #shift left
+        def op_code78(self,stack_z):     #shift left
                 var1 = stack_z.pop() << stack_z.pop()
                 stack_z.append(var1)
                 return stack_z
 
-        def op_code80(stack_z):     #bitwise OR
+        def op_code80(self,stack_z):     #bitwise OR
                 var1 = stack_z.pop() | stack_z.pop()
                 stack_z.append(var1)
                 return stack_z
