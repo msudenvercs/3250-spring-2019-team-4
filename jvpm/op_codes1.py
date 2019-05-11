@@ -37,27 +37,27 @@ class op_codes:
             result
         )  # Will remove when done with testing as the result should only be pushed onto the stack
 
-    def irem(self):  # remainder
+    def irem(self, stack_z):  # remainder
         var1 = stack_z.pop() % stack_z.pop()
         stack_z.append(var1)
         return stack_z
 
-    def ishl(self):  # int logical shift left
+    def ishl(self, stack_z):  # int logical shift left
         var1 = stack_z.pop() << stack_z.pop()
         stack_z.append(var1)
         return stack_z
 
-    def ior(self):  # bitwise int OR
+    def ior(self, stack_z):  # bitwise int OR
         var1 = stack_z.pop() | stack_z.pop()
         stack_z.append(var1)
         return stack_z
 
-    def iushr(self):  # int logical shift right
+    def iushr(self, stack_z):  # int logical shift right
         var1 = stack_z.pop() >> stack_z.pop()
         stack_z.append(var1)
         return stack_z
 
-    def ishr(self):  # int arithmetic shift right
+    def ishr(self, stack):  # int arithmetic shift right
         # Assumes values put on the stack have already been converted to decimal integers
         value = stack.pop()
         shift_amount = stack.pop()
@@ -66,28 +66,28 @@ class op_codes:
         stack.append(result)
         return stack
 
-    def ixor(self):  # bitwise XOR
+    def ixor(self, stack_z):  # bitwise XOR
         var1 = stack_z.pop() ^ stack_z.pop()
         stack_z.append(var1)
         return stack_z
 
-    def iconst_2(self):  # loads int 2 onto stack
+    def iconst_2(self, stack_z):  # loads int 2 onto stack
         stack_z.append(2)
         return stack_z
 
-    def iconst_3(self):  # loads int 3 onto stack
+    def iconst_3(self, stack_z):  # loads int 3 onto stack
         stack_z.append(3)
         return stack_z
 
-    def iconst_4(self):  # loads int 4 onto stack
+    def iconst_4(self, stack_z):  # loads int 4 onto stack
         stack_z.append(4)
         return stack_z
 
-    def iconst_5(self):  # loads int 5 onto stack
+    def iconst_5(self, stack_z):  # loads int 5 onto stack
         stack_z.append(5)
         return stack_z
 
-    def iadd(self):  # int add
+    def iadd(self, stack_z):  # int add
         MAX_JAVA_INT = 2147483647
         MIN_JAVA_INT = -2147483647
         var1 = stack_z.pop()
