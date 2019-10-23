@@ -659,30 +659,6 @@ class JavaClassFile:
         code = info[16:(16 + code_length * 2)]
         return code
 
-    def get_opcodes(self):
-        index = 18
-        for method in self.classfile_method_table:
-            method_split = [method[i : i + 2] for i in range(0, len(method), 2)]
-            opcodes_len = method_split[index : index + 4]
-            hex = int("".join(map(str, opcodes_len)), 16)
-            self.opcodes.append(method_split[index + 4 : index + 4 + hex])
-        return self.opcodes
-
-    def get_virtual(self):
-        index = 0
-        for opcodes in self.get_opcodes():
-            check = 0
-            for opcode in opcodes:
-                if check == 1 or check == 2:
-                    check = check + 1
-                    continue
-                if opcode == "10" or opcode == "12":
-                    check = 2
-                if opcode[0] == "B":
-                    check = 1
-                self.execute_opcodes(opcodes, opcode)
-        return self.virtual
-
     # Python "Constructor"
     def __init__(self, file_name):
         # TODO: Make it so that the .class file can be specified by name, this could help in testing opcode reading
