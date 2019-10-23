@@ -683,77 +683,6 @@ class JavaClassFile:
                 self.execute_opcodes(opcodes, opcode)
         return self.virtual
 
-    def execute_opcodes(self, opcodes, opcode):
-        get_return = ""
-        map = {
-            "B2": self.get_path,
-            "B1": self.get_void,
-            "12": self.get_constant,
-            "10": self.get_object
-        }
-        try:
-            map[opcode](opcodes, opcode)
-        except KeyError:
-            self.default(opcode)
-
-    def get_path(self,opcodes,opcode):
-        pool_index = opcodes.index(opcode)
-        code_index = int("".join(map(str, opcodes[pool_index+1:pool_index+3])),16)
-        self.recursive(code_index-1)
-
-    def get_void(self,opcodes,opcode):
-        return None
-
-    def get_constant(self,opcodes,opcode):
-        pool_index = opcodes.index(opcode)
-        constant = int("".join(map(str, opcodes[pool_index + 2 : pool_index + 3])), 16)
-        self.stack_z.append(constant)
-
-    def get_object(self,opcodes, opcode):
-        pool_index = opcodes.index(opcode)
-        table_index = int("".join(map(str, opcodes[pool_index+1:pool_index+2])),16)
-        string = self.formatted_constant_table[table_index-1][1]
-        #add a check to see if it is a string then call recursive else just push int or
-        #float into stack
-        #isinstance(string, str)
-        self.stack_z.append(string)
-
-    # /////////
-
-    def default(self, opcode):
-        return "Missing Method: ", opcode
-
-    # recursive method to interpret contant pool
-    virtual = ""
-
-    def tag_utf8_helper(self, tag):
-        self.constant_parts.append(ConstantPoolTag(tag).get_tag_type(tag))
-        hex_list = []
-        for i in self.constant_split[3:]:
-            hex_list.append(chr(int(i, 16)))
-        ref = "".join(map(str, hex_list))
-        self.constant_parts.append(ref)
-        self.formatted_constant_table.append(self.constant_parts)
-        self.constant_parts = []
-
-    def int_helper(self,tag):
-        self.constant_parts.append(ConstantPoolTag(tag).get_tag_type(tag))
-        float_hex = ""
-        for i in range(1,len(self.constant_split)):
-            float_hex = float_hex + self.constant_split[i]
-        self.constant_parts.append(struct.unpack('!i', bytes.fromhex(float_hex))[0])
-        self.formatted_constant_table.append(self.constant_parts)
-        self.constant_parts = []
-
-    def float_helper(self,tag):
-        self.constant_parts.append(ConstantPoolTag(tag).get_tag_type(tag))
-        float_hex = ""
-        for i in range(1,len(self.constant_split)):
-            float_hex = float_hex + self.constant_split[i]
-        self.constant_parts.append(struct.unpack('!f', bytes.fromhex(float_hex))[0])
-        self.formatted_constant_table.append(self.constant_parts)
-        self.constant_parts = []
-
     # Python "Constructor"
     def __init__(self, file_name):
         # TODO: Make it so that the .class file can be specified by name, this could help in testing opcode reading
@@ -787,7 +716,3 @@ if __name__ == "__main__":
     # a.format_constant_table()
     # a.get_virtual()
     # a.print_table_info()
-    # b = JavaClassFile("wud.class")
-    # b.format_constant_table()
-    # b.get_virtual()
-    # b.print_string()
