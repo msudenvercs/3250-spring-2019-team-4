@@ -362,27 +362,34 @@ class JavaClassFile:
         return method_table
 
     def get_methods(self):
+        # Reads the raw values stored in the method table variable into their properly parsed value.
         constant_table = self.classfile_constant_table
         method_table = self.classfile_method_table
         methods = {}
         for i in range(len(method_table)):
+            # Gets info from the index values, each based on the x byte size sections described in the java documentation
             method_name_index = int(method_table[i][4:8], 16)
             method_descriptor_index = int(method_table[i][8:12], 16)
             method_name = constant_table[method_name_index]
             method_descriptor = constant_table[method_descriptor_index]
 
             method_attribute_count = int(method_table[i][12:16], 16)
-            attributes_raw = []
             attributes = []
-
-            for j in range(method_attribute_count):
-                attribute = method_table[i][16:]
-                attributes_raw.append(attribute)
+            attributes_raw = []
+            raw_attribute_data = method_table[i][16:]   # All of the attributes for a method without being separated
+            attributes_raw.append(raw_attribute_data)
             for j in range(len(attributes_raw)):
                 attribute_name_index = int(attributes_raw[j][0:4], 16)
                 attribute_name = constant_table[attribute_name_index]
-                attribute_length = attributes_raw[j][4:12]
-                attribute_info = attributes_raw[j][12:]
+                """
+                Length given by the hexadecimal length found in the length section of the attributes structure
+                is in hexadecimal. The length given is in bytes (e.g 00 = 1 in length). Thus we need to multiply the
+                length by 2 to get the length in single bytes. Since we are starting from the 12th index (i.e the end
+                of the attribute length bytes). The attribute_length value will be + 12 the actual value to get the end
+                of the attribute_info data 
+                """
+                attribute_length = int(attributes_raw[j][4:12], 16) * 2 + 12
+                attribute_info = attributes_raw[j][12:attribute_length]
 
                 attributes.append(bytes.fromhex(attribute_name).decode("utf-8")[3:])
                 attributes.append(attribute_info)
