@@ -362,34 +362,27 @@ class JavaClassFile:
         return method_table
 
     def get_methods(self):
-        # Reads the raw values stored in the method table variable into their properly parsed value.
         constant_table = self.classfile_constant_table
         method_table = self.classfile_method_table
         methods = {}
         for i in range(len(method_table)):
-            # Gets info from the index values, each based on the x byte size sections described in the java documentation
             method_name_index = int(method_table[i][4:8], 16)
             method_descriptor_index = int(method_table[i][8:12], 16)
             method_name = constant_table[method_name_index]
             method_descriptor = constant_table[method_descriptor_index]
 
             method_attribute_count = int(method_table[i][12:16], 16)
-            attributes = []
             attributes_raw = []
-            raw_attribute_data = method_table[i][16:]   # All of the attributes for a method without being separated
-            attributes_raw.append(raw_attribute_data)
+            attributes = []
+
+            for j in range(method_attribute_count):
+                attribute = method_table[i][16:]
+                attributes_raw.append(attribute)
             for j in range(len(attributes_raw)):
                 attribute_name_index = int(attributes_raw[j][0:4], 16)
                 attribute_name = constant_table[attribute_name_index]
-                """
-                Length given by the hexadecimal length found in the length section of the attributes structure
-                is in hexadecimal. The length given is in bytes (e.g 00 = 1 in length). Thus we need to multiply the
-                length by 2 to get the length in single bytes. Since we are starting from the 12th index (i.e the end
-                of the attribute length bytes). The attribute_length value will be + 12 the actual value to get the end
-                of the attribute_info data 
-                """
-                attribute_length = int(attributes_raw[j][4:12], 16) * 2 + 12
-                attribute_info = attributes_raw[j][12:attribute_length]
+                attribute_length = attributes_raw[j][4:12]
+                attribute_info = attributes_raw[j][12:]
 
                 attributes.append(bytes.fromhex(attribute_name).decode("utf-8")[3:])
                 attributes.append(attribute_info)
@@ -666,6 +659,101 @@ class JavaClassFile:
         code = info[16:(16 + code_length * 2)]
         return code
 
+    def get_opcodes(self):
+        index = 18
+        for method in self.classfile_method_table:
+            method_split = [method[i : i + 2] for i in range(0, len(method), 2)]
+            opcodes_len = method_split[index : index + 4]
+            hex = int("".join(map(str, opcodes_len)), 16)
+            self.opcodes.append(method_split[index + 4 : index + 4 + hex])
+        return self.opcodes
+
+    def get_virtual(self):
+        index = 0
+        for opcodes in self.get_opcodes():
+            check = 0
+            for opcode in opcodes:
+                if check == 1 or check == 2:
+                    check = check + 1
+                    continue
+                if opcode == "10" or opcode == "12":
+                    check = 2
+                if opcode[0] == "B":
+                    check = 1
+                self.execute_opcodes(opcodes, opcode)
+        return self.virtual
+
+    def execute_opcodes(self, opcodes, opcode):
+        get_return = ""
+        map = {
+            "B2": self.get_path,
+            "B1": self.get_void,
+            "12": self.get_constant,
+            "10": self.get_object
+        }
+        try:
+            map[opcode](opcodes, opcode)
+        except KeyError:
+            self.default(opcode)
+
+    def get_path(self,opcodes,opcode):
+        pool_index = opcodes.index(opcode)
+        code_index = int("".join(map(str, opcodes[pool_index+1:pool_index+3])),16)
+        self.recursive(code_index-1)
+
+    def get_void(self,opcodes,opcode):
+        return None
+
+    def get_constant(self,opcodes,opcode):
+        pool_index = opcodes.index(opcode)
+        constant = int("".join(map(str, opcodes[pool_index + 2 : pool_index + 3])), 16)
+        self.stack_z.append(constant)
+
+    def get_object(self,opcodes, opcode):
+        pool_index = opcodes.index(opcode)
+        table_index = int("".join(map(str, opcodes[pool_index+1:pool_index+2])),16)
+        string = self.formatted_constant_table[table_index-1][1]
+        #add a check to see if it is a string then call recursive else just push int or
+        #float into stack
+        #isinstance(string, str)
+        self.stack_z.append(string)
+
+    # /////////
+
+    def default(self, opcode):
+        return "Missing Method: ", opcode
+
+    # recursive method to interpret contant pool
+    virtual = ""
+
+    def tag_utf8_helper(self, tag):
+        self.constant_parts.append(ConstantPoolTag(tag).get_tag_type(tag))
+        hex_list = []
+        for i in self.constant_split[3:]:
+            hex_list.append(chr(int(i, 16)))
+        ref = "".join(map(str, hex_list))
+        self.constant_parts.append(ref)
+        self.formatted_constant_table.append(self.constant_parts)
+        self.constant_parts = []
+
+    def int_helper(self,tag):
+        self.constant_parts.append(ConstantPoolTag(tag).get_tag_type(tag))
+        float_hex = ""
+        for i in range(1,len(self.constant_split)):
+            float_hex = float_hex + self.constant_split[i]
+        self.constant_parts.append(struct.unpack('!i', bytes.fromhex(float_hex))[0])
+        self.formatted_constant_table.append(self.constant_parts)
+        self.constant_parts = []
+
+    def float_helper(self,tag):
+        self.constant_parts.append(ConstantPoolTag(tag).get_tag_type(tag))
+        float_hex = ""
+        for i in range(1,len(self.constant_split)):
+            float_hex = float_hex + self.constant_split[i]
+        self.constant_parts.append(struct.unpack('!f', bytes.fromhex(float_hex))[0])
+        self.formatted_constant_table.append(self.constant_parts)
+        self.constant_parts = []
+
     # Python "Constructor"
     def __init__(self, file_name):
         # TODO: Make it so that the .class file can be specified by name, this could help in testing opcode reading
@@ -699,3 +787,7 @@ if __name__ == "__main__":
     # a.format_constant_table()
     # a.get_virtual()
     # a.print_table_info()
+    # b = JavaClassFile("wud.class")
+    # b.format_constant_table()
+    # b.get_virtual()
+    # b.print_string()
